@@ -1,8 +1,9 @@
 package com.example.ecommerce.repository;
 
-import com.example.ecommerce.entity.Order;
+import com.example.ecommerce.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface OrderRepository extends JpaRepository<Order,Integer> {}
+public interface ImageRepository extends JpaRepository<Image, Long> {
+}

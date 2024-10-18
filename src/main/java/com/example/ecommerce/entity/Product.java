@@ -41,7 +41,7 @@ public class Product {
     @Column(name = "brand_name", nullable = false)
     private String brandName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Category category;
 

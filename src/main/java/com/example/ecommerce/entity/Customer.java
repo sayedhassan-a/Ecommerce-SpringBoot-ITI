@@ -1,5 +1,6 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -44,12 +45,14 @@ public class Customer {
     private String interests;
 
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch =
-            FetchType.LAZY)
+            FetchType.EAGER)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart = new Cart();
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "wishlist_id", nullable = false)
     private Wishlist wishlist = new Wishlist();
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private Set<Order> orders = new HashSet<>();
     boolean active;

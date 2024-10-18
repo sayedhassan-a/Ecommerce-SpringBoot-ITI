@@ -19,4 +19,6 @@ public class Cart {
     private Integer id;
     @OneToMany(mappedBy = "cart", cascade = {CascadeType.REMOVE})
     private Set<CartHasProduct> cartHasProducts = new HashSet<>();
+    @OneToOne(mappedBy = "cart")
+    private Customer customer;
 }

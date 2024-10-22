@@ -1,4 +1,4 @@
-package org.example.ecommerce.dtos.converters;
+package org.example.ecommerce.dtos.customerConverters;
 
 import org.example.ecommerce.dtos.CustomerDto;
 import org.example.ecommerce.models.Customer;

@@ -2,8 +2,8 @@ package org.example.ecommerce.controllers;
 
 import jakarta.validation.Valid;
 import org.example.ecommerce.dtos.CustomerDto;
-import org.example.ecommerce.dtos.converters.CustomerDtoToCustomerConverter;
-import org.example.ecommerce.dtos.converters.CustomerToCustomerDtoConverter;
+import org.example.ecommerce.dtos.customerConverters.CustomerDtoToCustomerConverter;
+import org.example.ecommerce.dtos.customerConverters.CustomerToCustomerDtoConverter;
 import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("${api.endpoint.base-url}/customers")
+@RequestMapping("/customers")
 public class CustomerController {
 
     private final CustomerService customerService;

@@ -21,7 +21,6 @@ import java.util.Set;
 @Setter
 @Valid
 @NoArgsConstructor
-@SoftDelete
 public class Customer extends User{
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;

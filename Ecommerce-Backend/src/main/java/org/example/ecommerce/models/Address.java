@@ -8,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@SoftDelete
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

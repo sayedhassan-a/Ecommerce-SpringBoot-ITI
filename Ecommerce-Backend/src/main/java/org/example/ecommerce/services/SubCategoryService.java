@@ -1,6 +1,5 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.dtos.CategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
 import org.example.ecommerce.mappers.SubCategoryMapper;
@@ -24,6 +23,7 @@ public class SubCategoryService {
     private final CategoryRepository categoryRepository;
 
 
+    @Autowired
     public SubCategoryService(SubCategoryRepository subCategoryRepository, SubCategorySpecificationRepository subCategorySpecificationRepository, SubCategoryMapper subCategoryMapper, CategoryRepository categoryRepository) {
         this.subCategoryRepository = subCategoryRepository;
         this.subCategorySpecificationRepository = subCategorySpecificationRepository;
@@ -71,7 +71,5 @@ public class SubCategoryService {
         // Map to DTO
         return subCategoryMapper.toSubCategoryWithSpecificationDTO(subCategory, subCategorySpecification);
     }
-
-
-
+    
 }

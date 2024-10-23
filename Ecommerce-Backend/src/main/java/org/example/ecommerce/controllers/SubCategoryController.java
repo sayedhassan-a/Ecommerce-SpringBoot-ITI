@@ -5,6 +5,7 @@ import org.example.ecommerce.dtos.CategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
 import org.example.ecommerce.services.SubCategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class SubCategoryController {
+
 
     private final SubCategoryService subCategoryService;
 

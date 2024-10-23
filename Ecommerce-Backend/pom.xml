@@ -110,6 +110,7 @@
             <artifactId>mongodb-driver-legacy</artifactId>
         </dependency>
 
+
     </dependencies>
 
     <build>

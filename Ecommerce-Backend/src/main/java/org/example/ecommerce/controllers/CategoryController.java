@@ -33,4 +33,5 @@ public class CategoryController {
         CategoryDTO addedCategory = categoryService.add(categoryDTO);
         return new ResponseEntity<>(addedCategory, HttpStatus.CREATED);
     }
+
 }

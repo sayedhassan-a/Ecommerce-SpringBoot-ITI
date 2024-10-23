@@ -28,7 +28,7 @@ public interface SubCategoryMapper {
 
     Specs toSpecs(SpecsDTO specsDTO);
 
-    // **Mappings from Entities to DTO**
+    //**Mappings from Entities to DTO**
 
     // Map from SubCategory entity and SubCategorySpecification entity back to SubCategoryDTO
     @Mapping(source = "category.name", target = "categoryName")  // Assuming you have a Category object with a name

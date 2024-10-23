@@ -1,6 +1,7 @@
 package org.example.ecommerce.dtos;
 
 import jakarta.validation.constraints.NotEmpty;
+import org.example.ecommerce.models.Role;
 
 public record AdminDTO(
     Long id,
@@ -8,5 +9,6 @@ public record AdminDTO(
     String middleName,
     String lastName,
     @NotEmpty(message = "Email is required.")
-    String email
+    String email,
+    Role role
 ) {}

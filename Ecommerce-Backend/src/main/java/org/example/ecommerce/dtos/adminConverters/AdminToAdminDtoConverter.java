@@ -15,7 +15,8 @@ public class AdminToAdminDtoConverter implements Converter<Admin, AdminDTO> {
             admin.getFirstName(),
             admin.getMiddleName(),
             admin.getLastName(),
-            admin.getEmail()
+            admin.getEmail(),
+            admin.getRole()
         );
     }
 }

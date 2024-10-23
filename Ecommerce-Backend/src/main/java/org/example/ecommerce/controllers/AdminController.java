@@ -31,9 +31,7 @@ public class AdminController {
 
     // Create a new admin
     @PostMapping
-    public Result createAdmin(@Valid @RequestBody AdminDTO adminDto) {
-        // Convert DTO to entity and save
-        Admin admin = adminDtoToAdminConverter.convert(adminDto);
+    public Result createAdmin(@Valid @RequestBody Admin admin) {
         Admin savedAdmin = adminService.save(admin);
         // Convert saved entity back to DTO
         AdminDTO savedAdminDto = adminToAdminDtoConverter.convert(savedAdmin);

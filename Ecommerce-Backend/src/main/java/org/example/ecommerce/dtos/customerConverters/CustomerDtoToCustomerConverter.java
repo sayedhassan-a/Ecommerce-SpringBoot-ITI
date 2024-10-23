@@ -16,9 +16,9 @@ public class CustomerDtoToCustomerConverter implements Converter<CustomerDto, Cu
         customer.setMiddleName(source.middleName());
         customer.setLastName(source.lastName());
         customer.setPhone(source.phone());
-        customer.setAddress(source.address());
         customer.setDateOfBirth(source.dateOfBirth());
         customer.setActive(source.isActive());
+        customer.setRole(source.role());
 
         return customer;
     }

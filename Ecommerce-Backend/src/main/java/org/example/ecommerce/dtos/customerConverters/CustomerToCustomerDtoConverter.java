@@ -11,7 +11,7 @@ public class CustomerToCustomerDtoConverter implements Converter<Customer, Custo
     public CustomerDto convert(Customer source) {
         // build the new object with the same sequence of fields in CustomerDto
         return new CustomerDto(source.getId(), source.getEmail(), source.getFirstName(),
-                source.getMiddleName(), source.getLastName(), source.getPhone(), source.getAddress(),
-                source.getDateOfBirth(), source.isActive());
+                source.getMiddleName(), source.getLastName(), source.getPhone(),
+                source.getDateOfBirth(), source.isActive(), source.getRole());
     }
 }

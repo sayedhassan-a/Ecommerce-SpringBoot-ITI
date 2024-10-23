@@ -16,6 +16,7 @@ public class AdminDtoToAdminConverter implements Converter<AdminDTO, Admin> {
         admin.setMiddleName(dto.middleName());
         admin.setLastName(dto.lastName());
         admin.setEmail(dto.email());
+        admin.setRole(dto.role());
         return admin;
     }
 }

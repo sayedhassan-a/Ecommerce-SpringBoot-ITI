@@ -32,9 +32,7 @@ public class CustomerController {
 
     // Create a new customer
     @PostMapping
-    public Result createCustomer(@Valid @RequestBody CustomerDto customerDto) {
-        // Convert DTO to entity and save
-        Customer customer = customerDtoToCustomerConverter.convert(customerDto);
+    public Result createCustomer(@Valid @RequestBody Customer customer) {
         Customer savedCustomer = customerService.save(customer);
         // Convert saved entity back to DTO
         CustomerDto savedCustomerDto = customerToCustomerDtoConverter.convert(savedCustomer);

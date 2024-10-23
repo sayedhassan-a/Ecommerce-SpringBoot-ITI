@@ -16,6 +16,7 @@ public class EcommerceApplication {
         System.setProperty("SQL_DB_URL", dotenv.get("SQL_DB_URL"));
         System.setProperty("SQL_DB_USERNAME", dotenv.get("SQL_DB_USERNAME"));
         System.setProperty("SQL_DB_PASSWORD", dotenv.get("SQL_DB_PASSWORD"));
+        System.setProperty("MONGODB_URL", dotenv.get("MONGODB_URL"));
         SpringApplication.run(EcommerceApplication.class, args);
     }
 

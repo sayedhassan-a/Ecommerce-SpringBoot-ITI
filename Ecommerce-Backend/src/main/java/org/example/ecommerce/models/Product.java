@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
@@ -40,8 +38,6 @@ public class Product {
 
     private String image;
 
-    Boolean deleted = false;
-
     @Column(name = "brand_name", nullable = false)
     private String brandName;
 
@@ -63,4 +59,6 @@ public class Product {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    boolean deleted = false;
 }

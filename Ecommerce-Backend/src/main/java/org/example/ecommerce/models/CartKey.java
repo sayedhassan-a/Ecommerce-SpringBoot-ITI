@@ -1,6 +1,5 @@
 package org.example.ecommerce.models;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.io.Serializable;

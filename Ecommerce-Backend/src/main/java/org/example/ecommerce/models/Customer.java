@@ -2,16 +2,12 @@ package org.example.ecommerce.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SoftDelete;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +17,6 @@ import java.util.Set;
 @Setter
 @Valid
 @NoArgsConstructor
-@SoftDelete
 public class Customer extends User{
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;

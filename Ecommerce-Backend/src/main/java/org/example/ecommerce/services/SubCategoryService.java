@@ -42,7 +42,7 @@ public class SubCategoryService {
     }
     public SubCategoryDTO getSubCategoryById(Long id) {
         return subCategoryRepository.findById(id)
-                .map(subCategory -> subCategoryMapper.toSubCategoryDTO(subCategory, null)) // Assuming no specifications initially
+                .map(subCategory -> subCategoryMapper.toSubCategoryDTO(subCategory)) // Assuming no specifications initially
                 .orElse(null);
     }
 

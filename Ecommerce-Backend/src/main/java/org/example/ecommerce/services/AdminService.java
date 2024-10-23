@@ -5,7 +5,6 @@ import org.example.ecommerce.models.Role;
 import org.example.ecommerce.repositories.AdminRepository;
 import org.example.ecommerce.system.exceptions.ObjectNotFoundException;
 import org.example.ecommerce.system.validations.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

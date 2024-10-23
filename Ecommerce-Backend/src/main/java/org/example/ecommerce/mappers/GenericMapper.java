@@ -1,6 +1,4 @@
-package org.example.ecommerce.mapper;
-
-import org.mapstruct.Mapper;
+package org.example.ecommerce.mappers;
 
 
 public interface GenericMapper <Entity, DTO>{

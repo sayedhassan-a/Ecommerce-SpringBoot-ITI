@@ -1,10 +1,9 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.dto.CategoryDTO;
-import org.example.ecommerce.mapper.CategoryMapper;
+import org.example.ecommerce.dtos.CategoryDTO;
+import org.example.ecommerce.mappers.CategoryMapper;
 import org.example.ecommerce.models.Category;
 import org.example.ecommerce.repositories.CategoryRepository;
-import org.example.ecommerce.repositories.SubCategorySpecificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

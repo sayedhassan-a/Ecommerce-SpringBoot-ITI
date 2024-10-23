@@ -1,7 +1,7 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.dto.SubCategoryWithSpecificationDTO;
-import org.example.ecommerce.mapper.SubCategoryMapper;
+import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
+import org.example.ecommerce.mappers.SubCategoryMapper;
 import org.example.ecommerce.models.SubCategory;
 import org.example.ecommerce.models.SubCategorySpecification;
 import org.example.ecommerce.repositories.SubCategoryRepository;
@@ -33,10 +33,10 @@ public class SubCategoryService {
         SubCategorySpecification subCategorySpecification = subCategoryMapper.toSubCategorySpecification(dto.getSubCategorySpecification());
 
         // Save SubCategorySpecification (MongoDB)
-        SubCategorySpecification savedSpecification = null ;
+        SubCategorySpecification savedSpecification = null;
 
         // Set the structureId in SubCategory to link it with the specification (MongoDB ID)
-        //savedSubCategory.setStructureId(savedSpecification.getId());
+        savedSubCategory.setStructureId(savedSpecification.getId());
         subCategoryRepository.save(savedSubCategory);  // Save again to update with structureId
 
         // Map back to combined DTO for the response

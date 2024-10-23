@@ -1,9 +1,9 @@
-package org.example.ecommerce.mapper;
+package org.example.ecommerce.mappers;
 
-import org.example.ecommerce.dto.SpecsDTO;
-import org.example.ecommerce.dto.SubCategoryDTO;
-import org.example.ecommerce.dto.SubCategorySpecificationDTO;
-import org.example.ecommerce.dto.SubCategoryWithSpecificationDTO;
+import org.example.ecommerce.dtos.SpecsDTO;
+import org.example.ecommerce.dtos.SubCategoryDTO;
+import org.example.ecommerce.dtos.SubCategorySpecificationDTO;
+import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
 import org.example.ecommerce.models.Specs;
 import org.example.ecommerce.models.SubCategory;
 import org.example.ecommerce.models.SubCategorySpecification;

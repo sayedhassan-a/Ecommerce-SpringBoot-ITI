@@ -1,7 +1,6 @@
 package org.example.ecommerce.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

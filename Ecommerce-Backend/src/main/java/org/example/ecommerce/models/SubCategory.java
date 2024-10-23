@@ -16,7 +16,7 @@ public class SubCategory {
     private String name;
 
     @Column(name = "structure_id")
-    private String StructureId;
+    private String structureId;
 
     @ManyToOne
     private Category category;

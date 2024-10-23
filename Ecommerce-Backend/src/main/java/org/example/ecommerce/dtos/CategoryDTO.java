@@ -1,10 +1,8 @@
-package org.example.ecommerce.dto;
+package org.example.ecommerce.dtos;
 
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.ecommerce.models.SubCategory;
 
 import java.util.Set;
 

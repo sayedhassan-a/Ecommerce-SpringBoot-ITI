@@ -1,33 +1,47 @@
 package org.example.ecommerce.services;
 
+import org.example.ecommerce.dtos.CategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
 import org.example.ecommerce.mappers.SubCategoryMapper;
+import org.example.ecommerce.models.Category;
 import org.example.ecommerce.models.SubCategory;
 import org.example.ecommerce.models.SubCategorySpecification;
+import org.example.ecommerce.repositories.CategoryRepository;
 import org.example.ecommerce.repositories.SubCategoryRepository;
 import org.example.ecommerce.repositories.SubCategorySpecificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
     private final SubCategorySpecificationRepository subCategorySpecificationRepository;
     private final SubCategoryMapper subCategoryMapper;
+    private final CategoryRepository categoryRepository;
 
 
-    public SubCategoryService(SubCategoryRepository subCategoryRepository, SubCategorySpecificationRepository subCategorySpecificationRepository, SubCategoryMapper subCategoryMapper) {
+    public SubCategoryService(SubCategoryRepository subCategoryRepository, SubCategorySpecificationRepository subCategorySpecificationRepository, SubCategoryMapper subCategoryMapper, CategoryRepository categoryRepository) {
         this.subCategoryRepository = subCategoryRepository;
         this.subCategorySpecificationRepository = subCategorySpecificationRepository;
         this.subCategoryMapper = subCategoryMapper;
+        this.categoryRepository = categoryRepository;
     }
 
+    public List<SubCategoryDTO> getAllSubCategories(){
+        return subCategoryRepository.findAll()
+                .stream()
+                .map(subCategoryMapper::toSubCategoryDTO)
+                .collect(Collectors.toList());
+    }
     public SubCategoryWithSpecificationDTO createSubCategoryWithSpecification(SubCategoryWithSpecificationDTO dto) {
+        Category category = categoryRepository.findByName(dto.getSubCategory().getCategoryName());
         // Map DTO to SubCategory entity
         SubCategory subCategory = subCategoryMapper.toSubCategory(dto.getSubCategory());
+        subCategory.setCategory(category);
         // Save SubCategory (MySQL)
         SubCategory savedSubCategory = subCategoryRepository.save(subCategory);
         // Map DTO to SubCategorySpecification entity
@@ -51,11 +65,9 @@ public class SubCategoryService {
         // Fetch the subcategory
         SubCategory subCategory = subCategoryRepository.findById(id)
                 .orElse(null); // or throw an exception if not found
-
         // Fetch the associated SubCategorySpecification using the structureId
         SubCategorySpecification subCategorySpecification = subCategorySpecificationRepository.findById(subCategory.getStructureId())
                 .orElse(null); // or throw an exception if not found
-
         // Map to DTO
         return subCategoryMapper.toSubCategoryWithSpecificationDTO(subCategory, subCategorySpecification);
     }

@@ -10,6 +10,5 @@ public class SubCategoryDTO {
     private Long id;
     private String name;
     private String structureId;
-    private SubCategorySpecificationDTO specification;
     private String categoryName;
 }

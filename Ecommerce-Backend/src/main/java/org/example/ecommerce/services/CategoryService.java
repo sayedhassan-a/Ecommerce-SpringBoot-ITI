@@ -14,11 +14,11 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @Autowired
     public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
+
 
     public Optional<CategoryDTO> get(Long id){
         Optional<Category> category = categoryRepository.findById(id);

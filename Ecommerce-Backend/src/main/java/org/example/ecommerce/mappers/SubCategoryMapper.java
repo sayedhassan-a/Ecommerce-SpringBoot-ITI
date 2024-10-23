@@ -35,6 +35,8 @@ public interface SubCategoryMapper {
     @Mapping(source = "StructureId", target = "structureId")     // Map StructureId back to structureId in DTO
     SubCategoryDTO toSubCategoryDTO(SubCategory subCategory, SubCategorySpecification subCategorySpecification);
 
+
+    List<SubCategoryDTO> toSubCategoryDTOList(SubCategory subCategory, SubCategorySpecification subCategorySpecification);
     // Map from SubCategorySpecification entity to SubCategorySpecificationDTO
     SubCategorySpecificationDTO toSubCategorySpecificationDTO(SubCategorySpecification subCategorySpecification);
 

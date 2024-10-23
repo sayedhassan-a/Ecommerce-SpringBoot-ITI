@@ -1,9 +1,8 @@
-package org.example.ecommerce.dto;
+package org.example.ecommerce.dtos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.ecommerce.models.Specs;
 
 import java.util.List;
 

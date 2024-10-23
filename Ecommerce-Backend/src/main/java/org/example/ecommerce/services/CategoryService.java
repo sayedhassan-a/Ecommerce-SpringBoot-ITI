@@ -1,14 +1,16 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.dto.CategoryDTO;
-import org.example.ecommerce.mapper.CategoryMapper;
+import org.example.ecommerce.dtos.CategoryDTO;
+import org.example.ecommerce.mappers.CategoryMapper;
 import org.example.ecommerce.models.Category;
 import org.example.ecommerce.repositories.CategoryRepository;
-import org.example.ecommerce.repositories.SubCategorySpecificationRepository;
+import org.example.ecommerce.system.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -21,10 +23,26 @@ public class CategoryService {
         this.categoryMapper = categoryMapper;
     }
 
-    public Optional<CategoryDTO> get(Long id){
-        Optional<Category> category = categoryRepository.findById(id);
-        return Optional.ofNullable(categoryMapper.toDTO(category.get()));
+
+    public List<CategoryDTO> getAllCategories(){
+        return categoryRepository.findAll()
+                .stream()
+                .map(categoryMapper::toDTO)
+                .collect(Collectors.toList());
     }
+    public CategoryDTO get(Long id){
+        return categoryRepository.findById(id)
+                .map(categoryMapper::toDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+    }
+
+    public CategoryDTO add(CategoryDTO categoryDTO)
+    {
+        Category category = categoryMapper.toEntity(categoryDTO);
+        return categoryMapper.toDTO(categoryRepository.save(category));
+    }
+
+
 
 
 

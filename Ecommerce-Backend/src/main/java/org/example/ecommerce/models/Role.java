@@ -1,6 +1,7 @@
 package org.example.ecommerce.models;
 
 public enum Role {
-    ADMIN,
-    MODERATOR
+    ROLE_USER, // For customers
+    ROLE_ADMIN, // For admins
+    ROLE_MODERATOR; // Other privileged roles
 }

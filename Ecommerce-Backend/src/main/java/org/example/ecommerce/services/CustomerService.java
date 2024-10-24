@@ -22,19 +22,20 @@ public class CustomerService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final UserValidator customerValidator;
+    private final UserValidator userValidator;
 
 
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserValidator customerValidator) {
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserValidator userValidator) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
-        this.customerValidator = customerValidator;
+        this.userValidator = userValidator;
     }
 
     //implement crud operations
     public Customer save(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole(Role.ROLE_USER);
+
         return this.customerRepository.save(customer);
     }
 
@@ -76,25 +77,13 @@ public class CustomerService implements UserDetailsService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void changePassword(Customer user, String oldPassword, String newPassword) {
-        List<String> validationErrors = customerValidator.validateChangePassword(user, oldPassword, newPassword);
+        List<String> validationErrors = userValidator.validateChangePassword(user, oldPassword, newPassword);
         if (!validationErrors.isEmpty()) {
-            throw new ValidationException(validationErrors); // Custom exception for validation failures
+            throw new ValidationException(validationErrors);
         }
         user.setPassword(passwordEncoder.encode(newPassword));
-        this.customerRepository.save(user);
+        customerRepository.save(user);
     }
-
-    // Login
-//    public String login(String email, String password) {
-//        Customer user = this.customerRepository.findByEmail(email)
-//                .orElseThrow(() -> new ObjectNotFoundException("Customer", email));
-//        // Use passwordEncoder to check the password against the stored hash
-//        if (!passwordEncoder.matches(password, user.getPassword())) {
-//            throw new ObjectNotFoundException("Customer", email);  // Password doesn't match, user unauthorized
-//        } else {
-//            return jwtService.generateToken(user);
-//        }
-//    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

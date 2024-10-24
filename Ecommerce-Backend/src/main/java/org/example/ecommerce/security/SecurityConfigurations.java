@@ -40,13 +40,9 @@ import java.security.interfaces.RSAPublicKey;
 public class SecurityConfigurations {
 
     private final RSAPublicKey publicKey;
-
     private final RSAPrivateKey privateKey;
-
     private final CustomBasicAuthEntryPoint customBasicAuthEntryPoint;
-
     private final CustomBearerTokenAuthEntryPoint customBearerTokenAuthEntryPoint;
-
     private final CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler;
 
     public SecurityConfigurations(CustomBasicAuthEntryPoint customBasicAuthEntryPoint, CustomBearerTokenAuthEntryPoint customBearerTokenAuthEntryPoint, CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler) throws NoSuchAlgorithmException {
@@ -76,7 +72,7 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET, "/admins").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
                                 .requestMatchers(HttpMethod.PUT, "/admins/**").hasAuthority("ROLE_moderator") // Protected endpoint
                                 .requestMatchers(HttpMethod.DELETE, "/admins/**").hasAuthority("ROLE_moderator") // Protected endpoint
-//                              // the rest is not public
+                                // the rest is not public
                                 .anyRequest().authenticated() // Always at last
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
@@ -111,7 +107,7 @@ public class SecurityConfigurations {
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);  // Ensure you set the password encoder
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 

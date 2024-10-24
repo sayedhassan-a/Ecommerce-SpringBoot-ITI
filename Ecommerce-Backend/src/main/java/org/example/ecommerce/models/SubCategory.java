@@ -1,12 +1,14 @@
 package org.example.ecommerce.models;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class SubCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +16,7 @@ public class SubCategory {
     private String name;
 
     @Column(name = "structure_id")
-    private String StructureId;
+    private String structureId;
 
     @ManyToOne
     private Category category;

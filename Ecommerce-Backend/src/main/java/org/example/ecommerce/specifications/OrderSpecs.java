@@ -2,6 +2,7 @@ package org.example.ecommerce.specifications;
 
 import org.example.ecommerce.models.Order;
 import org.example.ecommerce.models.OrderState;
+import org.example.ecommerce.models.PaymentMethod;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
@@ -36,5 +37,11 @@ public class OrderSpecs {
     public static Specification<Order> hasCustomerId(Long customerId) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(
                 "customerId"), customerId);
+    }
+
+    public static Specification<Order> hasPaymentMethod(
+            PaymentMethod paymentMethod){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(
+                "paymentMethod"), paymentMethod);
     }
 }

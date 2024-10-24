@@ -10,6 +10,7 @@ import org.example.ecommerce.models.SubCategorySpecification;
 import org.example.ecommerce.repositories.CategoryRepository;
 import org.example.ecommerce.repositories.SubCategoryRepository;
 import org.example.ecommerce.repositories.SubCategorySpecificationRepository;
+import org.example.ecommerce.system.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +71,55 @@ public class SubCategoryService {
                 .orElse(null); // or throw an exception if not found
         // Map to DTO
         return subCategoryMapper.toSubCategoryWithSpecificationDTO(subCategory, subCategorySpecification);
+    }
+
+    public SubCategoryWithSpecificationDTO updateSubCategoryWithSpecification(Long id, SubCategoryWithSpecificationDTO dto) {
+        // Fetch the existing SubCategory from MySQL
+        SubCategory existingSubCategory = subCategoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SubCategory not found with id " + id));
+
+        // Fetch the associated SubCategorySpecification from MongoDB using the structureId
+        SubCategorySpecification existingSpecification = subCategorySpecificationRepository.findById(existingSubCategory.getStructureId())
+                .orElseThrow(() -> new ResourceNotFoundException("SubCategorySpecification not found with id " + existingSubCategory.getStructureId()));
+
+        // Update the SubCategory fields from the DTO
+        existingSubCategory.setName(dto.getSubCategory().getName());
+
+        // Update category if provided
+        if (dto.getSubCategory().getCategoryName() != null) {
+            Category category = categoryRepository.findByName(dto.getSubCategory().getCategoryName());
+            existingSubCategory.setCategory(category);
+        }
+
+        // Update the SubCategorySpecification fields from the DTO
+        existingSpecification.setName(dto.getSubCategorySpecification().getName());
+        existingSpecification.setSpecs(subCategoryMapper.toSpecsList(dto.getSubCategorySpecification().getSpecs()));
+
+        // Save the updated SubCategory (MySQL)
+        SubCategory updatedSubCategory = subCategoryRepository.save(existingSubCategory);
+
+        // Save the updated SubCategorySpecification (MongoDB)
+        SubCategorySpecification updatedSpecification = subCategorySpecificationRepository.save(existingSpecification);
+
+        // Map back to combined DTO for the response
+        return subCategoryMapper.toSubCategoryWithSpecificationDTO(updatedSubCategory, updatedSpecification);
+    }
+
+
+    public void deleteSubCategoryWithSpecification(Long id) {
+        // Fetch the existing SubCategory from MySQL
+        SubCategory existingSubCategory = subCategoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SubCategory not found with id " + id));
+
+        // Fetch the associated SubCategorySpecification from MongoDB using the structureId
+        SubCategorySpecification existingSpecification = subCategorySpecificationRepository.findById(existingSubCategory.getStructureId())
+                .orElseThrow(() -> new ResourceNotFoundException("SubCategorySpecification not found with id " + existingSubCategory.getStructureId()));
+
+        // Delete the SubCategory from MySQL
+        subCategoryRepository.delete(existingSubCategory);
+
+        // Delete the SubCategorySpecification from MongoDB
+        subCategorySpecificationRepository.delete(existingSpecification);
     }
 
 

@@ -24,14 +24,11 @@ public class CustomerService implements UserDetailsService {
 
     private final UserValidator customerValidator;
 
-//    private final JwtService jwtService;
-
 
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserValidator customerValidator) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.customerValidator = customerValidator;
-//        this.jwtService = jwtService;
     }
 
     //implement crud operations

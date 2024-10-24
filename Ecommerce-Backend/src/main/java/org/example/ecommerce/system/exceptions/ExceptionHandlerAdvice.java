@@ -3,8 +3,11 @@ package org.example.ecommerce.system.exceptions;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -48,5 +51,35 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     Result handleAuthenticationException(Exception ex){
         return new Result(false, StatusCode.UNAUTHORIZED, "Email or password is incorrect", ex.getMessage());
+    }
+
+    @ExceptionHandler(AccountStatusException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    Result handleInvalidBearerTokenException(AccountStatusException ex){
+        return new Result(false, StatusCode.UNAUTHORIZED, "Account is disabled or locked", ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidBearerTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    Result handleInvalidBearerTokenException(InvalidBearerTokenException ex){
+        return new Result(false, StatusCode.UNAUTHORIZED, "The access token provided is expired, revoked, malformed, or invalid", ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    Result handleAccessDeniedException(AccessDeniedException ex){
+        return new Result(false, StatusCode.FORBIDDEN, "No permission", ex.getMessage());
+    }
+
+    /**
+     * This handles all other exceptions.
+     *
+     * @param ex
+     * @return Result
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    Result handleOtherExceptions(Exception ex){
+        return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "An internal server error occurred", ex.getMessage());
     }
 }

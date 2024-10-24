@@ -1,5 +1,6 @@
-package org.example.ecommerce.security;
+package org.example.ecommerce.controllers;
 
+import org.example.ecommerce.services.AuthService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
 import org.slf4j.Logger;

@@ -1,10 +1,10 @@
-package org.example.ecommerce.security;
+package org.example.ecommerce.services;
 
 import org.example.ecommerce.dtos.CustomerDto;
 import org.example.ecommerce.dtos.customerConverters.CustomerToCustomerDtoConverter;
 import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.models.User;
-import org.example.ecommerce.services.MyUserPrincipal;
+import org.example.ecommerce.security.JwtProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 

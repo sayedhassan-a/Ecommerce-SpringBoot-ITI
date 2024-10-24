@@ -39,15 +39,21 @@ import java.security.interfaces.RSAPublicKey;
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-//    @Autowired
-//    private JwtService jwtService;
-
     private final RSAPublicKey publicKey;
 
     private final RSAPrivateKey privateKey;
 
+    private final CustomBasicAuthEntryPoint customBasicAuthEntryPoint;
 
-    public SecurityConfigurations() throws NoSuchAlgorithmException {
+    private final CustomBearerTokenAuthEntryPoint customBearerTokenAuthEntryPoint;
+
+    private final CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler;
+
+    public SecurityConfigurations(CustomBasicAuthEntryPoint customBasicAuthEntryPoint, CustomBearerTokenAuthEntryPoint customBearerTokenAuthEntryPoint, CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler) throws NoSuchAlgorithmException {
+        this.customBasicAuthEntryPoint = customBasicAuthEntryPoint;
+        this.customBearerTokenAuthEntryPoint = customBearerTokenAuthEntryPoint;
+        this.customBearerTokenAccessDeniedHandler = customBearerTokenAccessDeniedHandler;
+
         // Generate RSA key pair
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(2048); // key size in bits
@@ -59,21 +65,28 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                                .requestMatchers(HttpMethod.POST, "/customers").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/customers").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/customers").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/customers/**").hasAuthority(Role.ROLE_USER.name()) // Protected endpoint
                                 .requestMatchers(HttpMethod.DELETE, "/customers/**").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
 
+                                .requestMatchers(HttpMethod.POST, "/admins").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
                                 .requestMatchers(HttpMethod.GET, "/admins").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
                                 .requestMatchers(HttpMethod.PUT, "/admins/**").hasAuthority("ROLE_moderator") // Protected endpoint
                                 .requestMatchers(HttpMethod.DELETE, "/admins/**").hasAuthority("ROLE_moderator") // Protected endpoint
 //                              // the rest is not public
                                 .anyRequest().authenticated() // Always at last
                 )
-                .httpBasic(Customizer.withDefaults())
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(this.customBearerTokenAuthEntryPoint)
+                        .accessDeniedHandler(this.customBearerTokenAccessDeniedHandler)
+                )
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }

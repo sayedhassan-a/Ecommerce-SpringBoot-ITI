@@ -57,7 +57,6 @@ function changeSize(){
             os.prop('checked', false);
         }
 
-
         search();
     }
 

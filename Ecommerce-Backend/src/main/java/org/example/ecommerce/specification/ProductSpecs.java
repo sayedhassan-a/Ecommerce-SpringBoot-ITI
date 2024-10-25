@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductSpecification {
+public class ProductSpecs {
     @Id
     private String id;
     private String productId;

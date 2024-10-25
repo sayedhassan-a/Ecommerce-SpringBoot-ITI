@@ -1,6 +1,5 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.dtos.CategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
 import org.example.ecommerce.mappers.SubCategoryMapper;
@@ -10,7 +9,6 @@ import org.example.ecommerce.models.SubCategorySpecification;
 import org.example.ecommerce.repositories.CategoryRepository;
 import org.example.ecommerce.repositories.SubCategoryRepository;
 import org.example.ecommerce.repositories.SubCategorySpecificationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package org.example.ecommerce.controllers;
 
 import jakarta.validation.Valid;
-import org.example.ecommerce.dtos.CategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryDTO;
 import org.example.ecommerce.dtos.SubCategoryWithSpecificationDTO;
 import org.example.ecommerce.services.SubCategoryService;

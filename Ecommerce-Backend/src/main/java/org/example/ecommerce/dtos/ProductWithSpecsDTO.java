@@ -1,4 +1,4 @@
-package org.example.ecommerce.dto;
+package org.example.ecommerce.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductWithSpecsDTO {
-    private ProductDTO productDto;
+    private ProductRequestDTO productDto;
     private ProductSpecsDTO productSpecsDTO;
 }

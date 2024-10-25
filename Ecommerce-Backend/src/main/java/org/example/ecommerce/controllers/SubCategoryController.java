@@ -42,6 +42,21 @@ public class SubCategoryController {
         return new ResponseEntity<>(addedSubCategory, HttpStatus.CREATED);
     }
 
+    @PutMapping("/subcategories/{id}")
+    public ResponseEntity<SubCategoryWithSpecificationDTO> updateSubCategoryWithSpecification(
+            @PathVariable Long id,
+            @RequestBody SubCategoryWithSpecificationDTO subCategoryWithSpecificationDTO) {
+
+        SubCategoryWithSpecificationDTO updatedDTO = subCategoryService.updateSubCategoryWithSpecification(id, subCategoryWithSpecificationDTO);
+        return ResponseEntity.ok(updatedDTO);
+    }
+
+    @DeleteMapping("/subcategories/{id}")
+    public ResponseEntity<Void> deleteSubCategoryWithSpecification(@PathVariable Long id) {
+        subCategoryService.deleteSubCategoryWithSpecification(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }

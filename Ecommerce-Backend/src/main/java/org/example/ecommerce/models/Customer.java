@@ -34,4 +34,7 @@ public class Customer extends User{
     private Set<Order> orders = new HashSet<>();
 
     boolean isActive;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<CreditCard> creditCard;
 }

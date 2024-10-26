@@ -57,6 +57,32 @@
                 object-fit: cover; /* Optional: maintains the aspect ratio */
                 border-radius: 5px; /* Optional: gives a rounded effect */
             }
+            /*@media only screen and (max-width: 600px) {*/
+            /*    #checkoutForm {*/
+            /*        margin-left: 0;*/
+            /*        width: 100%;*/
+            /*        display: flex;*/
+            /*        justify-content: space-evenly;*/
+            /*    }*/
+            /*    .table-responsive {*/
+            /*        width: 100%;*/
+            /*    }*/
+            /*    .table {*/
+            /*        width: 100%;*/
+            /*    }*/
+
+            /*    .gray_btn{*/
+            /*        padding: 0px;*/
+            /*        width: 50%;*/
+            /*        font-size:  12px;*/
+            /*        text-align: center;*/
+            /*    }*/
+            /*    #formContainer{*/
+            /*        width: 100%;*/
+            /*        padding: 0px;*/
+            /*        border-spacing: 0px;*/
+            /*    }*/
+            /*}*/
 
         </style>
 </head>
@@ -94,86 +120,9 @@
                             </tr>
                         </thead>
                         <script>
-                            function showError(errorMessage){
-                                document.getElementById("cartError").innerText=errorMessage;
-                            }
-                            function updateQuantity(itemId, action) {
-                                var result = document.getElementById('sst-' + itemId);
-                                var sst = result.value;
 
-                                var inputField = $('#sst-' + itemId);
-                                var currentQuantity = parseInt(inputField.val());
 
-                                // Update the quantity value locally
-                                if (action === 'increase') {
-                                    if( !isNaN( sst )) currentQuantity++;
-                                    else return false;
-                                } else if (action === 'decrease' && currentQuantity > 1) {
-                                    if( !isNaN( sst ) && sst > 1 ) currentQuantity--;
-                                    else return false;
-                                }
-                                // Make the asynchronous request to the server
-                                $.ajax({
-                                    url: 'updateQuantity', // Servlet URL
-                                    type: 'POST',
-                                    data: {
-                                        id: itemId,
-                                        quantity: currentQuantity
-                                    },
-                                    success: function(response) {
-                                        if(response.newTotal === "-1"){
-                                            //$('#err-' + itemId).text("quantity out of stock!");
-                                            showStockError();
-                                        }
-                                        else{
-                                            // Update the total price on success
-                                            $('#total-' + itemId).text((Number.parseFloat(response.newTotal)/100).toFixed(2) + ' EGP');
-                                            // Update the input field with the new quantity
-                                            inputField.val(currentQuantity);
-                                            calculateTotalPrice();
-                                            //$('#err-' + itemId).text("");
-                                        }
-                                    },
-                                    error: function() {
-                                        alert("Error updating quantity!");
-                                    }
-                                });
-                            }
 
-                            function removeItem(itemId, action) {
-                                            // Make the asynchronous request to the server
-                                            $.ajax({
-                                                url: 'deleteCartItem', // Servlet URL
-                                                type: 'POST',
-                                                data: {
-                                                    id: itemId
-                                                },
-                                                success: function(response) {
-                                                    location.reload(true);
-                                                },
-                                                error: function() {
-                                                    alert("Error removing item!");
-                                                }
-                                            });
-                                        }
-
-                            function calculateTotalPrice() {
-                                    // Select all elements with the class 'item-price'
-                                    const priceElements = document.querySelectorAll('.item-price');
-
-                                    let totalPrice = 0;
-
-                                    // Loop through the NodeList and sum up the price values
-                                    priceElements.forEach(function(priceElement) {
-                                        // Get the inner text, remove the dollar sign and convert to a float
-                                        const price = parseFloat(priceElement.innerText.replace(/[$,]/g, ''));
-                                        totalPrice += price; // Add to totalPrice
-                                    });
-
-                                    // Display the total price
-                                    //document.getElementById('total-price').innerText = `Total Price: $`;
-                                    document.getElementById('total-price').innerText = totalPrice.toFixed(2)+" EGP";
-                                }
                                 function showStockError() {
                                     var popup = document.getElementById("stock-error");
                                     popup.style.display = "block"; // Show the popup
@@ -188,78 +137,26 @@
                         </script>
                         <tbody id="cart-table-body">
 
-                            <tr class="bottom_button">
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <div class="cupon_text d-flex align-items-center">
-                                        <input type="text" placeholder="Coupon Code" id="coVal">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <h5>Subtotal</h5>
-                                </td>
-                                <td>
-                                    <h5 id = "total-price"></h5>
-                                </td>
-                                <td>
-
-                                </td>
-                            </tr>
-                            <tr class="out_button_area">
-                                <td>
-                                    <div class="text-danger">
-                                        <h5 id="cartError" class="text-danger"></h5>
-                                    </div>
-                                </td>
-                                <td>
-
-                                </td>
-                                <c:choose>
-                                    <c:when test="${not empty cartItems}">
-                                        <td>
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td>
-
-                                        </td>
-                                    </c:otherwise>
-                                </c:choose>
-                                <td>
-                                    <div class="checkout_btn_inner d-flex align-items-center">
-                                        <a class="gray_btn" href="index.jsp">Continue Shopping</a>
-                                        <form action="orderDetails" method="get" id="coForm">
-                                            <input type="hidden" name="coupon" id="hiddenValue">
-                                            <button type="button" onclick="viewOrderDetails()" class="primary-btn">Proceed To Checkout</button>
-                                            <input type="submit" class="gray_btn" value="Proceed to checkout" disabled>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <h5>Subtotal</h5>
+                            </td>
+                            <td>
+                                <h5 id="total-price"></h5>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="out_button_area">
+                            <td colspan="5" id="formContainer">
+                                <div id="checkoutForm" class="checkout_btn_inner d-flex justify-content-end align-items-center">
+                                    <a id ="continueButton"     class="gray_btn me-2" href="index.html">Continue Shopping</a>
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -276,9 +173,7 @@
         // });
 
         function viewOrderDetails(){
-            var valueFromDiv = document.getElementById('coVal').value;
-            console.log(valueFromDiv)
-            window.location.href = window.location.origin + "/ecommerce/web/orderDetails?coupon=" + valueFromDiv;
+            window.location.href = window.location.origin + "/web/checkout.html";
         }
 
     </script>

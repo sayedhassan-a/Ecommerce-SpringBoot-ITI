@@ -1,6 +1,8 @@
 package org.example.ecommerce.services;
 
+import org.example.ecommerce.dtos.ProductCartDTO;
 import org.example.ecommerce.dtos.ProductResponseDTO;
+import org.example.ecommerce.mappers.ProductCartMapper;
 import org.example.ecommerce.mappers.ProductMapper;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.repositories.ProductRepository;
@@ -24,13 +26,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductSpecificationRepository productSpecsRepository;
     private final ProductMapper productMapper;
+    private final ProductCartMapper productCartMapper;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
-                              ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper) {
+                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper) {
         this.productRepository = productRepository;
         this.productSpecsRepository = productSpecificationRepository;
         this.productMapper = productMapper;
+        this.productCartMapper = productCartMapper;
     }
 
     public Product createProduct(Product product) {
@@ -165,4 +169,9 @@ public class ProductService {
         });
     }
 
+    public ProductCartDTO findProductQuantityById(Long id) {
+        return productCartMapper.toDTO(
+                productRepository.findById(id).orElseThrow(
+                        ()->new ProductNotFoundException(id)));
+    }
 }

@@ -6,6 +6,7 @@ import org.example.ecommerce.dtos.ProductRequestDTO;
 import org.example.ecommerce.dtos.ProductResponseDTO;
 import org.example.ecommerce.dtos.ProductSpecsDTO;
 import org.example.ecommerce.dtos.ProductWithSpecsDTO;
+import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.ProductService;
 import org.example.ecommerce.services.ProductSpecsService;
@@ -142,4 +143,9 @@ public class ProductController {
         }
     }
 
+
+    @GetMapping("/{id}/stock")
+    public ResponseEntity<ProductCartDTO> searchProducts(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.findProductQuantityById(id));
+    }
 }

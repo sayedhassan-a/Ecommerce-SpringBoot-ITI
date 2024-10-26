@@ -6,15 +6,19 @@ import org.example.ecommerce.mappers.ProductCartMapper;
 import org.example.ecommerce.mappers.ProductMapper;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.repositories.ProductRepository;
-import org.example.ecommerce.specification.ProductSpecificationRepository;
-import org.example.ecommerce.specification.ProductSpecs;
+import org.example.ecommerce.repositories.ProductSpecificationRepository;
+import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.exceptions.ProductNotFoundException;
-import org.example.ecommerce.system.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -146,6 +150,24 @@ public class ProductService {
         return new ProductSpecs(); // Replace with actual fetching logic
     }
 
+    public Page<ProductResponseDTO> getProductsByFilters(Long subCategoryId, Map<String, List<String>> filters, int page, int size) {
+
+        List<String> keys = new ArrayList<>(filters.keySet());
+        List<String> values = filters.values().stream().flatMap(List::stream).collect(Collectors.toList());
+
+        List<ProductSpecs> matchingSpecs = productSpecsRepository.findByDynamicFilters(keys, values);
+        List<String> specsIds = matchingSpecs.stream().map(ProductSpecs::getId).collect(Collectors.toList());
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> matchingProducts = productRepository.findBySubCategoryIdAndSpecsIds(subCategoryId, specsIds, pageable);
+
+        return matchingProducts.map(product -> {
+            ProductSpecs productSpecs = matchingSpecs.stream()
+                    .filter(spec -> spec.getId().equals(product.getSpecsId()))
+                    .findFirst().orElse(null);
+            return productMapper.toProductResponseDTO(product, productSpecs);
+        });
+    }
 
     public ProductCartDTO findProductQuantityById(Long id) {
         return productCartMapper.toDTO(

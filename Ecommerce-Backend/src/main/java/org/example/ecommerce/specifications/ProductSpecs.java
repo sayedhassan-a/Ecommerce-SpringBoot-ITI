@@ -1,4 +1,4 @@
-package org.example.ecommerce.specification;
+package org.example.ecommerce.specifications;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +18,6 @@ public class ProductSpecs {
     private String productId;
     private List<String> key;
     private List<String> value;
+
 }
 

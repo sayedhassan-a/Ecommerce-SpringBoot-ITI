@@ -2,7 +2,7 @@ package org.example.ecommerce.controllers;
 
 
 import org.example.ecommerce.services.ProductSpecsService;
-import org.example.ecommerce.specification.ProductSpecs;
+import org.example.ecommerce.specifications.ProductSpecs;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

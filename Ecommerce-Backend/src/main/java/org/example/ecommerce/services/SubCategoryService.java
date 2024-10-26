@@ -68,7 +68,7 @@ public class SubCategoryService {
                 .orElse(null); // or throw an exception if not found
         // Fetch the associated SubCategorySpecification using the structureId
         SubCategorySpecification subCategorySpecification = subCategorySpecificationRepository.findById(subCategory.getStructureId())
-                .orElse(null); // or throw an exception if not found
+                .orElse(null);
         // Map to DTO
         return subCategoryMapper.toSubCategoryWithSpecificationDTO(subCategory, subCategorySpecification);
     }

@@ -22,10 +22,8 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
-
-
     public List<CategoryDTO> getAllCategories(){
-        return categoryRepository.findAll()
+        return categoryRepository.findAllBy()
                 .stream()
                 .map(categoryMapper::toDTO)
                 .collect(Collectors.toList());
@@ -35,7 +33,6 @@ public class CategoryService {
                 .map(categoryMapper::toDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
-
     public CategoryDTO add(CategoryDTO categoryDTO)
     {
         Category category = categoryMapper.toEntity(categoryDTO);

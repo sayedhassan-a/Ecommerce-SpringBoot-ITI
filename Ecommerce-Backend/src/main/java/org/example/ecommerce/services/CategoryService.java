@@ -22,10 +22,8 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
-
-
     public List<CategoryDTO> getAllCategories(){
-        return categoryRepository.findAll()
+        return categoryRepository.findAllBy()
                 .stream()
                 .map(categoryMapper::toDTO)
                 .collect(Collectors.toList());
@@ -35,13 +33,24 @@ public class CategoryService {
                 .map(categoryMapper::toDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
-
     public CategoryDTO add(CategoryDTO categoryDTO)
     {
         Category category = categoryMapper.toEntity(categoryDTO);
         return categoryMapper.toDTO(categoryRepository.save(category));
     }
 
+    public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+        existingCategory.setName(categoryDTO.getName());
+        Category updatedCategory = categoryRepository.save(existingCategory);
+        return categoryMapper.toDTO(updatedCategory);
+    }
+    public void delete(Long id) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+        categoryRepository.delete(existingCategory);
+    }
 
 
 

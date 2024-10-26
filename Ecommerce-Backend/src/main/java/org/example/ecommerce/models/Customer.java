@@ -40,4 +40,7 @@ public class Customer extends User{
     private OAuthProvider provider;
 
     boolean isActive;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<CreditCard> creditCard;
 }

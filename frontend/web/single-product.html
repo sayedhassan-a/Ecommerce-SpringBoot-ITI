@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="icon" href="../assets/img/electro-logo.png" />
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Electro</title>
+	<!-- CSS -->
+	<link rel="stylesheet" href="../assets/css/linearicons.css">
+	<link rel="stylesheet" href="../assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../assets/css/themify-icons.css">
+	<link rel="stylesheet" href="../assets/css/bootstrap.css">
+	<link rel="stylesheet" href="../assets/css/owl.carousel.css">
+	<link rel="stylesheet" href="../assets/css/nice-select.css">
+	<link rel="stylesheet" href="../assets/css/nouislider.min.css">
+	<link rel="stylesheet" href="../assets/css/ion.rangeSlider.css" />
+	<link rel="stylesheet" href="../assets/css/ion.rangeSlider.skinFlat.css" />
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<link rel="stylesheet" href="../assets/css/style.css" />
+	<link rel="stylesheet" href="../assets/css/header.css"/>
+	<style>
+		.popup {
+			display: none;
+			position: fixed;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			background-color: #3C5B6F;
+			padding: 20px;
+			border: 1px solid #153448;
+			border-radius: 5px;
+			z-index: 1000;
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+
+<!-- Start Header Area -->
+<header class="header_area sticky-header" id="header"></header>
+<!-- End Header Area -->
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Product Details</h1>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Single Product Area =================-->
+<div class="product_image_area">
+	<div class="container">
+		<div class="row s_product_inner">
+			<div class="col-lg-6">
+				<div class="s_Product_carousel">
+					<div class="single-prd-item">
+						<img class="img-fluid product-image1" src="" alt="">
+					</div>
+					<div class="single-prd-item">
+						<img class="img-fluid product-image2" src="" alt="">
+					</div>
+					<div class="single-prd-item">
+						<img class="img-fluid product-image3" src="" alt="">
+					</div>
+				</div>
+			</div>
+			<div id="stock-error" class="popup">
+				quantity out of stock!
+			</div>
+			<div class="col-lg-5 offset-lg-1">
+				<div class="s_product_text">
+					<h3 id="product-name"></h3>
+					<h2 id="product-price"></h2>
+					<ul class="list">
+						<li><a class="active" href="#" disabled="true"><span>Category</span> : <span id="product-category"></span></a></li>
+						<li><a href="#" disabled="true"><span>Brand Name</span> : <span id="brand-name"></span></a></li>
+						<li><a href="#" disabled="true" id="product-availability">
+							<span>Availability</span> : <span id="product-stock"></span></a>
+						</li>
+					</ul>
+					<p id="product-description"></p>
+					<div class="product_count">
+						<label for="qty">Quantity:</label>
+						<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
+						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+								class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) && sst > 1 ) result.value--;return false;"
+								class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+					</div>
+					<div class="card_area d-flex align-items-center">
+						<a class="primary-btn" href="#" onclick="event.preventDefault(); handleAddItem();">Add to Cart</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--================End Single Product Area =================-->
+
+<!--================Product Description Area =================-->
+<section class="product_description_area">
+	<div class="container">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+				   aria-selected="false">Specification</a>
+			</li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+				<div class="table-responsive">
+					<table class="table">
+						<tbody id="product-specifications">
+						<!-- Specifications will be dynamically populated here -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--================End Product Description Area =================-->
+
+<!-- Start footer Area -->
+<footer class="footer-area section_gap" id="footer"></footer>
+<!-- End footer Area -->
+
+<script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="../assets/js/vendor/bootstrap.min.js"></script>
+<script src="../assets/js/jquery.ajaxchimp.min.js"></script>
+<script src="../assets/js/jquery.nice-select.min.js"></script>
+<script src="../assets/js/jquery.sticky.js"></script>
+<script src="../assets/js/nouislider.min.js"></script>
+<script src="../assets/js/jquery.magnific-popup.min.js"></script>
+<script src="../assets/js/owl.carousel.min.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/cartHandlingFunctions.js"></script>
+<script src="../assets/js/addToCartButton.js"></script>
+<script>
+	$(document).ready(function() {
+		const url = new URL(window.location.href);
+		const params = new URLSearchParams(url.search);
+		const id = params.get('id');
+
+		// Fetch product details using the product ID
+		$.getJSON("http://localhost:9002/api/products" + "/" + id, populate);
+
+
+		function populate(data, status, xhr) {
+			//  console.log(data);
+
+			if (status === "success") {
+				// Populate product details
+				$('#product-name').text(data.name);
+				$('#product-price').text((parseFloat(data.price) / 100).toFixed(2) + " EGP");
+
+				$('#product-description').text(data.description);
+
+				// Populate images
+				// console.log(data);
+				if (data.image) {
+					$('.product-image1').attr('src', data.image || 'default_image.jpg');
+					$('.product-image2').attr('src', data.productImages[0]?.url || data.image || 'default_image.jpg');
+					$('.product-image3').attr('src', data.productImages[1]?.url || data.image || 'default_image.jpg');
+				}
+
+				/*else {
+                    // Use a default image if no product images are present
+                    $('.product-image1').attr('src', 'default_image.jpg');
+                    $('.product-image2').attr('src', 'default_image.jpg');
+                    $('.product-image3').attr('src', 'default_image.jpg');
+                }*/
+
+				// Populate dynamic specs
+				const specsContainer = $('#product-specifications');
+				specsContainer.empty(); // Clear previous specs if any
+				if (data.productSpecs && data.productSpecs.key && data.productSpecs.value) {
+					data.productSpecs.key.forEach((key, index) => {
+						const value = data.productSpecs.value[index] || "N/A";
+						const specRow = `<tr><td><h5>${key}</h5></td><td><h5>${value}</h5></td></tr>`;
+						specsContainer.append(specRow);
+					});
+				} else {
+					specsContainer.append('<tr><td colspan="2"><h5>No specifications available</h5></td></tr>');
+				}
+
+				// Populate stock and category
+				$('#product-stock').text(data.stock > 0 ? data.stock + " items available" : "Out of stock");
+				$('#product-category').text(data.categoryName || "N/A");
+				$('#brand-name').text(data.brandName || "N/A");
+			}
+		}
+	});
+
+</script>error
+</body>
+</html>

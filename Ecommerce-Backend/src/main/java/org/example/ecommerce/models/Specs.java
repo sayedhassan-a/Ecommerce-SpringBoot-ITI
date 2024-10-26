@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,5 +21,5 @@ public class Specs {
     @Field("is_required")
     private boolean isRequired;
 
-    private List<String> options;
+    private Set<String> options;
 }

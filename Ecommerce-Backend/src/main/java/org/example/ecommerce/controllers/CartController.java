@@ -36,7 +36,7 @@ public class CartController {
 
     @PostMapping("/add")
     ResponseEntity<CartItemResponseDTO> increaseCartItem(@RequestBody CartItemRequestDTO cartItemRequestDTO) {
-        return ResponseEntity.ok(cartItemService.setQuantity(
+        return ResponseEntity.ok(cartItemService.addQuantity(
                 cartItemRequestDTO.getProductId(),
                 cartItemRequestDTO.getQuantity()));
     }

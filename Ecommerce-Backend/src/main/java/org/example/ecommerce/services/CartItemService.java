@@ -88,10 +88,6 @@ public class CartItemService {
             throw new BadRequestException("Quantity cannot be negative");
         }
 
-        if(product.getStock() < quantity) {
-            throw new BadRequestException("Available quantity is not enough");
-        }
-
         CartKey cartKey = new CartKey(customer, product);
 
         Optional<CartItem> item = cartItemRepository.findById(cartKey);
@@ -107,14 +103,11 @@ public class CartItemService {
         }
         else {
             cartItem = new CartItem();
+            cartItem.setQuantity(quantity);
+            cartItem.setCustomer(customer);
+            cartItem.setProduct(product);
         }
-        cartItem.setQuantity(quantity);
-        cartItem.setCustomer(customer);
-        cartItem.setProduct(product);
-        if (quantity == 0) {
-            cartItemRepository.delete(cartItem);
-            return null;
-        }
+
 
         CartItem saved = cartItemRepository.save(cartItem);
 

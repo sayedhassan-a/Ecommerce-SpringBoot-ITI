@@ -1,5 +1,7 @@
 package org.example.ecommerce.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.ProductCartDTO;
 import org.example.ecommerce.dtos.ProductResponseDTO;
 import org.example.ecommerce.mappers.ProductCartMapper;
@@ -9,6 +11,7 @@ import org.example.ecommerce.repositories.ProductRepository;
 import org.example.ecommerce.repositories.ProductSpecificationRepository;
 import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.exceptions.ProductNotFoundException;
+import org.example.ecommerce.system.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -174,4 +183,5 @@ public class ProductService {
                 productRepository.findById(id).orElseThrow(
                         ()->new ProductNotFoundException(id)));
     }
+
 }

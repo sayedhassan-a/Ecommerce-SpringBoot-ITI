@@ -84,16 +84,13 @@ public class ProductService {
 
     public Page<ProductResponseDTO> searchProducts(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        String processedKeyword = keyword.toLowerCase().replaceAll("\\s+", " "); // Normalize spaces and case
+        String processedKeyword = keyword.toLowerCase().replaceAll("\\s+", " ");
 
-        // Perform the search and map each Product to ProductResponseDTO with ProductSpecs included
         return productRepository.searchProductsByName(processedKeyword, pageable)
                 .map(product -> {
-                    // Fetch ProductSpecs from MongoDB by specsId
                     ProductSpecs productSpecs = productSpecsRepository.findById(product.getSpecsId())
                             .orElse(null); // Use null if specs are optional
 
-                    // Map to ProductResponseDTO
                     return productMapper.toProductResponseDTO(product, productSpecs);
                 });
     }
@@ -136,6 +133,19 @@ public class ProductService {
             return productMapper.toProductResponseDTO(product, productSpecs);
         });
     }
+
+    public Page<ProductResponseDTO> getProductsBySubCategory(Long subCategoryId, Pageable pageable) {
+        Page<Product> products = productRepository.findBySubCategory(subCategoryId, pageable);
+        return products.map(product -> {
+            ProductSpecs productSpecs = fetchProductSpecs(product.getSpecsId());
+            return productMapper.toProductResponseDTO(product, productSpecs);
+        });
+    }
+
+    private ProductSpecs fetchProductSpecs(String specsId) {
+        return new ProductSpecs(); // Replace with actual fetching logic
+    }
+
 
     public ProductCartDTO findProductQuantityById(Long id) {
         return productCartMapper.toDTO(

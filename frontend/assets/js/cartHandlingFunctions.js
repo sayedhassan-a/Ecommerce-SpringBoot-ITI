@@ -15,6 +15,7 @@ function addToCart(itemId, buyQuantity, action) {
                                                         else{
                                                             showStockError("quantity out of stock!");
                                                         }
+                                                        
                                                     },
                                                     error: function(response) {
                                                         if(response.status == 401){

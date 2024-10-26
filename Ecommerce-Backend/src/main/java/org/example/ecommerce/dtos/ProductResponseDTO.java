@@ -8,6 +8,7 @@ import org.example.ecommerce.specification.ProductSpecs;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +19,9 @@ public class ProductResponseDTO {
    private BigDecimal price;
    private String description;
    private String image;
+   private String categoryName;
+   private String brandName;
+   private String stock;
+   private Set<Image> productImages;
    private ProductSpecs productSpecs;
 }

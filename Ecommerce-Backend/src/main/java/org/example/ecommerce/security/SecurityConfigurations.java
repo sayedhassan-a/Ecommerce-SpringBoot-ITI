@@ -67,6 +67,20 @@ public class SecurityConfigurations {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 //                                .requestMatchers(HttpMethod.POST, "/customers").permitAll()
+
+                               //
+                         .anyRequest().permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+//                                .requestMatchers(HttpMethod.PUT, "/customers/**").hasAuthority(Role.ROLE_USER.name()) // Protected endpoint
+//                                .requestMatchers(HttpMethod.DELETE, "/customers/**").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
+//
+//                                .requestMatchers(HttpMethod.POST, "/admins").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
+//                                .requestMatchers(HttpMethod.GET, "/admins").hasAuthority(Role.ROLE_ADMIN.name()) // Protected endpoint
+//                                .requestMatchers(HttpMethod.PUT, "/admins/**").hasAuthority("ROLE_moderator") // Protected endpoint
+//                                .requestMatchers(HttpMethod.DELETE, "/admins/**").hasAuthority("ROLE_moderator") // Protected endpoint
+////                              // the rest is not public
+//                                .anyRequest().authenticated() // Always at last
+
                              /*   .requestMatchers(HttpMethod.GET, "/customers").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/customers/**").hasAuthority(Role.ROLE_USER.name()) // Protected endpoint
@@ -79,7 +93,8 @@ public class SecurityConfigurations {
 //                              // the rest is not public
                                 .anyRequest().authenticated() // Always at last*/
 
-                                .anyRequest().permitAll()
+                                //.anyRequest().permitAll()
+
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

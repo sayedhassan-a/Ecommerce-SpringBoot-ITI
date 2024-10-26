@@ -14,7 +14,6 @@ public class SubCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
     @Column(name = "structure_id")
     private String structureId;
 

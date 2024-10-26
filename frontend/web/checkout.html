@@ -1,139 +1,200 @@
-<!DOCTYPE html>
-<html lang="zxx" class="no-js">
+    <!DOCTYPE html>
+    <html lang="zxx" class="no-js">
 
-<head>
-    <!-- Mobile Specific Meta -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon-->
-    <link rel="icon" href="../assets/img/electro-logo.png" />
-    <!-- Author Meta -->
-    <meta name="author" content="CodePixar">
-    <!-- Meta Description -->
-    <meta name="description" content="">
-    <!-- Meta Keyword -->
-    <meta name="keywords" content="">
-    <!-- meta character set -->
-    <meta charset="UTF-8">
-    <!-- Site Title -->
-    <title>Electro</title>
+    <head>
+        <!-- Mobile Specific Meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Favicon-->
+        <link rel="icon" href="../assets/img/electro-logo.png" />
+        <!-- Author Meta -->
+        <meta name="author" content="CodePixar">
+        <!-- Meta Description -->
+        <meta name="description" content="">
+        <!-- Meta Keyword -->
+        <meta name="keywords" content="">
+        <!-- meta character set -->
+        <meta charset="UTF-8">
+        <!-- Site Title -->
+        <title>Electro</title>
 
-    <!--
-            CSS
-            ============================================= -->
-    <link rel="stylesheet" href="../assets/css/linearicons.css">
-    <link rel="stylesheet" href="../assets/css/owl.carousel.css">
-    <link rel="stylesheet" href="../assets/css/themify-icons.css">
-    <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../assets/css/nice-select.css">
-    <link rel="stylesheet" href="../assets/css/nouislider.min.css">
-    <link rel="stylesheet" href="../assets/css/bootstrap.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/header.css"/>
-</head>
+        <!--
+                CSS
+                ============================================= -->
+        <link rel="stylesheet" href="../assets/css/linearicons.css">
+        <link rel="stylesheet" href="../assets/css/owl.carousel.css">
+        <link rel="stylesheet" href="../assets/css/themify-icons.css">
+        <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../assets/css/nice-select.css">
+        <link rel="stylesheet" href="../assets/css/nouislider.min.css">
+        <link rel="stylesheet" href="../assets/css/bootstrap.css">
+        <link rel="stylesheet" href="../assets/css/main.css">
+        <link rel="stylesheet" href="../assets/css/style.css" />
+        <script src="../assets/js/forbidden.js"></script>
+        <style>
+            .payment-options {
+                display: flex;
+                gap: 20px;
+                margin: 20px 0;
+                justify-content: space-between;
+            }
+            .payment-option {
+                padding: 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                text-align: center;
+                width: 100%;
+                cursor: pointer;
+                transition: box-shadow 0.3s;
+            }
+            .payment-option.active {
+                border-color: #007bff;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+                background-color: #f0f8ff;
+            }
+            .payment-option img {
+                max-width: 40px;
+                margin-bottom: 10px;
+            }
+            .primary-btn {
+                width: 100%;
+            }
+        </style>
+    </head>
 
-<body onload="setCoupon()">
+    <body onload="loadCheckout();setCoupon();">
 
-    <!-- Start Header Area -->
-    <header class="header_area sticky-header" id="header"></header>
-	<!-- End Header Area -->
+        <!-- Start Header Area -->
+        <header class="header_area sticky-header" id="header"></header>
+        <!-- End Header Area -->
 
-    <!-- Start Banner Area -->
-    <section class="banner-area organic-breadcrumb">
-        <div class="container">
-            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-                <div class="col-first">
-                    <h1>Checkout</h1>
+        <!-- Start Banner Area -->
+        <section class="banner-area organic-breadcrumb">
+            <div class="container">
+                <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                    <div class="col-first">
+                        <h1>Checkout</h1>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- End Banner Area -->
+        </section>
+        <!-- End Banner Area -->
 
-    <!--================Checkout Area =================-->
-    <section class="checkout_area section_gap">
-        <div class="container">
-            <div class="billing_details">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <div class="order_box">
-                            <h2>Your Order</h2>
-                            <ul class="list">
-                                <li><a href="#">Product <span>Total</span></a></li>
-                                <c:forEach var="item" items="${cartItems}">
-                                    <li>
-                                        <a href="#">${item.name}
-                                            <span class="middle">x ${item.quantity}</span>
-                                            <span class="last">EGP <fmt:formatNumber value="${(item.price/100) * item.quantity}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span>
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                            <c:choose>
-                            <c:when test="${not empty coupon}">
-                                <ul class="list list_2">
-                                    <li><a href="#">Subtotal <span>EGP <fmt:formatNumber value="${totalPrice/100}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></a></li>
+        <!--================Checkout Area =================-->
+        <section class="checkout_area section_gap">
+            <div class="container">
+                <div class="billing_details">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="order_box">
+                                <h2>Your Order</h2>
+                                <ul class="list">
+                                    <!-- Order items go here -->
                                 </ul>
                                 <ul class="list list_2">
-                                    <li><a href="#">Discount(${coupon}) <span>EGP -<fmt:formatNumber value="${discount/100}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></a></li>
+                                    <!-- Total and other fees go here -->
                                 </ul>
-                                <ul class="list list_2">
-                                    <li><a href="#">Total <span>EGP <fmt:formatNumber value="${newTotalPrice/100}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></a></li>
-                                </ul>
-                            </c:when>
-                            <c:otherwise>
-                                <ul class="list list_2">
-                                    <li><a href="#">Total <span>EGP <fmt:formatNumber value="${totalPrice/100}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></a></li>
-                                </ul>
-                            </c:otherwise>
-                            </c:choose>
-                            <!-- Payment options -->
-                            <form action="order" method="post">
-                                <input name="coupon" value="${coupon}" type="hidden" id="coVal" >
-                                <button type="submit" class="primary-btn">PROCEED TO PAYMENT</button>
-                            </form>
 
+                                <!-- Payment options -->
+                                <h4 class="mt-4">Select Payment Method</h4>
+
+                                <div class="payment-options">
+                                    <div class="payment-option" id="creditCardOption" onclick="selectPaymentMethod('CREDIT_CARD')">
+                                        <img src="../assets/img/credit-card-icon.png" alt="Credit Card">
+                                        <p>Credit Card</p>
+                                    </div>
+                                    <div class="payment-option" id="cashOption" onclick="selectPaymentMethod('CASH')">
+                                        <img src="../assets/img/cash-icon.png" alt="Cash">
+                                        <p>Cash</p>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="paymentMethod" value="CREDIT_CARD">
+                                <button onclick="createOrder()" class="primary-btn">Proceed to Payment</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!--================End Checkout Area =================-->
+        <!--================End Checkout Area =================-->
 
-    <!-- start footer Area -->
-    <footer class="footer-area section_gap" id="footer"></footer>
-    <!-- End footer Area -->
+        <!-- start footer Area -->
+        <footer class="footer-area section_gap" id="footer"></footer>
+        <!-- End footer Area -->
 
-    <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-        function setCoupon() {
-            var coup = getQueryParam("coupon");
-            document.getElementById("coVal").value = coup;
-        }
+        <script>
+            var token = localStorage.getItem("token");
+            function createOrder() {
+                const paymentMethod = document.getElementById('paymentMethod').value;
 
-    </script>
+                const orderRequestDTO = {
+                    paymentMethod: paymentMethod
+                };
+
+                fetch('http://localhost:9002/api/v1/orders', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: "Bearer " + token,
+                        'Content-Type':"application/json"
+                    },
+                    body: JSON.stringify(orderRequestDTO)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to create order');
+                        }
+                        return response.json();
+                    })
+                    .then(orderResponse => {
+                        console.log('Order created:', orderResponse);
+                        // Redirect or update UI based on the response
+                        if(paymentMethod === "CREDIT_CARD"){
+                            location.href = orderResponse.paymentLink;
+                        }
+                        else{
+                            location.href = location.origin + "/web/index.html";
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('Error creating order:', error);
+                        // Display error message to the user
+                    });
+            }
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+            function setCoupon() {
+                var coup = getQueryParam("coupon");
+                    document.getElementById("coVal").value = coup;
+            }
+            function selectPaymentMethod(method) {
+                document.getElementById('paymentMethod').value = method;
+                document.getElementById('creditCardOption').classList.toggle('active', method === 'CREDIT_CARD');
+                document.getElementById('cashOption').classList.toggle('active', method === 'CASH');
+            }
+
+        </script>
 
 
-    <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-        crossorigin="anonymous"></script>
-    <script src="../assets/js/vendor/bootstrap.min.js"></script>
-    <script src="../assets/js/jquery.ajaxchimp.min.js"></script>
-    <script src="../assets/js/jquery.nice-select.min.js"></script>
-    <script src="../assets/js/jquery.sticky.js"></script>
-    <script src="../assets/js/nouislider.min.js"></script>
-    <script src="../assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="../assets/js/owl.carousel.min.js"></script>
-    <!--gmaps Js-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
-    <script src="../assets/js/gmaps.min.js"></script>
-    <script src="../assets/js/main.js"></script>
-    <script src="../assets/js/loadHeader.js"></script>
-</body>
+        <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
+        <script src="../assets/js/vendor/bootstrap.min.js"></script>
+        <script src="../assets/js/jquery.ajaxchimp.min.js"></script>
+        <script src="../assets/js/jquery.nice-select.min.js"></script>
+        <script src="../assets/js/jquery.sticky.js"></script>
+        <script src="../assets/js/nouislider.min.js"></script>
+        <script src="../assets/js/jquery.magnific-popup.min.js"></script>
+        <script src="../assets/js/owl.carousel.min.js"></script>
+        <!--gmaps Js-->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+        <script src="../assets/js/gmaps.min.js"></script>
+        <script src="../assets/js/main.js"></script>
+        <script src="../assets/js/loadHeader.js"></script>
+        <script src="../assets/js/loading.js"></script>
+        <script src="../assets/js/loadCheckout.js"></script>
+    </body>
 
-</html>
+    </html>

@@ -5,13 +5,13 @@ import lombok.Setter;
 import org.example.ecommerce.models.OrderState;
 import org.example.ecommerce.models.PaymentMethod;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class OrderResponseDTO {
     private Long id;
-    private LocalDate date = LocalDate.now();
+    private LocalDateTime date = LocalDateTime.now();
     private int totalPrice;
     private OrderState state;
     private PaymentMethod paymentMethod;

@@ -22,20 +22,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "First name is required")
+//    @NotBlank(message = "First name is required")
     private String firstName;
 
     private String middleName;
 
-    @NotBlank(message = "Last name is required")
+//    @NotBlank(message = "Last name is required")
     private String lastName;
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
 
-    @ValidPassword
-    @NotBlank(message = "Password is required")
+//    @ValidPassword
+//    @NotBlank(message = "Password is required")
     private String password;
 
     @CreatedDate
@@ -45,7 +45,7 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Role is required")
+//    @NotNull(message = "Role is required")
     private Role role;
 
     @PrePersist

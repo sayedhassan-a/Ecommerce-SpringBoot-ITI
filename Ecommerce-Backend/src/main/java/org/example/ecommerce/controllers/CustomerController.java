@@ -1,5 +1,8 @@
 package org.example.ecommerce.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.example.ecommerce.dtos.CustomerDto;
 import org.example.ecommerce.dtos.customerConverters.CustomerDtoToCustomerConverter;
@@ -8,6 +11,9 @@ import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +37,7 @@ public class CustomerController {
     }
 
     // Create a new customer
-    @PostMapping
+    @PostMapping("/register")
     public Result createCustomer(@Valid @RequestBody Customer customer) {
         Customer savedCustomer = customerService.save(customer);
         // Convert saved entity back to DTO
@@ -83,4 +89,22 @@ public class CustomerController {
         customerService.delete(id);
         return new Result(true, StatusCode.SUCCESS, "Customer deleted successfully", null);
     }
+
+//    @PostMapping("/register/google")
+//    public Result registerCustomer(@AuthenticationPrincipal OAuth2User principal) {
+//        // Extract Google user info
+//        String email = principal.getAttribute("email");
+//        String firstName = principal.getAttribute("name");
+//
+//        Customer customer = new Customer();
+//        customer.setEmail(email);
+//        customer.setFirstName(firstName);
+//        // Save customer
+//        customerService.save(customer);
+//
+//        // Convert saved entity back to DTO
+//        CustomerDto customerDto = customerToCustomerDtoConverter.convert(customer);
+//
+//        return new Result(true, StatusCode.SUCCESS, "Customer registered successfully", customerDto);
+//    }
 }

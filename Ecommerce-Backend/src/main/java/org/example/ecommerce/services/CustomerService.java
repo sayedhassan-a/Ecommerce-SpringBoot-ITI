@@ -18,12 +18,10 @@ import java.util.List;
 
 @Service
 public class CustomerService implements UserDetailsService {
+
     private final CustomerRepository customerRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final UserValidator userValidator;
-
 
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, UserValidator userValidator) {
         this.customerRepository = customerRepository;
@@ -33,6 +31,11 @@ public class CustomerService implements UserDetailsService {
 
     //implement crud operations
     public Customer save(Customer customer) {
+        List<String> errors = userValidator.validateCustomer(customer);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException("Invalid customer data: " + String.join(", ", errors));
+        }
+
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole(Role.ROLE_USER);
 
@@ -85,10 +88,22 @@ public class CustomerService implements UserDetailsService {
         customerRepository.save(user);
     }
 
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        return this.customerRepository.findByEmail(email)
+//                .map(customer -> new MyUserPrincipal(customer))
+//                .orElseThrow(() -> new UsernameNotFoundException("Customer not found with email: " + email));
+//    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return this.customerRepository.findByEmail(email)
-                .map(customer -> new MyUserPrincipal(customer))
+        Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Customer not found with email: " + email));
+
+        if (customer.getProvider() != null) {
+            throw new UsernameNotFoundException("Customer registered with OAuth provider: " + customer.getProvider());
+        }
+
+        return new MyUserPrincipal(customer);
     }
 }

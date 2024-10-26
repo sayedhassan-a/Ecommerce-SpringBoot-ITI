@@ -16,9 +16,7 @@ import java.util.List;
 @Service
 public class AdminService implements UserDetailsService {
     private final AdminRepository adminRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final UserValidator customerValidator;
 
     public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder, UserValidator customerValidator) {
@@ -29,6 +27,12 @@ public class AdminService implements UserDetailsService {
 
     // Save Admin
     public Admin save(Admin admin) {
+        // Validate Admin password
+        List<String> errors = customerValidator.validateCustomer(admin);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException("Invalid admin data: " + String.join(", ", errors));
+        }
+
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         admin.setRole(Role.ROLE_ADMIN);
         return adminRepository.save(admin);

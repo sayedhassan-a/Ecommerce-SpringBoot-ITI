@@ -20,14 +20,14 @@ import java.util.Set;
 @NoArgsConstructor
 public class Customer extends User{
 
-    @ValidAddress
+//    @ValidAddress
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     private String phone;
 
-    @NotNull
+//    @NotNull
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
@@ -36,6 +36,8 @@ public class Customer extends User{
 
     @OneToMany(mappedBy = "customer")
     private Set<Order> orders = new HashSet<>();
+
+    private OAuthProvider provider;
 
     boolean isActive;
 }

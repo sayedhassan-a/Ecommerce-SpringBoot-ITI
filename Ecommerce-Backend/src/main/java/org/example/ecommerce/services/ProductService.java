@@ -130,4 +130,17 @@ public class ProductService {
         });
     }
 
+    public Page<ProductResponseDTO> getProductsBySubCategory(Long subCategoryId, Pageable pageable) {
+        Page<Product> products = productRepository.findBySubCategory(subCategoryId, pageable);
+        return products.map(product -> {
+            ProductSpecs productSpecs = fetchProductSpecs(product.getSpecsId());
+            return productMapper.toProductResponseDTO(product, productSpecs);
+        });
+    }
+
+    private ProductSpecs fetchProductSpecs(String specsId) {
+        return new ProductSpecs(); // Replace with actual fetching logic
+    }
+
+
 }

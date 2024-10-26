@@ -92,7 +92,7 @@ public class SecurityConfigurations {
 //                              // the rest is not public
                                 .anyRequest().authenticated() // Always at last*/
 
-                                .anyRequest().permitAll()
+                                //.anyRequest().permitAll()
 
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))

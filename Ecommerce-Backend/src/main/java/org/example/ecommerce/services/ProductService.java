@@ -161,10 +161,7 @@ public class ProductService {
 
     public Page<ProductResponseDTO> getProductsByFilters(Long subCategoryId, Map<String, List<String>> filters, int page, int size) {
 
-        List<String> keys = new ArrayList<>(filters.keySet());
-        List<String> values = filters.values().stream().flatMap(List::stream).collect(Collectors.toList());
-
-        List<ProductSpecs> matchingSpecs = productSpecsRepository.findByDynamicFilters(keys, values);
+        List<ProductSpecs> matchingSpecs = productSpecsRepository.findByDynamicFilters(filters);
         List<String> specsIds = matchingSpecs.stream().map(ProductSpecs::getId).collect(Collectors.toList());
 
         Pageable pageable = PageRequest.of(page, size);

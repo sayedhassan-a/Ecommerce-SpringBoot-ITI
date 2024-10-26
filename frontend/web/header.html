@@ -2,58 +2,48 @@
     <div class="main_menu">
         <nav class="navbar navbar-expand-lg navbar-light main_box">
             <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-
+                <!-- Logo Section -->
                 <div class="logo-container">
-                    <a class="navbar-brand logo_h" href="index.html"
-                    ><img src="../assets/img/electro-logo.png" alt="" class="logo-image"
-                    /></a>
+                    <a class="navbar-brand logo_h" href="index.html">
+                        <img src="../assets/img/electro-logo.png" alt="" class="logo-image" />
+                    </a>
                 </div>
-
                 <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                >
+                    class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div
-                        class="collapse navbar-collapse offset"
-                        id="navbarSupportedContent"
-                >
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="index.html">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category.html">Shop</a>
+                        <!-- Shop Dropdown Placeholder -->
+                        <li class="nav-item dropdown" id="shopDropdownContainer">
+                            <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
+                            <div class="dropdown-menu" aria-labelledby="shopDropdown"></div> <!-- This is where the dropdown items will go -->
                         </li>
-
-                        <li id="login" class="nav-item">
-                        </li>
+                        <li id="login" class="nav-item"></li>
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html">Contact</a>
                         </li>
                     </ul>
+                    
                     <ul class="nav navbar-nav navbar-right">
-                        <br>
                         <li class="nav-item">
                             <button class="search">
                                 <a href="cart" class="cart"><span class="ti-bag"></span></a>
                             </button>
                         </li>
                     </ul>
-                    <ul id="profileSection" class="nav navbar-nav navbar-right">
-                        <br>
-
-                    </ul>
+                    <ul id="profileSection" class="nav navbar-nav navbar-right"></ul>
                 </div>
             </div>
         </nav>

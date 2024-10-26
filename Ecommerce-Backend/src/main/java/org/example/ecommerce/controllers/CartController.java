@@ -34,6 +34,13 @@ public class CartController {
                 cartItemRequestDTO.getQuantity()));
     }
 
+    @PostMapping("/add")
+    ResponseEntity<CartItemResponseDTO> increaseCartItem(@RequestBody CartItemRequestDTO cartItemRequestDTO) {
+        return ResponseEntity.ok(cartItemService.setQuantity(
+                cartItemRequestDTO.getProductId(),
+                cartItemRequestDTO.getQuantity()));
+    }
+
     @PutMapping
     ResponseEntity<List<CartItemResponseDTO>> merge(@RequestBody List<CartItemRequestDTO> cartItemRequestDTOs) {
         return ResponseEntity.ok(cartItemService.mergeCart(cartItemRequestDTOs));

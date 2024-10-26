@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +28,14 @@ public class OrderService {
     private final CartItemService cartItemService;
     private final OrderItemRepository orderItemRepository;
     private final PaymentService paymentService;
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, CartItemService cartItemService, OrderItemRepository orderItemRepository, PaymentService paymentService) {
+    private final CustomerService customerService;
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, CartItemService cartItemService, OrderItemRepository orderItemRepository, PaymentService paymentService, CustomerService customerService) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.cartItemService = cartItemService;
         this.orderItemRepository = orderItemRepository;
         this.paymentService = paymentService;
+        this.customerService = customerService;
     }
 
     public Page<OrderResponseDTO> findAll(Integer page, Integer size) {
@@ -98,36 +102,42 @@ public class OrderService {
     }
 
     @Transactional
-    public Optional<OrderResponseDTO> initOrder(Long customerId,
-                                                OrderRequestDTO orderRequestDTO) {
+    public Optional<OrderResponseDTO> initOrder(OrderRequestDTO orderRequestDTO) {
+
+
+
+        //Retrieve current customer
+        Customer customer =
+                customerService.findUserByEmail(
+                        (String) ((Jwt)SecurityContextHolder.getContext()
+                                    .getAuthentication().getPrincipal()).getClaims().get(
+                                        "sub"));
 
         List<CartItem> cartItems =
-                cartItemService.findCartItemsByCustomerId(customerId);
-
-        //TODO: Retrieve Customer
-        Customer customer = null;
-
+                cartItemService.findCartItemsByCustomerId(customer.getId());
 
         //Create Order with PLACED state
         Order order = Order.builder()
                 .state(OrderState.PLACED)
                 .paymentMethod(orderRequestDTO.getPaymentMethod())
                 .customer(customer)
+                .date(LocalDateTime.now())
                 .build();
         orderRepository.save(order);
 
         //Saving OrderItems
         List<OrderItem> orderItemList =
-                cartItems.stream().collect(ArrayList::new,(set,carItem)->{
-                    if(carItem.getProduct().getStock()<carItem.getQuantity()) {
+                cartItems.stream().collect(ArrayList::new,(set,cartItem)->{
+                    if(cartItem.getProduct().getStock()<cartItem.getQuantity()) {
                         throw new BadRequestException("Product with id ("
-                                + carItem.getProduct().getId() + ")"
+                                + cartItem.getProduct().getId() + ")"
                                 + "does not have enough stock");
                     }
+                    cartItem.getProduct().setStock(cartItem.getProduct().getStock() - cartItem.getQuantity());
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setProduct(carItem.getProduct());
-                    orderItem.setQuantity(carItem.getQuantity());
-                    orderItem.setCurrentPrice(carItem.getProduct().getPrice());
+                    orderItem.setProduct(cartItem.getProduct());
+                    orderItem.setQuantity(cartItem.getQuantity());
+                    orderItem.setCurrentPrice(cartItem.getProduct().getPrice());
                     orderItem.setOrder(order);
                     set.add(orderItem);
                 }, AbstractCollection::addAll);
@@ -144,15 +154,12 @@ public class OrderService {
         OrderResponseDTO orderResponseDTO = orderMapper.toDTO(saved);
 
         //Emptying Cart
-        cartItemService.emptyCart(customerId);
+        cartItemService.emptyCart(customer.getId());
 
         if (order.getPaymentMethod().equals(PaymentMethod.CREDIT_CARD)){
             PaymentDTO paymentDTO = new PaymentDTO(customer,order);
             String paymentLink = paymentService.generateLink(paymentDTO);
             orderResponseDTO.setPaymentLink(paymentLink);
-
-            //TODO: Initialize background task to mark the order as cancelled and
-            // return the reserved quantity if order state is not confirmed
         }
 
         return Optional.ofNullable(orderResponseDTO);

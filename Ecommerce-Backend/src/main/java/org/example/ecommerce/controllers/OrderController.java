@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/orders")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
     private final OrderService orderService;
     public OrderController(OrderService orderService) {
@@ -46,8 +46,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponseDTO> createOrder(
             @RequestBody OrderRequestDTO orderRequestDTO){
-        Long customerId = null;
-        return ResponseEntity.ok(orderService.initOrder(customerId,
+
+        return ResponseEntity.ok(orderService.initOrder(
                 orderRequestDTO).orElse(null));
     }
 }

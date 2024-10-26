@@ -73,6 +73,51 @@ public class CartItemService {
     }
 
     @Transactional
+    public CartItemResponseDTO addQuantity(Long productId, int quantity) {
+        Customer customer = customerService.findUserByEmail(
+                (String) ((Jwt)SecurityContextHolder.getContext()
+                        .getAuthentication().getPrincipal()).getClaims().get(
+                        "sub"));
+
+
+        Product product =
+                productRepository.findById(productId).
+                        orElseThrow(()->new NotFoundException("Product not found"));
+
+        if(product.getStock() < -1) {
+            throw new BadRequestException("Quantity cannot be negative");
+        }
+
+        CartKey cartKey = new CartKey(customer, product);
+
+        Optional<CartItem> item = cartItemRepository.findById(cartKey);
+        CartItem cartItem = null;
+        if(item.isPresent()) {
+            cartItem = item.get();
+            if(cartItem.getQuantity() + quantity <= product.getStock()) {
+                cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            }
+            else {
+                throw new BadRequestException("Available quantity is not enough");
+            }
+        }
+        else {
+            cartItem = new CartItem();
+            cartItem.setQuantity(quantity);
+            cartItem.setCustomer(customer);
+            cartItem.setProduct(product);
+        }
+
+
+        CartItem saved = cartItemRepository.save(cartItem);
+
+        CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
+        cartItemResponseDTO.setQuantity(saved.getQuantity());
+        cartItemResponseDTO.setProduct(productCartMapper.toDTO(cartItem.getProduct()));
+        return cartItemResponseDTO;
+    }
+
+    @Transactional
     public boolean emptyCart(Long customerId) {
         cartItemRepository.deleteAll(cartItemRepository.findByCustomerId(customerId));
         return true;

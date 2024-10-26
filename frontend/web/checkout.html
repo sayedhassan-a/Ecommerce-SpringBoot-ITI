@@ -61,7 +61,7 @@
         </style>
     </head>
 
-    <body onload="loadCheckout();setCoupon();">
+    <body onload="loadCheckout();">
 
         <!-- Start Header Area -->
         <header class="header_area sticky-header" id="header"></header>
@@ -165,10 +165,7 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
-            function setCoupon() {
-                var coup = getQueryParam("coupon");
-                    document.getElementById("coVal").value = coup;
-            }
+
             function selectPaymentMethod(method) {
                 document.getElementById('paymentMethod').value = method;
                 document.getElementById('creditCardOption').classList.toggle('active', method === 'CREDIT_CARD');

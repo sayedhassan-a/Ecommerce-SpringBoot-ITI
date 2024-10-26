@@ -30,4 +30,4 @@ public class EcommerceApplication {
         System.setProperty("MONGO_CLUSTER", dotenv.get("MONGO_CLUSTER"));
         SpringApplication.run(EcommerceApplication.class, args);
     }
-    }
+}

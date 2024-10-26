@@ -1,5 +1,7 @@
 package org.example.ecommerce.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.ProductRequestDTO;
 import org.example.ecommerce.dtos.ProductResponseDTO;
 import org.example.ecommerce.dtos.ProductSpecsDTO;
@@ -7,7 +9,7 @@ import org.example.ecommerce.dtos.ProductWithSpecsDTO;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.ProductService;
 import org.example.ecommerce.services.ProductSpecsService;
-import org.example.ecommerce.specification.ProductSpecs;
+import org.example.ecommerce.specifications.ProductSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,17 +17,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
     private final ProductSpecsService productSpecsService;
+    private final ObjectMapper objectMapper;
+
+
 
     @Autowired
-    public ProductController(ProductService productService, ProductSpecsService productSpecsService) {
+    public ProductController(ProductService productService, ProductSpecsService productSpecsService, ObjectMapper objectMapper) {
         this.productService = productService;
         this.productSpecsService = productSpecsService;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -112,4 +122,24 @@ public class ProductController {
             Pageable pageable) {
         return productService.getProductsBySubCategory(subCategoryId, pageable);
     }
+
+    @GetMapping("/subcategory/{subCategoryId}/filter")
+    public Page<ProductResponseDTO> getProducts(
+            @PathVariable Long subCategoryId,    // <-- Ensure this is a @PathVariable
+            @RequestParam String filters,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Map<String, List<String>> filtersMap = parseFilters(filters);
+        return productService.getProductsByFilters(subCategoryId, filtersMap, page, size);
+    }
+
+    private Map<String, List<String>> parseFilters(String filters) {
+        try {
+            return objectMapper.readValue(filters, new TypeReference<Map<String, List<String>>>() {});
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid filters format", e);
+        }
+    }
+
 }

@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.ecommerce.models.Image;
-import org.example.ecommerce.specification.ProductSpecs;
+import org.example.ecommerce.specifications.ProductSpecs;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 @Data

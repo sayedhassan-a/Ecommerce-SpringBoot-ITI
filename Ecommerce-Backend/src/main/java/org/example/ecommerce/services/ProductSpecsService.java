@@ -1,7 +1,7 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.specification.ProductSpecs;
-import org.example.ecommerce.specification.ProductSpecificationRepository;
+import org.example.ecommerce.specifications.ProductSpecs;
+import org.example.ecommerce.repositories.ProductSpecificationRepository;
 import org.example.ecommerce.system.exceptions.ProductSpecificationNotFoundException;
 import org.springframework.stereotype.Service;
 

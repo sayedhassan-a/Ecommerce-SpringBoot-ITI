@@ -1,7 +1,7 @@
 package org.example.ecommerce.mappers;
 
 import org.example.ecommerce.dtos.ProductSpecsDTO;
-import org.example.ecommerce.specification.ProductSpecs;
+import org.example.ecommerce.specifications.ProductSpecs;
 import org.mapstruct.Mapper;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 var currentSize = 12;
-var currentPage = 1;
+var currentPage = 0;
 var filterDict = {
-    page: 1,
+    page: 0,
     size: currentSize
 };
 
@@ -13,7 +13,7 @@ function changePage(pageNum){
 function changeSize(){
     currentSize =  $("#selectPageSize").val();
     filterDict = {
-        page: 1,
+        page: 0,
         size: currentSize
     };
     search();
@@ -62,11 +62,11 @@ function changeSize(){
 
 function search() {
     var queryParams = new URLSearchParams(filterDict).toString();
-    $.get("products?" + queryParams, function (response) {
+    $.get("http://localhost:9002/api/products?" + queryParams, function (response) {
         console.log(response);
         // Assuming response is an array of ProductDTO objects
-        var data = response.data;
-        var page = response.page;
+        var data = response.content;
+        var page = response.totalPages;
         createPagination(page, filterDict.page);
 
         // Clear the productBox before appending new products
@@ -117,7 +117,7 @@ function createPagination(totalPages, currentPage) {
             pageButton.classList.add('active');  // Highlight current page
         }
         pageButton.onclick = function() {
-            loadPage(pageNum);
+            loadPage(pageNum-1);
         };
         container.appendChild(pageButton);
     };

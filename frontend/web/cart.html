@@ -57,6 +57,32 @@
                 object-fit: cover; /* Optional: maintains the aspect ratio */
                 border-radius: 5px; /* Optional: gives a rounded effect */
             }
+            /*@media only screen and (max-width: 600px) {*/
+            /*    #checkoutForm {*/
+            /*        margin-left: 0;*/
+            /*        width: 100%;*/
+            /*        display: flex;*/
+            /*        justify-content: space-evenly;*/
+            /*    }*/
+            /*    .table-responsive {*/
+            /*        width: 100%;*/
+            /*    }*/
+            /*    .table {*/
+            /*        width: 100%;*/
+            /*    }*/
+
+            /*    .gray_btn{*/
+            /*        padding: 0px;*/
+            /*        width: 50%;*/
+            /*        font-size:  12px;*/
+            /*        text-align: center;*/
+            /*    }*/
+            /*    #formContainer{*/
+            /*        width: 100%;*/
+            /*        padding: 0px;*/
+            /*        border-spacing: 0px;*/
+            /*    }*/
+            /*}*/
 
         </style>
 </head>
@@ -94,9 +120,6 @@
                             </tr>
                         </thead>
                         <script>
-                            function showError(errorMessage){
-                                document.getElementById("cartError").innerText=errorMessage;
-                            }
 
 
 
@@ -113,17 +136,7 @@
 
                         </script>
                         <tbody id="cart-table-body">
-                        <tr class="bottom_button">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="cupon_text d-flex align-items-center">
-                                    <input type="text" placeholder="Coupon Code" id="coVal">
-                                </div>
-                            </td>
-                        </tr>
+
                         <tr>
                             <td></td>
                             <td></td>
@@ -136,17 +149,9 @@
                             <td></td>
                         </tr>
                         <tr class="out_button_area">
-                            <td>
-                                <div class="text-danger">
-                                    <h5 id="cartError" class="text-danger"></h5>
-                                </div>
-                            </td>
-                            <td colspan="4">
-                                <div class="checkout_btn_inner d-flex justify-content-end align-items-center">
-                                    <a class="gray_btn me-2" href="index.jsp">Continue Shopping</a>
-                                    <form id="checkoutForm" action="orderDetails" method="get">
-                                        <input type="hidden" name="coupon" id="hiddenValue">
-                                    </form>
+                            <td colspan="5" id="formContainer">
+                                <div id="checkoutForm" class="checkout_btn_inner d-flex justify-content-end align-items-center">
+                                    <a id ="continueButton"     class="gray_btn me-2" href="index.html">Continue Shopping</a>
                                 </div>
                             </td>
                         </tr>
@@ -168,8 +173,6 @@
         // });
 
         function viewOrderDetails(){
-            var valueFromDiv = document.getElementById('coVal').value;
-            console.log(valueFromDiv)
             window.location.href = window.location.origin + "/web/checkout.html";
         }
 

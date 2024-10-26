@@ -7,6 +7,7 @@ function loadCartItems() {
         if(cartItems.length>0){
             // Create a new button element
             const button = document.createElement("button");
+            button.id = "checkOutButton";
             button.type = "button";
             button.className = "primary-btn";
             button.innerText = "Proceed To Checkout";
@@ -18,6 +19,7 @@ function loadCartItems() {
         else{
             // Create a new input element
             const input = document.createElement("input");
+            input.id = "checkOutButton";
             input.type = "submit";
             input.className = "gray_btn";
             input.value = "Proceed to checkout";
@@ -57,6 +59,7 @@ function loadCartItems() {
                 if(cartItems.length>0){
                     // Create a new button element
                     const button = document.createElement("button");
+                    button.id = "checkOutButton";
                     button.type = "button";
                     button.className = "primary-btn";
                     button.innerText = "Proceed To Checkout";
@@ -68,6 +71,7 @@ function loadCartItems() {
                 else{
                     // Create a new input element
                     const input = document.createElement("input");
+                    input.id = "checkOutButton";
                     input.type = "submit";
                     input.className = "gray_btn";
                     input.value = "Proceed to checkout";
@@ -227,7 +231,7 @@ function removeItem(itemId, action) {
     if(token == null){
         var cartItems = localStorage.getItem("cart");
         cartItems = JSON.parse(cartItems);
-        const index = cartItems.findIndex(item => item.product.id === productId);
+        const index = cartItems.findIndex(item => item.product.id === itemId);
 
         // Check if the item exists
         if (index !== -1) {

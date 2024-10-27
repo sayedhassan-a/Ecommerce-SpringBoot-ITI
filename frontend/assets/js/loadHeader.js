@@ -3,7 +3,7 @@ function loadHeader() {
         .then(response => response.text())
         .then(data => {
             document.getElementById('header').innerHTML = data;
-            loadingHeaderContent();
+            loadingAdminHeaderContent();
             displayShop();
         });
     fetch('footer.html')

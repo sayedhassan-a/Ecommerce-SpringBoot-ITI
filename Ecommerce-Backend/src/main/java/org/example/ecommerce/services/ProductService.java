@@ -18,9 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import java.net.URLDecoder;
@@ -173,6 +171,22 @@ public class ProductService {
                     .findFirst().orElse(null);
             return productMapper.toProductResponseDTO(product, productSpecs);
         });
+    }
+
+    public Page<ProductResponseDTO> getProductsByName(Long subCategoryId,
+                                                      String name, int page,
+                                                      int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> matchingProducts =
+                productRepository.findBySubCategoryIdAndNameLikeIgnoreCase(subCategoryId,
+                "%"+name+"%", pageable);
+
+        return matchingProducts.map(product -> {
+            return productMapper.toProductResponseDTO(product,
+                    productSpecsRepository.findById(product.getSpecsId()).orElse(null));
+        });
+
     }
 
     public ProductCartDTO findProductQuantityById(Long id) {

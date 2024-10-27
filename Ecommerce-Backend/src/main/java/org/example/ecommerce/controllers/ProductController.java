@@ -136,6 +136,16 @@ public class ProductController {
         return productService.getProductsByFilters(subCategoryId, filtersMap, page, size);
     }
 
+    @GetMapping("/subcategory/{subCategoryId}/search")
+    public Page<ProductResponseDTO> searchByName(
+            @PathVariable Long subCategoryId,    // <-- Ensure this is a @PathVariable
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return productService.getProductsByName(subCategoryId, name, page,
+                size);
+    }
+
     private Map<String, List<String>> parseFilters(String filters) {
         try {
             return objectMapper.readValue(filters, new TypeReference<Map<String, List<String>>>() {});

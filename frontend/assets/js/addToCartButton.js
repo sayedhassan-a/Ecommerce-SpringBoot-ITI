@@ -1,11 +1,21 @@
-function handleAddItem(){
-    var result = document.getElementById('sst');
-    var quantity = parseInt(result.value);
 
-    // Use URLSearchParams to parse the query string
-    const params = new URLSearchParams(window.location.search);
-    // Get the 'id' parameter
-    const itemId = parseInt(params.get('id'));
+function handleAddItem(num, id, redirect){
+    var quantity;
+    var itemId;
+    if(num){
+        quantity = num;
+        itemId = id;
+    }
+    else{
+        var result = document.getElementById('sst');
+        quantity = parseInt(result.value);
+        // Use URLSearchParams to parse the query string
+        const params = new URLSearchParams(window.location.search);
+        // Get the 'id' parameter
+        itemId = parseInt(params.get('id'));
+    }
+
+
 
     var currentQuantity = quantity;
     var token = localStorage.getItem("token");
@@ -45,7 +55,7 @@ function handleAddItem(){
                            item.product.image = response.image;
                            localStorage.setItem("cart", JSON.stringify(cartItems));
                            alert("Item added to cart");
-                           location.href = location.origin + "/web/cart.html";
+                           if(!redirect)location.href = location.origin + "/web/cart.html";
                        }
                    },
                    error: function() {
@@ -69,7 +79,7 @@ function handleAddItem(){
                    },
                    success: function(response) {
                        alert("Item added to cart");
-                       location.href = location.origin + "/web/cart.html";
+                       if(!redirect)location.href = location.origin + "/web/cart.html";
                    },
                    error: function() {
                        showStockError();

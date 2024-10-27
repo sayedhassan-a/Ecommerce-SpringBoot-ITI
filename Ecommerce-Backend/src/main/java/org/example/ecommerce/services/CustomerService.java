@@ -31,9 +31,12 @@ public class CustomerService implements UserDetailsService {
 
     //implement crud operations
     public Customer save(Customer customer) {
+        System.out.println("inside save: " + customer);
+
         List<String> errors = userValidator.validateCustomer(customer);
         if (!errors.isEmpty()) {
-            throw new IllegalArgumentException("Invalid customer data: " + String.join(", ", errors));
+            System.out.println("Errors: " + errors);
+            throw new ValidationException(errors);
         }
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
@@ -105,5 +108,9 @@ public class CustomerService implements UserDetailsService {
         }
 
         return new MyUserPrincipal(customer);
+    }
+
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
     }
 }

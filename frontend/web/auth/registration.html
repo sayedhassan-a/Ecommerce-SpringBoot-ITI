@@ -45,57 +45,20 @@
                     /></a>
                 </div>
 
-                <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                >
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div
-                        class="collapse navbar-collapse offset"
-                        id="navbarSupportedContent"
-                >
+                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="../index.html">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../category.html">Shop</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.html">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../contact.html">Contact</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../category.html">Shop</a></li>
+                        <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../contact.html">Contact</a></li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item">
-                            <button class="search">
-                                <a href="#" class="cart"><span class="ti-bag"></span></a>
-                            </button>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <c:if test="${not empty sessionScope['customer-id']}">
-                            <li class="nav-item">
-                                <button class="search">
-                                    <a href="#" class="cart"><span class="lnr fa-regular fa-user" id="search"></span></a>
-                                </button>
-                            </li>
-                        </c:if>
-                    </ul>
-
                 </div>
-            </div>
+                </div>
         </nav>
     </div>
 </header>
@@ -130,7 +93,8 @@
             <div class="col-lg-6">
                 <div class="login_form_inner">
                     <h3>Create an Account</h3>
-                    <form class="row login_form" action="/ecommerce/web/auth/register" method="post" id="registrationForm">
+                    <div id="generalError" class="text-danger"></div>
+                    <form class="row login_form" id="registrationForm">
                         <div class="col-md-12 form-group">
                             <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" required>
                         </div>
@@ -148,23 +112,6 @@
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
                             <div id="confirmPasswordError" class="text-danger"></div>
                         </div>
-                        <div class="col-md-12 form-group">
-                            <input type="text" class="form-control" id="address" name="address" placeholder="Address" required>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone" pattern="[0-9]{11}" title="Phone number must be 11 digits long." required>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <input class="form-control" type="date" id="date" name="date" placeholder="Date Of Birth"
-                                   max="2013-01-01" min="1900-01-01" required />
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <input class="form-control" type="text" id="job" name="job" placeholder="Job" />
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <input class="form-control" type="text" id="interests" name="interests" placeholder="Interests" />
-                        </div>
-
                         <div class="col-md-12 form-group">
                             <div class="creat_account">
                                 <input type="checkbox" id="terms" name="terms" required>
@@ -213,64 +160,79 @@
 <script src="../../assets/js/gmaps.min.js"></script>
 <script src="../../assets/js/main.js"></script>
 <script>
-    var mailIsAvailable = true
-    function checkValidEmail() {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var responseText = this.responseText;
-                if(responseText == "true"){
+    let mailIsAvailable = false;
+
+    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevents form from submitting the usual way
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        // Front-end validation: password confirmation
+        if (password !== confirmPassword) {
+            document.getElementById("confirmPasswordError").innerText = "Passwords do not match.";
+            return;
+        } else {
+            document.getElementById("confirmPasswordError").innerText = "";
+        }
+
+        // Check email availability
+        fetch(`http://localhost:8080/customers/checkEmail?email=${email}`)
+            .then(response => response.text())
+            .then(responseText => {
+                if (responseText === "true") {
                     mailIsAvailable = true;
                     document.getElementById("emailError").innerText = "";
-                }
-                else {
+
+                    // Proceed with back-end validation if the email is available
+                    const data = {
+                        firstName: document.getElementById("firstName").value,
+                        lastName: document.getElementById("lastName").value,
+                        email: email,
+                        password: password,
+                        terms: document.getElementById("terms").checked
+                    };
+
+                    fetch('http://localhost:8080/customers/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => response.json().then(errorData => {
+                            if (response.ok) {
+                                window.location.href = '/web/auth/login.html';
+                            } else {
+                                displayErrors(errorData.data); // Call a function to display errors from back end
+                            }
+                        }))
+                        .catch(error => console.error('Error during registration:', error));
+                } else {
                     mailIsAvailable = false;
-                    document.getElementById("emailError").innerText = "This email is not available";
-
+                    document.getElementById("emailError").innerText = "This email already exists";
+                    alert("This email already exists");
                 }
-            }
-        };
-        xhttp.open(
-            "GET",
-            "register?email=" + document.getElementById("email").value,
-            true
-        );
-        xhttp.send();
-    }
-    $(document).ready(function () {
-        // Check for password match on input
-        $('#confirmPassword, #password').on('input', function () {
-            checkPasswords();
-        });
-
-        // Prevent form submission if passwords don't match
-        $('#registrationForm').on('submit', function (e) {
-            if (!mailIsAvailable) {
-                e.preventDefault();  // Prevent form submission
-                alert('This email is not available.');
-            }
-            else if (!checkPasswords()) {
-                e.preventDefault();  // Prevent form submission
-                alert('Passwords do not match. Please correct it before submitting.');
-            }
-        });
-
-        // Function to check if passwords match
-        function checkPasswords() {
-            var password = $('#password').val();
-            var confirmPassword = $('#confirmPassword').val();
-
-            if (password !== confirmPassword) {
-                $('#confirmPasswordError').text('Passwords do not match');
-                $('#confirmPassword').addClass('is-invalid');
-                return false;
-            } else {
-                $('#confirmPasswordError').text('');
-                $('#confirmPassword').removeClass('is-invalid');
-                return true;
-            }
-        }
+            })
+            .catch(error => console.error('Error checking email availability:', error));
     });
+
+    function displayErrors(errors) {
+        // Clear any previous errors
+        document.getElementById("confirmPasswordError").innerText = "";
+        document.getElementById("emailError").innerText = "";
+        document.getElementById("generalError").innerText = "";
+
+        // Check if errors object is defined and is a map
+        if (errors && typeof errors === 'object') {
+            const firstErrorKey = Object.keys(errors)[0];
+            const firstErrorMessage = errors[firstErrorKey];
+            document.getElementById("generalError").innerText = firstErrorMessage;
+        } else {
+            alert("An unknown error occurred. Please try again.");
+        }
+    }
 </script>
 </body>
 

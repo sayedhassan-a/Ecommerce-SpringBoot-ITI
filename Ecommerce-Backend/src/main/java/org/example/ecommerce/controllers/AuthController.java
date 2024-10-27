@@ -40,24 +40,6 @@ public class AuthController {
         this.googleTokenValidator = googleTokenValidator;
     }
 
-//    @GetMapping("/google")
-//    public Result registerCustomer(@AuthenticationPrincipal OAuth2User principal) {
-//        if (principal == null) {
-//            return new Result(false, StatusCode.UNAUTHORIZED, "User is not authenticated");
-//        }
-//
-//
-//        authService.registerOAuthUser(customer, OAuthProvider.GOOGLE);
-//
-//        return new Result(true, StatusCode.SUCCESS, "Customer registered successfully");
-//    }
-
-//    @PostMapping("/register/facebook")
-//    public ResponseEntity<?> registerFacebook(@RequestBody CustomerDto customerDto) {
-//        authService.registerOAuthUser(customerDto, OAuthProvider.FACEBOOK);
-//        return ResponseEntity.ok("User registered successfully with Facebook OAuth");
-//    }
-
     @PostMapping
     public Result getLoginInfo(@RequestBody Customer customer) {
 

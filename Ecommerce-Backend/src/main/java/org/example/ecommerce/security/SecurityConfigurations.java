@@ -6,7 +6,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.example.ecommerce.models.Role;
 import org.example.ecommerce.services.AdminService;
 import org.example.ecommerce.services.CustomerService;
 import org.springframework.context.annotation.Bean;
@@ -68,11 +67,14 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 //                                .anyRequest().permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
-
+                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
+                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
                         .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
-                        .anyRequest().authenticated()
+////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
+//                        .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

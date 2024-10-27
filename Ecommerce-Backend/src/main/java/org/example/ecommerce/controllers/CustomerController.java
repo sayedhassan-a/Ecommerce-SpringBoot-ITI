@@ -11,6 +11,7 @@ import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
@@ -39,12 +40,17 @@ public class CustomerController {
     // Create a new customer
     @PostMapping("/register")
     public Result createCustomer(@Valid @RequestBody Customer customer) {
+        System.out.println("inside createCustomer: " + customer);
         Customer savedCustomer = customerService.save(customer);
         // Convert saved entity back to DTO
         CustomerDto savedCustomerDto = customerToCustomerDtoConverter.convert(savedCustomer);
         return new Result(true, StatusCode.SUCCESS, "Customer created successfully", savedCustomerDto);
     }
-
+//    Customer customer =
+//            customerService.findUserByEmail(
+//                    (String) ((Jwt)SecurityContextHolder.getContext()
+//                            .getAuthentication().getPrincipal()).getClaims().get(
+//                            "sub"));
     // Retrieve all customers
     @GetMapping
     public Result findAllCustomers() {
@@ -54,6 +60,12 @@ public class CustomerController {
                 .map(customerToCustomerDtoConverter::convert)
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Customers retrieved successfully", customerDtos);
+    }
+
+    @GetMapping("/checkEmail")
+    public ResponseEntity<String> checkEmail(@RequestParam String email) {
+        boolean exists = customerService.existsByEmail(email);
+        return ResponseEntity.ok(Boolean.toString(!exists)); // Return "true" if email is available, "false" if not
     }
 
     // Retrieve customer by ID
@@ -89,22 +101,4 @@ public class CustomerController {
         customerService.delete(id);
         return new Result(true, StatusCode.SUCCESS, "Customer deleted successfully", null);
     }
-
-//    @PostMapping("/register/google")
-//    public Result registerCustomer(@AuthenticationPrincipal OAuth2User principal) {
-//        // Extract Google user info
-//        String email = principal.getAttribute("email");
-//        String firstName = principal.getAttribute("name");
-//
-//        Customer customer = new Customer();
-//        customer.setEmail(email);
-//        customer.setFirstName(firstName);
-//        // Save customer
-//        customerService.save(customer);
-//
-//        // Convert saved entity back to DTO
-//        CustomerDto customerDto = customerToCustomerDtoConverter.convert(customer);
-//
-//        return new Result(true, StatusCode.SUCCESS, "Customer registered successfully", customerDto);
-//    }
 }

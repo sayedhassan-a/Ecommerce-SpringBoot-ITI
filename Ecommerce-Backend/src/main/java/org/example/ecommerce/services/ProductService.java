@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,6 +50,7 @@ public class ProductService {
     }
 
 
+    @Transactional
     public Product updateProduct(Long id, Product product) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
@@ -63,20 +65,23 @@ public class ProductService {
                 }).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    @Transactional
     public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
+        productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId)).setDeleted(true);
+
     }
 
 
     public Product getProductById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
+
     }
 
     public Page<ProductResponseDTO> getAllProductsDto(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Product> productPage = productRepository.findAll(pageable);
+            Page<Product> productPage = productRepository.findAllByDeleted(false,pageable);
 
             return productPage.map(product -> {
                 ProductSpecs productSpecs = null;
@@ -179,7 +184,7 @@ public class ProductService {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> matchingProducts =
-                productRepository.findBySubCategoryIdAndNameLikeIgnoreCase(subCategoryId,
+                productRepository.findBySubCategoryIdAndNameLikeIgnoreCaseAndDeletedFalse(subCategoryId,
                 "%"+name+"%", pageable);
 
         return matchingProducts.map(product -> {

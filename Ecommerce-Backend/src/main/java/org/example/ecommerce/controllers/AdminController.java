@@ -1,13 +1,18 @@
 package org.example.ecommerce.controllers;
 
 import jakarta.validation.Valid;
-import org.example.ecommerce.dtos.AdminDTO;
+import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.adminConverters.AdminDtoToAdminConverter;
 import org.example.ecommerce.dtos.adminConverters.AdminToAdminDtoConverter;
 import org.example.ecommerce.models.Admin;
+import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.AdminService;
+import org.example.ecommerce.services.ProductService;
+import org.example.ecommerce.services.ProductSpecsService;
+import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +33,11 @@ public class AdminController {
 
     @Autowired
     private AdminToAdminDtoConverter adminToAdminDtoConverter;
+
+    @Autowired
+    private ProductService productService;
+
+    private ProductSpecsService productSpecsService;
 
     // Create a new admin
     @PostMapping
@@ -82,4 +92,67 @@ public class AdminController {
         adminService.delete(id);
         return new Result(true, StatusCode.SUCCESS, "Admin deleted successfully", null);
     }
+
+
+    // this part is for managing products
+
+
+    @PostMapping("/products")
+    public Result addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
+        ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
+        ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();
+
+        // Use existing ProductService method
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setDescription(productDTO.getDescription());
+        product.setStock(productDTO.getStock());
+        product.setImage(productDTO.getImage());
+        product.setBrandName(productDTO.getBrandName());
+        product.setSubCategory(productDTO.getSubCategory());
+
+        Product savedProduct = productService.createProduct(product);
+        ProductSpecs specs = new ProductSpecs();
+        specs.setProductId(savedProduct.getId().toString());
+        specs.setKey(specsDTO.getKey());
+        specs.setValue(specsDTO.getValue());
+
+        ProductSpecs savedSpecs = productSpecsService.saveProductSpecification(specs);
+        savedProduct.setSpecsId(savedSpecs.getId());
+        productService.createProduct(savedProduct);
+
+        return new Result(true, StatusCode.SUCCESS, "Product added successfully", savedProduct);
+    }
+
+
+    @PutMapping("/products/{id}")
+    public Result updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        Product updatedProduct = productService.updateProduct(id, product);
+        return new Result(true, StatusCode.SUCCESS, "Product updated successfully", updatedProduct);
+    }
+
+
+    @DeleteMapping("/products/{id}")
+    public Result deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return new Result(true, StatusCode.SUCCESS, "Product deleted successfully", null);
+    }
+
+    @GetMapping("/products/{id}")
+    public Result getProductById(@PathVariable Long id) {
+        ProductResponseDTO productResponse = productService.findProductById(id);
+        return new Result(true, StatusCode.SUCCESS, "Product retrieved successfully", productResponse);
+    }
+
+
+    @GetMapping("/products")
+    public Result getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ProductResponseDTO> products = productService.getAllProductsDto(page, size);
+        return new Result(true, StatusCode.SUCCESS, "Products retrieved successfully", products);
+    }
+
+
 }

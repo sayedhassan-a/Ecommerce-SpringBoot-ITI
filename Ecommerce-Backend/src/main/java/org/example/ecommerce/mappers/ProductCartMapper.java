@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface ProductCartMapper extends GenericMapper<Product,
-        ProductCartDTO>{
+public interface ProductCartMapper {
+    @Mapping(source = "stock", target = "quantity")
+    ProductCartDTO toDTO(Product product);
 }

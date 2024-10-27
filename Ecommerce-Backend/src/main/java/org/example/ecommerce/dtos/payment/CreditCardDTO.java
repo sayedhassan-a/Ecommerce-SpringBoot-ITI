@@ -1,4 +1,4 @@
-package org.example.ecommerce.dtos.payment.token;
+package org.example.ecommerce.dtos.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -6,9 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TokenBodyDTO {
-    private String token;
+public class CreditCardDTO {
+    private Long id;
     @JsonProperty("masked_pan")
     private String maskedPan;
-    private String email;
 }

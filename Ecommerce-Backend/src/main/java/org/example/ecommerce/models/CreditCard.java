@@ -15,6 +15,7 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
+    private String maskedPan;
 
     @ManyToOne
     private Customer customer;

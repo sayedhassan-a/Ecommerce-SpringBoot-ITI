@@ -92,6 +92,7 @@ public class PaymentService {
     public void saveToken(TokenDTO tokenDTO){
         CreditCard creditCard = new CreditCard();
         creditCard.setToken(tokenDTO.getObj().getToken());
+        creditCard.setMaskedPan(tokenDTO.getObj().getMaskedPan());
         Customer customer = customerRepository
                 .findByEmail(tokenDTO.getObj().getEmail())
                 .orElseThrow(RuntimeException::new);

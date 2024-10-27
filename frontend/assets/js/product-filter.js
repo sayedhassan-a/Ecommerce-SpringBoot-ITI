@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const subId = urlParams.get('sub');
     const filterContainer = document.querySelector('.sidebar-filter .common-filter');
     const productBox = document.getElementById('productBox');
-    const currentSize = 10;
+    const currentSize = 12;
     let currentPage = 0;
     let filters = { sub: subId };
-    let flag = true;
+    let flag = false;
 
     if (subId) {
         fetchSpecifications(subId);
@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Apply filters and fetch filtered products
  // Apply filters and fetch filtered products
 function applyFilters() {
+        currentPage = 0;
     flag = true;
     filters = {};  // Start with an empty filters object since subId is now in the URL path
 
@@ -185,6 +186,7 @@ function fetchFilteredProducts(subId, filters) {
     const searchButton = document.getElementById('searchButton');
 
     function applySearch() {
+        currentPage = 0;
         flag = false;
         var searchParameter = searchInput.value;  // Start with an empty filters object since subId is now in the URL path
         localStorage.setItem("searchParam", searchParameter);
@@ -254,7 +256,7 @@ function fetchFilteredProducts(subId, filters) {
         const createLeftButton = () => {
             const leftArrow = document.createElement('a');
             leftArrow.classList.add('arrow', 'prev-arrow');
-            if(flag) leftArrow.innerHTML = '<i class="fa fa-long-arrow-left" aria-hidden="true"></i>';
+            leftArrow.innerHTML = '<i class="fa fa-long-arrow-left" aria-hidden="true"></i>';
             leftArrow.style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
 
             leftArrow.onclick = function() {
@@ -317,7 +319,7 @@ function fetchFilteredProducts(subId, filters) {
         }
 
         // Dots if currentPage is not close to the end
-        if (currentPage + delta < totalPages - 1) {
+        if (currentPage + 1 + delta < totalPages - 1) {
             const dots = document.createElement('a');
             dots.classList.add('pagination-link');
             dots.innerText = '...';
@@ -325,7 +327,7 @@ function fetchFilteredProducts(subId, filters) {
         }
 
         // Last page
-        createPageButton(totalPages);
+        if(totalPages>1)createPageButton(totalPages);
 
 
         createRightButton();

@@ -7,6 +7,7 @@ import org.example.ecommerce.models.Image;
 import org.example.ecommerce.specifications.ProductSpecs;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -21,6 +22,6 @@ public class ProductResponseDTO {
    private String categoryName;
    private String brandName;
    private String stock;
-   private Set<Image> productImages;
+   private Set<Image> productImages=new HashSet<>();
    private ProductSpecs productSpecs;
 }

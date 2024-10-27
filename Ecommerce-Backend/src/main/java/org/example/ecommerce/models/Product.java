@@ -47,7 +47,7 @@ public class Product {
     @JsonIgnore
     private SubCategory subCategory;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Image> images = new HashSet<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)

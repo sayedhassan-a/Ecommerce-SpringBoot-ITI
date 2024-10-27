@@ -57,42 +57,18 @@
         </tr>
         </thead>
         <tbody id="productTableBody">
-        <c:forEach items="${products}" var="product">
-            <tr>
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td><fmt:formatNumber value="${product.price/100}" type="number" minFractionDigits="2" maxFractionDigits="2"/></td>
-                <td>${product.stock}</td>
-                <td>${product.brandName}</td>
-                <td>
-                    <button class="btn btn-danger" onclick="event.stopPropagation(); confirmDelete(${product.id})">Delete</button>
-                    <button class="btn btn-primary" onclick="window.location.href='/ecommerce/dashboard/update-product?id=${product.id}'">Update</button>
-                </td>
-            </tr>
-        </c:forEach>
+        <!-- Product rows will be inserted here dynamically -->
         </tbody>
     </table>
 
+
     <!-- Pagination -->
     <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item ${page == 1 ? 'disabled' : ''}">
-                <button class="page-link" onclick="redirect(${page - 1})"  aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </button>
-            </li>
-            <c:forEach begin="1" end="${totalPages}" var="i">
-                <li class="page-item ${page == i ? 'active' : ''}">
-                    <button class="page-link" onclick="redirect(${i})">${i}</button>
-                </li>
-            </c:forEach>
-            <li class="page-item ${page == totalPages ? 'disabled' : ''}">
-                <button class="page-link" onclick="redirect(${page + 1})" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </button>
-            </li>
+        <ul class="pagination" id="pagination">
+            <!-- Pagination controls will be inserted here dynamically -->
         </ul>
     </nav>
+
 </section>
 
 <script>
@@ -106,8 +82,8 @@
 
     // Function to delete the product
     function deleteProduct(productId) {
-        fetch(`/ecommerce/dashboard/delete-product?id=`+productId, {
-            method: 'GET',
+        fetch(`http://localhost:9002/admins/products/${productId}`, {
+            method: 'DELETE',
         }).then(response => {
             if (response.ok) {
                 // If delete is successful, reload the page
@@ -130,6 +106,222 @@
 <script src="../assets/js/vendor/bootstrap.min.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/loadAdminHeader.js"></script>
-</body>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentPage = 0;
+        const pageSize = 10;
+        // Load Page Function
+
+        function loadPage(pageNumber) {
+            fetchProducts(pageNumber, pageSize);
+        }
+
+        fetchProducts(currentPage, pageSize);
+
+        function fetchProducts(page, size) {
+            const url = `http://localhost:9002/admins/products?page=${page}&size=${size}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                        renderProducts(data.data.content); // Assuming products are inside the "content" of paginated data
+                        createPagination(data.data.totalPages, data.data.pageable.pageNumber);
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                    alert('An error occurred while fetching products.');
+                });
+        }
+
+        function renderProducts(products) {
+            const tableBody = document.getElementById('productTableBody');
+            tableBody.innerHTML = ''; // Clear existing content
+
+            products.forEach(product => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${formatPrice(product.price)}</td>
+                    <td>${product.stock}</td>
+                    <td>${product.brandName}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="event.stopPropagation(); confirmDelete(${product.id})">Delete</button>
+                        <button class="btn btn-primary" onclick="window.location.href='/ecommerce/dashboard/update-product?id=${product.id}'">Update</button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function renderPagination(currentPage, totalPages) {
+            const paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = '';
+
+            // Previous button
+            const prevItem = document.createElement('li');
+            prevItem.className = `page-item ${currentPage === 0 ? 'disabled' : ''}`;
+            prevItem.innerHTML = `
+                <button class="page-link" onclick="fetchProducts(${currentPage - 1}, ${pageSize})" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </button>
+            `;
+            paginationElement.appendChild(prevItem);
+
+            // Page numbers
+            for (let i = 0; i < totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.className = `page-item ${currentPage === i ? 'active' : ''}`;
+                pageItem.innerHTML = `
+                    <button class="page-link" onclick="fetchProducts(${i}, ${pageSize})">${i + 1}</button>
+                `;
+                paginationElement.appendChild(pageItem);
+            }
+
+            // Next button
+            const nextItem = document.createElement('li');
+            nextItem.className = `page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`;
+            nextItem.innerHTML = `
+                <button class="page-link" onclick="fetchProducts(${currentPage + 1}, ${pageSize})" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </button>
+            `;
+            paginationElement.appendChild(nextItem);
+        }
+
+        function formatPrice(price) {
+            return (price / 100).toFixed(2);
+        }
+
+        function deleteProduct(productId) {
+            const url = `http://localhost:9002/admins/products/${productId}`;
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Product deleted successfully.');
+                        fetchProducts(currentPage, pageSize);
+                    } else {
+                        alert('Failed to delete product.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting product:', error);
+                    alert('An error occurred while deleting the product.');
+                });
+        }
+
+
+        function createPagination(totalPages, currentPage) {
+            const container = document.getElementById('pagination');
+            container.innerHTML = '';  // Clear previous pagination
+
+            const paginationNumbers = document.createElement('span');
+            paginationNumbers.classList.add('pagination-numbers');
+            container.appendChild(paginationNumbers);
+
+            const delta = 0; // Pages to show around the current page
+
+            // Left Arrow
+            const createLeftButton = () => {
+                const leftArrow = document.createElement('a');
+                leftArrow.classList.add('arrow', 'prev-arrow');
+                leftArrow.innerHTML = '<i class="fa fa-long-arrow-left" aria-hidden="true"></i>';
+                leftArrow.style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
+
+                leftArrow.onclick = function() {
+                    if (currentPage > 0) {
+                        loadPage(currentPage - 1);
+                    }
+                };
+                container.insertBefore(leftArrow, paginationNumbers);
+            };
+
+            // Right Arrow
+            const createRightButton = () => {
+                const rightArrow = document.createElement('a');
+                rightArrow.classList.add('arrow', 'next-arrow');
+                rightArrow.innerHTML = '<i class="fa fa-long-arrow-right" aria-hidden="true"></i>';
+                rightArrow.style.pointerEvents = currentPage === totalPages ? 'none' : 'auto';
+
+                rightArrow.onclick = function() {
+                    if (currentPage < totalPages - 1) {
+                        loadPage(currentPage + 1);
+                    }
+                };
+                container.appendChild(rightArrow);
+            };
+
+            // Individual Page Buttons
+            const createPageButton = (pageNum) => {
+                const pageButton = document.createElement('a');
+                pageButton.classList.add('pagination-link');
+                pageButton.innerText = pageNum;
+                if (pageNum === currentPage + 1 ) {
+                    pageButton.classList.add('active');  // Highlight current page
+                }
+                else{
+                    pageButton.onclick = function() {
+                        loadPage(pageNum - 1);
+                    };
+                }
+
+                paginationNumbers.appendChild(pageButton);
+            };
+
+            createLeftButton();
+
+            // First page
+            createPageButton(1);
+
+
+            // Dots if currentPage is not close to the beginning
+            if (currentPage - delta > 1) {
+                const dots = document.createElement('a');
+                dots.classList.add('pagination-link');
+                dots.innerText = '...';
+                paginationNumbers.appendChild(dots);
+            }
+
+            // Pages around currentPage
+            for (let i = Math.max(2, currentPage + 1 - delta); i <= Math.min(totalPages - 1 , currentPage + 1 + delta); i++) {
+                createPageButton(i);
+            }
+
+            // Dots if currentPage is not close to the end
+            if (currentPage + delta < totalPages - 1) {
+                const dots = document.createElement('a');
+                dots.classList.add('pagination-link');
+                dots.innerText = '...';
+                paginationNumbers.appendChild(dots);
+            }
+
+            // Last page
+            createPageButton(totalPages);
+
+            createRightButton();
+        }
+
+
+    });
+
+
+
+
+
+</script>
+</body>
 </html>
+
+
+
+
+
+
+

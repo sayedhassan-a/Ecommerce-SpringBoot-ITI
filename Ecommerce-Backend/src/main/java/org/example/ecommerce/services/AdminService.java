@@ -82,4 +82,7 @@ public class AdminService implements UserDetailsService {
                 .map(admin -> new MyUserPrincipal(admin))
                 .orElseThrow(() -> new UsernameNotFoundException("Admin not found with email: " + email));
     }
+
+
+
 }

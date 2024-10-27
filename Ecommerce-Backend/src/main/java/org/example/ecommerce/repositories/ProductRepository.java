@@ -16,13 +16,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query("SELECT p FROM Product p WHERE p.specsId = ?1")
     Product findBySpecsId(String specsId);
 
-    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) AND p.deleted = false")
     Page<Product> searchProductsByName(@Param("keyword") String keyword, Pageable pageable);
 
     Page<Product> findByNameContainingIgnoreCaseAndPriceBetween(
             String name, int minPrice, int maxPrice, Pageable pageable);
-
     @Query("SELECT p FROM Product p WHERE "
+            + "p.deleted = false AND "
             + "(:name IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND "
             + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
             + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
@@ -36,12 +36,24 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             @Param("subCategory") String subCategory,
             Pageable pageable);
 
+
     @Query("SELECT p FROM Product p WHERE p.subCategory.id = :subCategoryId AND p.deleted = false")
     Page<Product> findBySubCategory(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE p.subCategory.id = :subCategoryId AND p.specsId IN :specsIds")
-    Page<Product> findBySubCategoryIdAndSpecsIds(@Param("subCategoryId") Long subCategoryId, @Param("specsIds") List<String> specsIds, Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE p.subCategory.id = :subCategoryId AND p.specsId IN :specsIds AND p.deleted = false")
+    Page<Product> findBySubCategoryIdAndSpecsIds(
+            @Param("subCategoryId") Long subCategoryId,
+            @Param("specsIds") List<String> specsIds,
+            Pageable pageable);
 
+    Page<Product> findBySubCategoryIdAndNameLikeIgnoreCaseAndDeletedFalse(
+            Long subCategoryId,
+            String name,
+            Pageable pageable);
+
+
+
+    Page<Product> findAllByDeleted(boolean deleted, Pageable pageable);
 
 
 

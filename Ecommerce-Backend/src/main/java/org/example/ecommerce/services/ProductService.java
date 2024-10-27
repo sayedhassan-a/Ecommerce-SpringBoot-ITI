@@ -2,10 +2,10 @@ package org.example.ecommerce.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.ecommerce.dtos.ProductCartDTO;
-import org.example.ecommerce.dtos.ProductResponseDTO;
+import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.mappers.ProductCartMapper;
 import org.example.ecommerce.mappers.ProductMapper;
+import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.repositories.ProductRepository;
 import org.example.ecommerce.repositories.ProductSpecificationRepository;
@@ -17,10 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import java.net.URLDecoder;
@@ -36,21 +35,61 @@ public class ProductService {
     private final ProductSpecificationRepository productSpecsRepository;
     private final ProductMapper productMapper;
     private final ProductCartMapper productCartMapper;
+    private final ProductSpecsService productSpecsService;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
-                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper) {
+                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper, ProductSpecsService productSpecsService) {
         this.productRepository = productRepository;
         this.productSpecsRepository = productSpecificationRepository;
         this.productMapper = productMapper;
         this.productCartMapper = productCartMapper;
+        this.productSpecsService = productSpecsService;
+
     }
 
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
 
+    public Product addProduct(ProductWithSpecsDTO productWithSpecsDTO) {
+        ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
+        ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();
 
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setDescription(productDTO.getDescription());
+        product.setStock(productDTO.getStock());
+        product.setImage(productDTO.getImages().get(0));
+        product.setImages(productDTO.getImages().stream().skip(1).map(image -> {
+            Image image1 = new Image();
+            image1.setUrl(image);
+            image1.setProduct(product);
+            return image1;
+        }).collect(Collectors.toSet()));
+        product.setBrandName(productDTO.getBrandName());
+        product.setSubCategory(productDTO.getSubCategory());
+
+        // Save product in MySQL
+        Product savedProduct = productRepository.save(product);
+
+        // Create ProductSpecs for MongoDB
+        ProductSpecs specs = new ProductSpecs();
+        specs.setProductId(savedProduct.getId().toString());
+        specs.setKey(specsDTO.getKey());
+        specs.setValue(specsDTO.getValue());
+
+        // Save specs in MongoDB
+        ProductSpecs savedSpecs = productSpecsService.saveProductSpecification(specs);
+
+        // Update product with specsId (MongoDB ID) and save again in MySQL
+        savedProduct.setSpecsId(savedSpecs.getId());
+        return productRepository.save(savedProduct);
+    }
+
+
+    @Transactional
     public Product updateProduct(Long id, Product product) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
@@ -65,20 +104,23 @@ public class ProductService {
                 }).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    @Transactional
     public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
+        productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId)).setDeleted(true);
+
     }
 
 
     public Product getProductById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
+
     }
 
     public Page<ProductResponseDTO> getAllProductsDto(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Product> productPage = productRepository.findAll(pageable);
+            Page<Product> productPage = productRepository.findAllByDeleted(false,pageable);
 
             return productPage.map(product -> {
                 ProductSpecs productSpecs = null;
@@ -173,6 +215,22 @@ public class ProductService {
                     .findFirst().orElse(null);
             return productMapper.toProductResponseDTO(product, productSpecs);
         });
+    }
+
+    public Page<ProductResponseDTO> getProductsByName(Long subCategoryId,
+                                                      String name, int page,
+                                                      int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> matchingProducts =
+                productRepository.findBySubCategoryIdAndNameLikeIgnoreCaseAndDeletedFalse(subCategoryId,
+                "%"+name+"%", pageable);
+
+        return matchingProducts.map(product -> {
+            return productMapper.toProductResponseDTO(product,
+                    productSpecsRepository.findById(product.getSpecsId()).orElse(null));
+        });
+
     }
 
     public ProductCartDTO findProductQuantityById(Long id) {

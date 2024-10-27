@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class OrderSpecs {
     public static Specification<Order> hasDateBefore(LocalDateTime date) {
@@ -36,7 +37,7 @@ public class OrderSpecs {
 
     public static Specification<Order> hasCustomerId(Long customerId) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(
-                "customerId"), customerId);
+                "customer").get("id"), customerId);
     }
 
     public static Specification<Order> hasPaymentMethod(
@@ -44,4 +45,17 @@ public class OrderSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(
                 "paymentMethod"), paymentMethod);
     }
+
+    public static Specification<Order> hasPayment(
+            List<PaymentMethod> paymentMethods){
+        return (root, query, criteriaBuilder) ->
+                root.get("paymentMethod").in(paymentMethods);
+    }
+
+    public static Specification<Order> hasOrderState(
+            List<OrderState> orderStates){
+        return (root, query, criteriaBuilder) ->
+                root.get("state").in(orderStates);
+    }
+
 }

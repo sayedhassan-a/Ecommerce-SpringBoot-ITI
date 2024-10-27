@@ -1,5 +1,6 @@
 package org.example.ecommerce.services;
 
+import org.example.ecommerce.models.Address;
 import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.models.Role;
 import org.example.ecommerce.repositories.CustomerRepository;
@@ -45,6 +46,43 @@ public class CustomerService implements UserDetailsService {
         return this.customerRepository.save(customer);
     }
 
+    public Customer updateByEmail(String email, Customer customer) {
+        // Find the customer in the repository
+        Customer foundCustomer = this.customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("customer", email));
+
+        System.out.println("inside updateByEmail: " + customer);
+
+        List<String> validationErrors = userValidator.checkName(customer); // Call to validateCustomerInput
+
+        if (!validationErrors.isEmpty()) {
+            throw new ValidationException(validationErrors);
+        }
+
+        // Update fields only if they are non-null
+        if (customer.getFirstName() != null) foundCustomer.setFirstName(customer.getFirstName());
+        if (customer.getLastName() != null) foundCustomer.setLastName(customer.getLastName());
+
+        Address address = customer.getAddress();
+        Address foundAddress = foundCustomer.getAddress();
+        if (address != null && foundAddress != null) {
+            if (address.getAddressOne() != null) foundCustomer.getAddress().setAddressOne(address.getAddressOne());
+            if (address.getCity() != null) foundCustomer.getAddress().setCity(address.getCity());
+            if (address.getCountry() != null) foundCustomer.getAddress().setCountry(address.getCountry());
+            if (address.getZipCode() != null) foundCustomer.getAddress().setZipCode(address.getZipCode());
+        }
+        foundCustomer.setAddress(address);
+
+        if (customer.getDateOfBirth() != null) foundCustomer.setDateOfBirth(customer.getDateOfBirth());
+        if (customer.getPhone() != null) foundCustomer.setPhone(customer.getPhone());
+
+        // Handle email update as needed, possibly with additional verification
+        if (customer.getEmail() != null) foundCustomer.setEmail(customer.getEmail());
+
+        // Save and return the updated customer
+        return customerRepository.save(foundCustomer);
+    }
+
     public void delete(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Customer", id));
@@ -66,21 +104,6 @@ public class CustomerService implements UserDetailsService {
         return customerRepository.findAll();
     }
 
-    public Customer update(Long id, Customer newCustomer) {
-        Customer foundCustomer = customerRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Customer", id));
-        foundCustomer.setFirstName(newCustomer.getFirstName());
-        foundCustomer.setMiddleName(newCustomer.getMiddleName());
-        foundCustomer.setLastName(newCustomer.getLastName());
-        foundCustomer.setEmail(newCustomer.getEmail());
-        foundCustomer.setPhone(newCustomer.getPhone());
-        foundCustomer.setAddress(newCustomer.getAddress());
-        foundCustomer.setDateOfBirth(newCustomer.getDateOfBirth());
-        foundCustomer.setActive(newCustomer.isActive());
-
-        return customerRepository.save(foundCustomer);
-    }
-
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void changePassword(Customer user, String oldPassword, String newPassword) {
         List<String> validationErrors = userValidator.validateChangePassword(user, oldPassword, newPassword);
@@ -90,13 +113,6 @@ public class CustomerService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(newPassword));
         customerRepository.save(user);
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        return this.customerRepository.findByEmail(email)
-//                .map(customer -> new MyUserPrincipal(customer))
-//                .orElseThrow(() -> new UsernameNotFoundException("Customer not found with email: " + email));
-//    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -112,5 +128,33 @@ public class CustomerService implements UserDetailsService {
 
     public boolean existsByEmail(String email) {
         return customerRepository.existsByEmail(email);
+    }
+
+    public Customer update(Long id, Customer customer) {
+        // Find the customer in the repository
+        Customer foundCustomer = this.customerRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("customer", id));
+
+        List<String> validationErrors = userValidator.validateCustomer(customer); // Call to validateCustomerInput
+
+        if (!validationErrors.isEmpty()) {
+            throw new ValidationException(validationErrors); // Handle validation failures
+        }
+
+        // Update fields only if they are non-null
+        if (customer.getFirstName() != null) foundCustomer.setFirstName(customer.getFirstName());
+        if (customer.getLastName() != null) foundCustomer.setLastName(customer.getLastName());
+        if (customer.getAddress().getAddressOne() != null) foundCustomer.getAddress().setAddressOne(customer.getAddress().getAddressOne());
+        if (customer.getAddress().getCity() != null) foundCustomer.getAddress().setCity(customer.getAddress().getCity());
+        if (customer.getAddress().getCountry() != null) foundCustomer.getAddress().setCountry(customer.getAddress().getCountry());
+        if (customer.getAddress().getZipCode() != null) foundCustomer.getAddress().setZipCode(customer.getAddress().getZipCode());
+        if (customer.getDateOfBirth() != null) foundCustomer.setDateOfBirth(customer.getDateOfBirth());
+        if (customer.getPhone() != null) foundCustomer.setPhone(customer.getPhone());
+
+        // Handle email update as needed, possibly with additional verification
+        if (customer.getEmail() != null) foundCustomer.setEmail(customer.getEmail());
+
+        // Save and return the updated customer
+        return customerRepository.save(foundCustomer);
     }
 }

@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.example.ecommerce.models.Role;
 import org.example.ecommerce.services.AdminService;
 import org.example.ecommerce.services.CustomerService;
 import org.springframework.context.annotation.Bean;
@@ -66,13 +67,20 @@ public class SecurityConfigurations {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 //                                .anyRequest().permitAll()
-                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
                                 .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
+//                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-                        .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
+//                        .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
 ////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
 //                        .anyRequest().authenticated()
                 )
@@ -86,8 +94,7 @@ public class SecurityConfigurations {
                 )
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(oauth2Login -> oauth2Login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/web/index.html", true)
                         .successHandler(customOAuth2LoginSuccessHandler)
                         .failureUrl("/login?error=true")
                 )

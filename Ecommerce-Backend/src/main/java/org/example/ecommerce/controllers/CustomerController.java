@@ -8,12 +8,15 @@ import org.example.ecommerce.dtos.CustomerDto;
 import org.example.ecommerce.dtos.customerConverters.CustomerDtoToCustomerConverter;
 import org.example.ecommerce.dtos.customerConverters.CustomerToCustomerDtoConverter;
 import org.example.ecommerce.models.Customer;
+import org.example.ecommerce.services.AuthService;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +31,15 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CustomerDtoToCustomerConverter customerDtoToCustomerConverter;
     private final CustomerToCustomerDtoConverter customerToCustomerDtoConverter;
+    private final AuthService authService;
 
     public CustomerController(CustomerService customerService,
                               CustomerDtoToCustomerConverter customerDtoToCustomerConverter,
-                              CustomerToCustomerDtoConverter customerToCustomerDtoConverter) {
+                              CustomerToCustomerDtoConverter customerToCustomerDtoConverter, AuthService authService) {
         this.customerService = customerService;
         this.customerDtoToCustomerConverter = customerDtoToCustomerConverter;
         this.customerToCustomerDtoConverter = customerToCustomerDtoConverter;
+        this.authService = authService;
     }
 
     // Create a new customer
@@ -101,4 +106,32 @@ public class CustomerController {
         customerService.delete(id);
         return new Result(true, StatusCode.SUCCESS, "Customer deleted successfully", null);
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<CustomerDto> getCustomerProfile() {
+
+        System.out.println("in here " + "       ");
+        String email = authService.extractEmail(); // Extract email from JWT token
+
+        System.out.println("in here " + "       " + email);
+        Customer foundCustomer = customerService.findUserByEmail(email);
+        CustomerDto customerDto = customerToCustomerDtoConverter.convert(foundCustomer);
+        System.out.println("in here " + "       " + customerDto);
+        return ResponseEntity.ok(customerDto);
+    }
+
+    @PutMapping("/profile")
+    public Result updateCustomer(@RequestBody Customer customer) {
+        // Extract email from JWT
+        String email = authService.extractEmail();
+
+        System.out.println("in here " + "       " + email);
+        // Update customer by email
+        Customer updatedCustomer = customerService.updateByEmail(email, customer);
+
+        // Convert updated entity back to DTO
+        CustomerDto updatedCustomerDto = customerToCustomerDtoConverter.convert(updatedCustomer);
+        return new Result(true, StatusCode.SUCCESS, "Customer updated successfully", updatedCustomerDto);
+    }
+
 }

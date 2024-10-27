@@ -19,14 +19,21 @@ public class UserValidator {
     public List<String> validateCustomer(User user) {
         List<String> errors = new ArrayList<>();
 
-        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
-            errors.add("First name cannot be empty.");
-        }
+        errors.addAll(checkName(user));
+
 
         if (!isValidPassword(user.getPassword())) {
             errors.add("Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
         }
 
+        return errors;
+    }
+
+    public List<String> checkName(User user) {
+        List<String> errors = new ArrayList<>();
+        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
+            errors.add("First name cannot be empty.");
+        }
         return errors;
     }
 

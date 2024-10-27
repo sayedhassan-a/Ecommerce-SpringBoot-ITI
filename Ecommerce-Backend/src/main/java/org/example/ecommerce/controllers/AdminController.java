@@ -5,6 +5,7 @@ import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.adminConverters.AdminDtoToAdminConverter;
 import org.example.ecommerce.dtos.adminConverters.AdminToAdminDtoConverter;
 import org.example.ecommerce.models.Admin;
+import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.AdminService;
 import org.example.ecommerce.services.ProductService;
@@ -108,7 +109,13 @@ public class AdminController {
         product.setPrice(productDTO.getPrice());
         product.setDescription(productDTO.getDescription());
         product.setStock(productDTO.getStock());
-        product.setImage(productDTO.getImage());
+        product.setImage(productDTO.getImages().get(0));
+        product.setImages(productDTO.getImages().stream().skip(1).map(image->{
+            Image image1=new Image();
+            image1.setUrl(image);
+            image1.setProduct(product);
+            return image1;
+        }).collect(Collectors.toSet()));
         product.setBrandName(productDTO.getBrandName());
         product.setSubCategory(productDTO.getSubCategory());
 
@@ -124,7 +131,6 @@ public class AdminController {
 
         return new Result(true, StatusCode.SUCCESS, "Product added successfully", savedProduct);
     }
-
 
     @PutMapping("/products/{id}")
     public Result updateProduct(@PathVariable Long id, @RequestBody Product product) {

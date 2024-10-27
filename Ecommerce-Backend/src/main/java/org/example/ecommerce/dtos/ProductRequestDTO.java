@@ -9,6 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.ecommerce.models.SubCategory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +22,7 @@ public class ProductRequestDTO {
     private int price;
     private String description;
     private int stock;
-    private String image;
+    private List<String> images= new ArrayList<>();
     private String brandName;
     private SubCategory subCategory;
 }

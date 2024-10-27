@@ -1,10 +1,11 @@
 package org.example.ecommerce.services;
 
-import org.example.ecommerce.dtos.OrderResponseDTO;
-import org.example.ecommerce.dtos.OrderRequestDTO;
+import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.payment.PaymentDTO;
 import org.example.ecommerce.exceptionHandling.exception.BadRequestException;
+import org.example.ecommerce.exceptionHandling.exception.NotFoundException;
 import org.example.ecommerce.mappers.OrderMapper;
+import org.example.ecommerce.mappers.OrderViewMapper;
 import org.example.ecommerce.models.*;
 import org.example.ecommerce.repositories.OrderItemRepository;
 import org.example.ecommerce.repositories.OrderRepository;
@@ -25,13 +26,15 @@ import java.util.*;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderViewMapper orderViewMapper;
     private final CartItemService cartItemService;
     private final OrderItemRepository orderItemRepository;
     private final PaymentService paymentService;
     private final CustomerService customerService;
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, CartItemService cartItemService, OrderItemRepository orderItemRepository, PaymentService paymentService, CustomerService customerService) {
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, OrderViewMapper orderViewMapper, CartItemService cartItemService, OrderItemRepository orderItemRepository, PaymentService paymentService, CustomerService customerService) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.orderViewMapper = orderViewMapper;
         this.cartItemService = cartItemService;
         this.orderItemRepository = orderItemRepository;
         this.paymentService = paymentService;
@@ -43,8 +46,21 @@ public class OrderService {
         return orderRepository.findAll(pageable).map(orderMapper::toDTO);
     }
 
-    public Page<OrderResponseDTO> findAllBySpecs(Integer page, Integer size,
-                                                 Map<String, Object> filter) {
+    @Transactional
+    public Page<OrderViewDTO> findAllBySpecsForCurrentUser(Integer page,
+                                                      Integer size, Map<String, Object> filter) {
+
+       Customer customer = customerService.findUserByEmail(
+               (String) ((Jwt)SecurityContextHolder.getContext()
+                       .getAuthentication().getPrincipal()).getClaims().get(
+                       "sub"));
+       filter.put("customerId", customer.getId());
+
+       return findAllBySpecs(page, size, filter);
+    }
+
+    public Page<OrderViewDTO> findAllBySpecs(Integer page, Integer size,
+                                             Map<String, Object> filter) {
         Pageable pageable = PageRequest.of(page, size);
         Specification<Order> specification = Specification.where(null);
         if (filter.get("startDate") != null &&
@@ -83,7 +99,19 @@ public class OrderService {
                     (Long) filter.get("customerId")));
         }
 
-        return orderRepository.findAll(specification, pageable).map(orderMapper::toDTO);
+        if (filter.get("states") != null &&
+                filter.get("states") instanceof List<?>) {
+            specification = specification.and(OrderSpecs.hasOrderState(
+                    (List<OrderState>) filter.get("states")));
+        }
+
+        if (filter.get("paymentMethods") != null &&
+                filter.get("paymentMethods") instanceof List<?>) {
+            specification = specification.and(OrderSpecs.hasPayment(
+                    (List<PaymentMethod>) filter.get("paymentMethods")));
+        }
+
+        return orderRepository.findAll(specification, pageable).map(orderViewMapper::toDTO);
 
     }
 
@@ -163,5 +191,37 @@ public class OrderService {
         }
 
         return Optional.ofNullable(orderResponseDTO);
+    }
+    @Transactional
+    public OrderWithItemsDTO findOrderWithIdForCustomer(Long id){
+        System.out.println(SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal());
+        Customer customer =
+                customerService.findUserByEmail(
+                        (String) ((Jwt)SecurityContextHolder.getContext()
+                                .getAuthentication().getPrincipal()).getClaims().get(
+                                "sub"));
+        Order order = orderRepository.findById(id).orElse(null);
+        if(order.getCustomer().getId() == customer.getId()){
+            return findOrderWithId(id);
+        }
+        throw new NotFoundException("No order found with id:" + id);
+    }
+    @Transactional
+    public OrderWithItemsDTO findOrderWithId(Long id){
+        Order order = orderRepository.findById(id).orElse(null);
+        OrderWithItemsDTO orderWithItemsDTO = new OrderWithItemsDTO();
+        orderWithItemsDTO.setOrder(orderViewMapper.toDTO(order));
+        orderWithItemsDTO.setProductCartDTOS(order.getOrderItems().stream().map((orderItem ->
+        {
+            ProductCartDTO productCartDTO = new ProductCartDTO();
+            productCartDTO.setId(orderItem.getProduct().getId());
+            productCartDTO.setName(orderItem.getProduct().getName());
+            productCartDTO.setPrice(orderItem.getProduct().getPrice());
+            productCartDTO.setImage(orderItem.getProduct().getImage());
+            productCartDTO.setQuantity(orderItem.getQuantity());
+            return productCartDTO;
+        })).toList());
+        return orderWithItemsDTO;
     }
 }

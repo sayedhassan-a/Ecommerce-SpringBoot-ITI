@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.*;
+import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.ProductService;
 import org.example.ecommerce.services.ProductSpecsService;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -51,32 +53,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
-        ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
-        ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();
-
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setPrice(productDTO.getPrice());
-        product.setDescription(productDTO.getDescription());
-        product.setStock(productDTO.getStock());
-        product.setImage(productDTO.getImage());
-        product.setBrandName(productDTO.getBrandName());
-        product.setSubCategory(productDTO.getSubCategory());
-        //MySQl
-        Product savedProduct = productService.createProduct(product);
-
-        ProductSpecs specs = new ProductSpecs();
-        specs.setProductId(savedProduct.getId().toString()); // Link SQL product ID
-        specs.setKey(specsDTO.getKey());
-        specs.setValue(specsDTO.getValue());
-
-        //MongoDB
-        ProductSpecs savedSpecs = productSpecsService.saveProductSpecification(specs);
-
-        // Update product with specsId (MongoDB ID) and save again in SQL
-        savedProduct.setSpecsId(savedSpecs.getId());
-        productService.createProduct(savedProduct); // Save updated product
-
+        Product savedProduct = productService.addProduct(productWithSpecsDTO);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
@@ -159,9 +136,6 @@ public class ProductController {
     public ResponseEntity<ProductCartDTO> searchProducts(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findProductQuantityById(id));
     }
-
-
-
 
 
 }

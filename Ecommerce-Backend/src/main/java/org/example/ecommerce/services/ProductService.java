@@ -1,5 +1,7 @@
 package org.example.ecommerce.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.ProductCartDTO;
 import org.example.ecommerce.dtos.ProductResponseDTO;
 import org.example.ecommerce.mappers.ProductCartMapper;
@@ -9,13 +11,18 @@ import org.example.ecommerce.repositories.ProductRepository;
 import org.example.ecommerce.repositories.ProductSpecificationRepository;
 import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.exceptions.ProductNotFoundException;
+import org.example.ecommerce.system.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -152,10 +159,7 @@ public class ProductService {
 
     public Page<ProductResponseDTO> getProductsByFilters(Long subCategoryId, Map<String, List<String>> filters, int page, int size) {
 
-        List<String> keys = new ArrayList<>(filters.keySet());
-        List<String> values = filters.values().stream().flatMap(List::stream).collect(Collectors.toList());
-
-        List<ProductSpecs> matchingSpecs = productSpecsRepository.findByDynamicFilters(keys, values);
+        List<ProductSpecs> matchingSpecs = productSpecsRepository.findByDynamicFilters(filters);
         List<String> specsIds = matchingSpecs.stream().map(ProductSpecs::getId).collect(Collectors.toList());
 
         Pageable pageable = PageRequest.of(page, size);
@@ -169,9 +173,26 @@ public class ProductService {
         });
     }
 
+    public Page<ProductResponseDTO> getProductsByName(Long subCategoryId,
+                                                      String name, int page,
+                                                      int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> matchingProducts =
+                productRepository.findBySubCategoryIdAndNameLikeIgnoreCase(subCategoryId,
+                "%"+name+"%", pageable);
+
+        return matchingProducts.map(product -> {
+            return productMapper.toProductResponseDTO(product,
+                    productSpecsRepository.findById(product.getSpecsId()).orElse(null));
+        });
+
+    }
+
     public ProductCartDTO findProductQuantityById(Long id) {
         return productCartMapper.toDTO(
                 productRepository.findById(id).orElseThrow(
                         ()->new ProductNotFoundException(id)));
     }
+
 }

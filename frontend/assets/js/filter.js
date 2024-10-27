@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
                             colorName.classList.add('color-name');
                             colorName.innerText = option;
 
-                            // Toggle selection on click
                             colorSwatch.addEventListener('click', () => {
                                 colorSwatch.classList.toggle('selected');
                             });
@@ -82,58 +81,49 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function applyFilters() {
-        const selectedFilters = {
-            color: [], // Array to hold multiple colors
-        };
+        const filters = { sub: subId }; // Initialize filters with sub ID
 
         // Collect selected color options
         document.querySelectorAll('.color-option.selected').forEach(option => {
-            selectedFilters.color.push(option.dataset.color); // Push all selected colors to the array
+            if (!filters.color) filters.color = [];
+            filters.color.push(option.dataset.color);
         });
 
         // Collect other selected filter checkboxes
         document.querySelectorAll('.pixel-checkbox:checked').forEach(checkbox => {
             const [specKey] = checkbox.id.split('-');
-            if (!selectedFilters[specKey]) {
-                selectedFilters[specKey] = [];
+            if (!filters[specKey]) filters[specKey] = [];
+            filters[specKey].push(checkbox.value);
+        });
+
+        // Store filters in localStorage
+        localStorage.setItem('selectedFilters', JSON.stringify(filters));
+
+        // Redirect to the target URL without adding parameters in the URL
+        window.location.href = 'category.html';
+    }
+
+    // On page load, check if there are saved filters and apply them
+    const storedFilters = JSON.parse(localStorage.getItem('selectedFilters'));
+    if (storedFilters && storedFilters.sub === subId) {
+        applyStoredFilters(storedFilters);
+    }
+
+    function applyStoredFilters(filters) {
+        // Apply color filters
+        (filters.color || []).forEach(color => {
+            const colorElement = document.querySelector(`.color-option[data-color="${color}"]`);
+            if (colorElement) colorElement.classList.add('selected');
+        });
+
+        // Apply other filters
+        Object.keys(filters).forEach(key => {
+            if (key !== 'sub' && key !== 'color') {
+                filters[key].forEach(value => {
+                    const checkbox = document.getElementById(`${key}-${value}`);
+                    if (checkbox) checkbox.checked = true;
+                });
             }
-            selectedFilters[specKey].push(checkbox.value);
         });
-
-        // Store filters in local storage for security and reference
-        localStorage.setItem('selectedFilters', JSON.stringify(selectedFilters));
-
-        // Reset the filters
-        resetFilters();
-
-        // Fetch and display filtered data
-        fetchFilteredData(selectedFilters);
-    }
-
-    function resetFilters() {
-        // Reset color selections
-        document.querySelectorAll('.color-option.selected').forEach(option => {
-            option.classList.remove('selected');
-        });
-
-        // Reset checkbox selections
-        document.querySelectorAll('.pixel-checkbox:checked').forEach(checkbox => {
-            checkbox.checked = false;
-        });
-    }
-
-    function fetchFilteredData(filters) {
-        // Fetch products using the selected filters
-        console.log('Fetching data with filters:', filters);
-        
-        // Example: Fetch data using the filters
-        fetch(`http://localhost:9002/api/products?filters=${encodeURIComponent(JSON.stringify(filters))}`)
-            .then(response => response.json())
-            .then(data => {
-                // Update your product display logic here
-                console.log(data);
-                // E.g., update the DOM to show the filtered products
-            })
-            .catch(error => console.error('Error fetching products:', error));
     }
 });

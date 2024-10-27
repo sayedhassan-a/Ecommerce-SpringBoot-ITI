@@ -4,15 +4,15 @@ import org.example.ecommerce.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     @Query("SELECT p FROM Product p WHERE p.specsId = ?1")
     Product findBySpecsId(String specsId);
 
@@ -41,6 +41,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.subCategory.id = :subCategoryId AND p.specsId IN :specsIds")
     Page<Product> findBySubCategoryIdAndSpecsIds(@Param("subCategoryId") Long subCategoryId, @Param("specsIds") List<String> specsIds, Pageable pageable);
+
+    Page<Product> findBySubCategoryIdAndNameLikeIgnoreCase(Long subCategoryId
+            ,String name, Pageable pageable);
+
+
 
 
 }

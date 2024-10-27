@@ -2,10 +2,8 @@ package org.example.ecommerce.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.ecommerce.dtos.ProductRequestDTO;
-import org.example.ecommerce.dtos.ProductResponseDTO;
-import org.example.ecommerce.dtos.ProductSpecsDTO;
-import org.example.ecommerce.dtos.ProductWithSpecsDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.ProductService;
@@ -13,6 +11,7 @@ import org.example.ecommerce.services.ProductSpecsService;
 import org.example.ecommerce.specifications.ProductSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -135,6 +136,16 @@ public class ProductController {
         return productService.getProductsByFilters(subCategoryId, filtersMap, page, size);
     }
 
+    @GetMapping("/subcategory/{subCategoryId}/search")
+    public Page<ProductResponseDTO> searchByName(
+            @PathVariable Long subCategoryId,    // <-- Ensure this is a @PathVariable
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return productService.getProductsByName(subCategoryId, name, page,
+                size);
+    }
+
     private Map<String, List<String>> parseFilters(String filters) {
         try {
             return objectMapper.readValue(filters, new TypeReference<Map<String, List<String>>>() {});
@@ -148,4 +159,9 @@ public class ProductController {
     public ResponseEntity<ProductCartDTO> searchProducts(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findProductQuantityById(id));
     }
+
+
+
+
+
 }

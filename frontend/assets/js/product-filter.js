@@ -1,80 +1,98 @@
-var currentSize = 12;
-var currentPage = 0;
-var filterDict = {
-    page: 0,
-    size: currentSize
-};
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const subId = urlParams.get('sub');
+    const filterContainer = document.querySelector('.sidebar-filter .common-filter');
+    const productBox = document.getElementById('productBox');
+    const currentSize = 1;
+    let currentPage = 0;
+    let filters = { sub: subId };
+    let flag = true;
 
-function changePage(pageNum) {
-    filterDict.page = pageNum;
-    search();
-}
-
-function changeSize() {
-    currentSize = $("#selectPageSize").val();
-    filterDict = {
-        page: 0,
-        size: currentSize
-    };
-    search();
-}
-
-function filter() {
-    filterDict = {
-        page: 1,
-        size: currentSize,
-        'min-price': parseInt($('[data-handle="0"]').attr('aria-valuetext')) * 100,
-        'max-price': parseInt($('[data-handle="1"]').attr('aria-valuetext')) * 100
-    };
-
-    const category = $('input[name="category"]:checked');
-    if (category.val() !== undefined) {
-        filterDict['category'] = category.val();
-        category.prop('checked', false);
+    if (subId) {
+        fetchSpecifications(subId);
+        fetchProducts(subId);
     }
 
-    const brand = $('input[name="brand"]:checked');
-    if (brand.val() !== undefined) {
-        filterDict['brand'] = brand.val();
-        brand.prop('checked', false);
+    // Fetch specifications based on subcategory
+    function fetchSpecifications(subId) {
+        fetch(`http://localhost:9002/api/subcategories/${subId}/specifications`)
+            .then(response => response.json())
+            .then(data => renderSpecifications(data.subCategorySpecification.specs))
+            .catch(error => console.error('Error fetching specifications:', error));
     }
 
-    const processor = $('input[name="processor"]:checked');
-    if (processor.val() !== undefined) {
-        filterDict['processor'] = processor.val();
-        processor.prop('checked', false);
+    // Render specification filters
+    function renderSpecifications(specs) {
+        filterContainer.innerHTML = '';
+
+        specs.forEach(spec => {
+            const headDiv = document.createElement('div');
+            headDiv.classList.add('head');
+            headDiv.innerText = spec.specKey;
+            filterContainer.appendChild(headDiv);
+
+            const optionsList = document.createElement('ul');
+            optionsList.classList.add('main-categories');
+
+            spec.options.forEach(option => {
+                const li = document.createElement('li');
+                li.classList.add('filter-list');
+
+                if (spec.specKey.toLowerCase() === "color") {
+                    const colorSwatch = document.createElement('span');
+                    colorSwatch.classList.add('color-option');
+                    colorSwatch.style.backgroundColor = option.toLowerCase();
+                    colorSwatch.dataset.color = option;
+
+                    colorSwatch.addEventListener('click', () => {
+                        colorSwatch.classList.toggle('selected');
+                    });
+
+                    li.appendChild(colorSwatch);
+                } else {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `${spec.specKey}-${option}`;
+                    checkbox.value = option;
+                    checkbox.classList.add('pixel-checkbox');
+
+                    const label = document.createElement('label');
+                    label.htmlFor = checkbox.id;
+                    label.innerText = option;
+
+                    li.appendChild(checkbox);
+                    li.appendChild(label);
+                }
+                optionsList.appendChild(li);
+            });
+            filterContainer.appendChild(optionsList);
+        });
+
+        const searchButton = document.createElement('button');
+        searchButton.innerText = "Apply Filters";
+        searchButton.classList.add('filter-search-button');
+        searchButton.addEventListener('click', applyFilters);
+
+        filterContainer.appendChild(searchButton);
     }
 
-    const memory = $('input[name="memory"]:checked');
-    if (memory.val() !== undefined) {
-        filterDict['memory'] = parseInt(memory.val());
-        memory.prop('checked', false);
+    // Fetch products by subcategory
+    function fetchProducts(subId) {
+        const queryParams = new URLSearchParams({ page: currentPage, size: currentSize }).toString();
+        fetch(`http://localhost:9002/api/products/subcategory/${subId}?${queryParams}`)
+            .then(response => response.json())
+            .then(data => {renderProducts(data.content);
+                createPagination(data.totalPages,data.pageable.pageNumber);
+            })
+            .catch(error => console.error('Error fetching products:', error));
     }
 
-    const os = $('input[name="os"]:checked');
-    if (os.val() !== undefined) {
-        filterDict['os'] = os.val();
-        os.prop('checked', false);
-    }
+    // Render products
+    function renderProducts(products) {
+        productBox.innerHTML = '';
 
-    search();
-}
-
-function search() {
-    const subId = getSubIdFromURL(); // Get the subId from the URL
-    var queryParams = new URLSearchParams(filterDict).toString();
-    $.get(`http://localhost:9002/api/products/subcategory/${subId}?${queryParams}`, function (response) {
-        console.log(response);
-        var data = response.content;
-        var page = response.totalPages;
-        createPagination(page, filterDict.page);
-
-        // Clear the productBox before appending new products
-        $('#productBox').empty();
-
-        // Iterate over each product and generate HTML
-        $.each(data, function (index, product) {
-            var productHtml = `
+        products.forEach(product => {
+            const productHtml = `
                 <div class="col-lg-4 col-md-6">
                     <div class="single-product">
                         <div class="img-container">
@@ -86,154 +104,239 @@ function search() {
                                 <h6>${(Number.parseFloat(product.price) / 100).toFixed(2)} EGP</h6>
                             </div>
                             <div class="prd-bottom">
-                                <a href="#" class="social-info" onclick="event.preventDefault(); addToCart(${product.id},1);">
+                                <div class="social-info" onclick="event.preventDefault(); addToCart(${product.id},1);">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="/ecommerce/web/single-product.jsp?id=${product.id}" class="social-info">
+                                </div>
+                                <div class="social-info">
                                     <span class="lnr lnr-move"></span>
                                     <p class="hover-text">view more</p>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
-            // Append the generated HTML to productBox
-            $('#productBox').append(productHtml);
+            productBox.innerHTML += productHtml;
         });
+    }
+
+    // Apply filters and fetch filtered products
+ // Apply filters and fetch filtered products
+function applyFilters() {
+    flag = true;
+    filters = {};  // Start with an empty filters object since subId is now in the URL path
+
+    // Collect selected color options
+    document.querySelectorAll('.color-option.selected').forEach(option => {
+        if (!filters.color) filters.color = [];
+        filters.color.push(option.dataset.color);
     });
+
+    // Collect other selected filter checkboxes
+    document.querySelectorAll('.pixel-checkbox:checked').forEach(checkbox => {
+        const [specKey] = checkbox.id.split('-');
+        if (!filters[specKey]) filters[specKey] = [];
+        filters[specKey].push(checkbox.value);
+    });
+
+    localStorage.setItem('selectedFilters', JSON.stringify(filters));
+    fetchFilteredProducts(subId, filters);
 }
 
-function createPagination(totalPages, currentPage) {
-    const container = document.getElementById('pagination');
-    container.innerHTML = ''; // Clear previous pagination
+// Fetch products with applied filters
+function fetchFilteredProducts(subId, filters) {
+    const filterParams = encodeURIComponent(JSON.stringify(filters));
+    const queryParams = `filters=${filterParams}&page=${currentPage}&size=${currentSize}`;
+    fetch(`http://localhost:9002/api/products/subcategory/${subId}/filter?${queryParams}`)
+        .then(response => response.json())
+        .then(data => {renderProducts(data.content);
+            createPagination(data.totalPages,data.pageable.pageNumber);
+        })
+        .catch(error => console.error('Error fetching filtered products:', error));
+}
 
-    const delta = 2; // Pages to show around the current page
 
-    const createPageButton = (pageNum) => {
-        const pageButton = document.createElement('a');
-        pageButton.innerText = pageNum;
-        if (pageNum === currentPage) {
-            pageButton.classList.add('active');  // Highlight current page
+    // Restore filters from localStorage and apply them if present
+    const storedFilters = JSON.parse(localStorage.getItem('selectedFilters'));
+    if (storedFilters && storedFilters.sub === subId) {
+        applyStoredFilters(storedFilters);
+    }
+
+    function applyStoredFilters(storedFilters) {
+        if (storedFilters.color) {
+            storedFilters.color.forEach(color => {
+                const colorElement = document.querySelector(`.color-option[data-color="${color}"]`);
+                if (colorElement) colorElement.classList.add('selected');
+            });
         }
-        pageButton.onclick = function () {
-            loadPage(pageNum - 1);
-        };
-        container.appendChild(pageButton);
-    };
 
-    const createLeftButton = () => {
-        const pageButton = document.createElement('a');
-        pageButton.classList.add('prev-arrow');
-        pageButton.classList.add('fa');
-        pageButton.classList.add('fa-long-arrow-left');
-        if (currentPage === 1) {
-            pageButton.style.pointerEvents = "none";
-        }
-        pageButton.onclick = function () {
-            if (currentPage > 1) {
-                loadPage(currentPage - 1);
+        Object.keys(storedFilters).forEach(key => {
+            if (key !== 'sub' && key !== 'color') {
+                storedFilters[key].forEach(value => {
+                    const checkbox = document.getElementById(`${key}-${value}`);
+                    if (checkbox) checkbox.checked = true;
+                });
             }
-        };
-        container.appendChild(pageButton);
-    };
+        });
+    }
 
-    const createRightButton = () => {
-        const pageButton = document.createElement('a');
-        pageButton.classList.add('next-arrow');
-        pageButton.classList.add('fa');
-        pageButton.classList.add('fa-long-arrow-right');
-        if (currentPage === totalPages) {
-            pageButton.style.pointerEvents = "none";
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    function applySearch() {
+        flag = false;
+        var searchParameter = searchInput.value;  // Start with an empty filters object since subId is now in the URL path
+        localStorage.setItem("searchParam", searchParameter);
+        fetchBySearch(searchParameter);
+    }
+
+    searchButton.addEventListener('click', () => {
+        applySearch()
+    });
+
+    searchInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            applySearch();
         }
-        pageButton.onclick = function () {
-            if (currentPage < totalPages) {
-                loadPage(currentPage + 1);
-            }
+    });
+    function fetchBySearch(){
+        var searchValue = localStorage.getItem("searchParam");
+        if(searchValue == null)searchValue="";
+        searchInput.value=searchValue;
+        const queryParams = new URLSearchParams({ page: currentPage, size: currentSize, name: searchValue }).toString();
+        fetch(`http://localhost:9002/api/products/subcategory/${subId}/search?${queryParams}`)
+            .then(response => response.json())
+            .then(data => {renderProducts(data.content);
+                createPagination(data.totalPages,data.pageable.pageNumber);
+            })
+            .catch(error => console.error('Error fetching products:', error));
+        resetFilters();
+    }
+    function resetFilters() {
+        // Clear color selections
+        document.querySelectorAll('.color-option.selected').forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        // Clear checkbox selections
+        document.querySelectorAll('.pixel-checkbox:checked').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Reset filters object
+        filters = { sub: subId }; // Reset to only include the subcategory filter
+
+        // Clear stored filters from localStorage
+        localStorage.removeItem('selectedFilters');
+
+        // Fetch and render the default product list
+    }
+
+
+
+
+
+
+
+    //Pagination
+    function createPagination(totalPages, currentPage) {
+        const container = document.getElementById('pagination');
+        container.innerHTML = '';  // Clear previous pagination
+
+        const paginationNumbers = document.createElement('span');
+        paginationNumbers.classList.add('pagination-numbers');
+        container.appendChild(paginationNumbers);
+
+        const delta = 0; // Pages to show around the current page
+
+        // Left Arrow
+        const createLeftButton = () => {
+            const leftArrow = document.createElement('a');
+            leftArrow.classList.add('arrow', 'prev-arrow');
+            if(flag) leftArrow.innerHTML = '<i class="fa fa-long-arrow-left" aria-hidden="true"></i>';
+            leftArrow.style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
+
+            leftArrow.onclick = function() {
+                if (currentPage > 0) {
+                    loadPage(currentPage - 1);
+                }
+            };
+            container.insertBefore(leftArrow, paginationNumbers);
         };
-        container.appendChild(pageButton);
-    };
 
-    createLeftButton();
+        // Right Arrow
+        const createRightButton = () => {
+            const rightArrow = document.createElement('a');
+            rightArrow.classList.add('arrow', 'next-arrow');
+            rightArrow.innerHTML = '<i class="fa fa-long-arrow-right" aria-hidden="true"></i>';
+            rightArrow.style.pointerEvents = currentPage === totalPages ? 'none' : 'auto';
 
-    // First page
-    if (currentPage > 1) {
+            rightArrow.onclick = function() {
+                if (currentPage < totalPages - 1) {
+                    loadPage(currentPage + 1);
+                }
+            };
+            container.appendChild(rightArrow);
+        };
+
+        // Individual Page Buttons
+        const createPageButton = (pageNum) => {
+            const pageButton = document.createElement('a');
+            pageButton.classList.add('pagination-link');
+            pageButton.innerText = pageNum;
+            if (pageNum === currentPage + 1 ) {
+                pageButton.classList.add('active');  // Highlight current page
+            }
+            else{
+                pageButton.onclick = function() {
+                    loadPage(pageNum - 1);
+                };
+            }
+
+            paginationNumbers.appendChild(pageButton);
+        };
+
+        createLeftButton();
+
+        // First page
         createPageButton(1);
-    }
 
-    // Dots if currentPage is not close to the beginning
-    if (currentPage - delta > 2) {
-        const dots = document.createElement('span');
-        dots.innerText = '...';
-        container.appendChild(dots);
-    }
 
-    // Pages around currentPage
-    for (let i = Math.min(currentPage, Math.max(2, currentPage - delta)); i <= Math.max(currentPage, Math.min(totalPages - 1, currentPage + delta)); i++) {
-        createPageButton(i);
-    }
-
-    // Dots if currentPage is not close to the end
-    if (currentPage + delta < totalPages - 1) {
-        const dots = document.createElement('span');
-        dots.innerText = '...';
-        container.appendChild(dots);
-    }
-
-    // Last page
-    if (currentPage < totalPages) {
-        createPageButton(totalPages);
-    }
-    createRightButton();
-}
-
-function loadPage(pageNumber) {
-    currentPage = pageNumber;
-    createPagination(10, pageNumber);
-    changePage(pageNumber);
-}
-
-function getSubIdFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('sub'); // Returns the subId from the URL
-}
-
-$(document).ready(function () {
-    document.getElementById('selectPageSize').addEventListener('change', function () {
-        const selectedSize = this.value;
-        changeSize(selectedSize);
-    });
-
-    search(); // Fetch products when the page loads
-
-    // Initialize the price range slider if applicable
-    if (document.getElementById("price-range")) {
-        var nonLinearSlider = document.getElementById("price-range");
-        var minPriceFetched = parseInt(nonLinearSlider.getAttribute("data-min-price")) / 100;
-        var maxPriceFetched = parseInt(nonLinearSlider.getAttribute("data-max-price")) / 100;
-
-        if (nonLinearSlider.noUiSlider) {
-            nonLinearSlider.noUiSlider.destroy();
+        // Dots if currentPage is not close to the beginning
+        if (currentPage - delta > 1) {
+            const dots = document.createElement('a');
+            dots.classList.add('pagination-link');
+            dots.innerText = '...';
+            paginationNumbers.appendChild(dots);
         }
-        noUiSlider.create(nonLinearSlider, {
-            connect: true,
-            behaviour: "tap",
-            start: [minPriceFetched, maxPriceFetched],
-            range: {
-                min: [minPriceFetched],
-                max: [maxPriceFetched],
-            },
-        });
 
-        var nodes = [
-            document.getElementById("lower-value"), // 0
-            document.getElementById("upper-value"), // 1
-        ];
+        // Pages around currentPage
+        for (let i = Math.max(2, currentPage + 1 - delta); i <= Math.min(totalPages - 1 , currentPage + 1 + delta); i++) {
+            createPageButton(i);
+        }
 
-        // Display the slider value and how far the handle moved
-        nonLinearSlider.noUiSlider.on("update", function (values, handle) {
-            nodes[handle].innerHTML = values[handle];
-        });
+        // Dots if currentPage is not close to the end
+        if (currentPage + delta < totalPages - 1) {
+            const dots = document.createElement('a');
+            dots.classList.add('pagination-link');
+            dots.innerText = '...';
+            paginationNumbers.appendChild(dots);
+        }
+
+        // Last page
+        createPageButton(totalPages);
+
+
+        createRightButton();
     }
+
+// Load Page Function
+    function loadPage(pageNumber) {
+        currentPage = pageNumber;
+        if(flag)applyFilters();
+        else fetchBySearch();
+    }
+
 });
+

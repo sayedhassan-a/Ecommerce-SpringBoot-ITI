@@ -18,6 +18,5 @@ public class ProductSpecs {
     private String productId;
     private List<String> key;
     private List<String> value;
-
 }
 

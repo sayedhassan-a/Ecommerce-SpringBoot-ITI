@@ -42,6 +42,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query("SELECT p FROM Product p WHERE p.subCategory.id = :subCategoryId AND p.specsId IN :specsIds")
     Page<Product> findBySubCategoryIdAndSpecsIds(@Param("subCategoryId") Long subCategoryId, @Param("specsIds") List<String> specsIds, Pageable pageable);
 
+    Page<Product> findBySubCategoryIdAndNameLikeIgnoreCase(Long subCategoryId
+            ,String name, Pageable pageable);
+
 
 
 

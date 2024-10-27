@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const subId = urlParams.get('sub');
     const filterContainer = document.querySelector('.sidebar-filter .common-filter');
     const productBox = document.getElementById('productBox');
-    const currentSize = 1;
+    const currentSize = 10;
     let currentPage = 0;
     let filters = { sub: subId };
     let flag = true;

@@ -53,38 +53,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
-        ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
-        ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();
-
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setPrice(productDTO.getPrice());
-        product.setDescription(productDTO.getDescription());
-        product.setStock(productDTO.getStock());
-        product.setImage(productDTO.getImages().get(0));
-        product.setImages(productDTO.getImages().stream().skip(1).map(image->{
-            Image image1=new Image();
-            image1.setUrl(image);
-            image1.setProduct(product);
-            return image1;
-        }).collect(Collectors.toSet()));
-        product.setBrandName(productDTO.getBrandName());
-        product.setSubCategory(productDTO.getSubCategory());
-        //MySQl
-        Product savedProduct = productService.createProduct(product);
-
-        ProductSpecs specs = new ProductSpecs();
-        specs.setProductId(savedProduct.getId().toString()); 
-        specs.setKey(specsDTO.getKey());
-        specs.setValue(specsDTO.getValue());
-
-        //MongoDB
-        ProductSpecs savedSpecs = productSpecsService.saveProductSpecification(specs);
-
-        // Update product with specsId (MongoDB ID) and save again in SQL
-        savedProduct.setSpecsId(savedSpecs.getId());
-        productService.createProduct(savedProduct); // Save updated product
-
+        Product savedProduct = productService.addProduct(productWithSpecsDTO);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
@@ -167,9 +136,6 @@ public class ProductController {
     public ResponseEntity<ProductCartDTO> searchProducts(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findProductQuantityById(id));
     }
-
-
-
 
 
 }

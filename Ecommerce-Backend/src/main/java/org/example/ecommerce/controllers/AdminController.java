@@ -14,6 +14,7 @@ import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -132,12 +133,12 @@ public class AdminController {
         return new Result(true, StatusCode.SUCCESS, "Product added successfully", savedProduct);
     }
 
-    @PutMapping("/products/{id}")
+  /*  @PutMapping("/products/{id}")
     public Result updateProduct(@PathVariable Long id, @RequestBody Product product) {
         Product updatedProduct = productService.updateProduct(id, product);
         return new Result(true, StatusCode.SUCCESS, "Product updated successfully", updatedProduct);
     }
-
+*/
 
     @DeleteMapping("/products/{id}")
     public Result deleteProduct(@PathVariable Long id) {
@@ -160,5 +161,17 @@ public class AdminController {
         return new Result(true, StatusCode.SUCCESS, "Products retrieved successfully", products);
     }
 
+
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @PathVariable Long id,
+            @RequestBody UpdateProductDTO updateProductDTO) {
+        ProductResponseDTO updatedProduct = productService.updateProduct(
+                id,
+                updateProductDTO.getProductDto(),
+                updateProductDTO.getProductSpecsDTO()
+        );
+        return ResponseEntity.ok(updatedProduct);
+    }
 
 }

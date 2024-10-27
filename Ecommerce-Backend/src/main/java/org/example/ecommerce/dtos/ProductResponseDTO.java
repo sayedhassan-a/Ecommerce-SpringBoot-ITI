@@ -22,6 +22,7 @@ public class ProductResponseDTO {
    private String categoryName;
    private String brandName;
    private String stock;
+   private int salePercentage;
    private Set<Image> productImages=new HashSet<>();
    private ProductSpecs productSpecs;
 }

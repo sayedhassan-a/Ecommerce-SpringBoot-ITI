@@ -133,13 +133,6 @@ public class AdminController {
         return new Result(true, StatusCode.SUCCESS, "Product added successfully", savedProduct);
     }
 
-  /*  @PutMapping("/products/{id}")
-    public Result updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        Product updatedProduct = productService.updateProduct(id, product);
-        return new Result(true, StatusCode.SUCCESS, "Product updated successfully", updatedProduct);
-    }
-*/
-
     @DeleteMapping("/products/{id}")
     public Result deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

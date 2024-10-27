@@ -62,6 +62,7 @@ public class ProductService {
         product.setDescription(productDTO.getDescription());
         product.setStock(productDTO.getStock());
         product.setImage(productDTO.getImages().get(0));
+        product.setSalePercentage(productDTO.getSalePercentage());
         product.setImages(productDTO.getImages().stream().skip(1).map(image -> {
             Image image1 = new Image();
             image1.setUrl(image);
@@ -256,6 +257,7 @@ public class ProductService {
         product.setStock(productRequestDTO.getStock());
         product.setBrandName(productRequestDTO.getBrandName());
         product.setSubCategory(productRequestDTO.getSubCategory());
+        product.setSalePercentage(product.getSalePercentage());
         product.setImage(productRequestDTO.getImages().isEmpty() ? null : productRequestDTO.getImages().get(0)); // Set main image if present
 
         Product updatedProduct = productRepository.save(product);
@@ -276,6 +278,37 @@ public class ProductService {
         ProductSpecs updatedSpecs = productSpecsRepository.save(productSpecs);
 
         return productMapper.toProductResponseDTO(updatedProduct, updatedSpecs);
+    }
+
+
+
+   // latest products
+   public List<ProductResponseDTO> getLatestProducts() {
+       List<Product> latestProducts = productRepository.findTop10ByOrderByCreatedAtDesc();
+       return latestProducts.stream()
+               .map(product -> productMapper.toProductResponseDTO(
+                       product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)))
+               .collect(Collectors.toList());
+   }
+
+
+    // fetching products on sale
+    public Page<ProductResponseDTO> getProductsOnSale(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> saleProducts = productRepository.findProductsOnSale(pageable);
+
+        return saleProducts.map(product -> productMapper.toProductResponseDTO(
+                product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)));
+    }
+
+
+    // fetching products on flash sale
+    public Page<ProductResponseDTO> getFlashSaleProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> flashSaleProducts = productRepository.findFlashSaleProducts(pageable);
+
+        return flashSaleProducts.map(product -> productMapper.toProductResponseDTO(
+                product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)));
     }
 
 }

@@ -18,5 +18,6 @@ public class ProductRequestDTO {
     private int stock;
     private List<String> images= new ArrayList<>();
     private String brandName;
+    private int salePercentage;
     private SubCategory subCategory;
 }

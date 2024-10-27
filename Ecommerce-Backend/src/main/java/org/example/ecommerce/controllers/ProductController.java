@@ -2,10 +2,7 @@ package org.example.ecommerce.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.*;
-import org.example.ecommerce.dtos.*;
-import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.ProductService;
 import org.example.ecommerce.services.ProductSpecsService;
@@ -21,9 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -144,5 +138,27 @@ public class ProductController {
     }
 
 
+
+    @GetMapping("/latest")
+    public ResponseEntity<List<ProductResponseDTO>> getLatestProducts() {
+        List<ProductResponseDTO> latestProducts = productService.getLatestProducts();
+        return ResponseEntity.ok(latestProducts);
+    }
+    @GetMapping("/onsale")
+    public ResponseEntity<Page<ProductResponseDTO>> getProductsOnSale(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductResponseDTO> products = productService.getProductsOnSale(page, size);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/flash-sale")
+    public ResponseEntity<Page<ProductResponseDTO>> getFlashSaleProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ProductResponseDTO> products = productService.getFlashSaleProducts(page,size);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.*;
+import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.services.ProductService;
 import org.example.ecommerce.services.ProductSpecsService;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -59,14 +61,20 @@ public class ProductController {
         product.setPrice(productDTO.getPrice());
         product.setDescription(productDTO.getDescription());
         product.setStock(productDTO.getStock());
-        product.setImage(productDTO.getImage());
+        product.setImage(productDTO.getImages().get(0));
+        product.setImages(productDTO.getImages().stream().skip(1).map(image->{
+            Image image1=new Image();
+            image1.setUrl(image);
+            image1.setProduct(product);
+            return image1;
+        }).collect(Collectors.toSet()));
         product.setBrandName(productDTO.getBrandName());
         product.setSubCategory(productDTO.getSubCategory());
         //MySQl
         Product savedProduct = productService.createProduct(product);
 
         ProductSpecs specs = new ProductSpecs();
-        specs.setProductId(savedProduct.getId().toString()); // Link SQL product ID
+        specs.setProductId(savedProduct.getId().toString()); 
         specs.setKey(specsDTO.getKey());
         specs.setValue(specsDTO.getValue());
 

@@ -56,9 +56,15 @@ public class ProductController {
         Product savedProduct = productService.addProduct(productWithSpecsDTO);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        Product updatedProduct = productService.updateProduct(id, product);
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @PathVariable Long productId,
+            @RequestBody UpdateProductDTO updateProductDTO) {
+        ProductResponseDTO updatedProduct = productService.updateProduct(
+                productId,
+                updateProductDTO.getProductDto(),
+                updateProductDTO.getProductSpecsDTO()
+        );
         return ResponseEntity.ok(updatedProduct);
     }
 
@@ -136,6 +142,7 @@ public class ProductController {
     public ResponseEntity<ProductCartDTO> searchProducts(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findProductQuantityById(id));
     }
+
 
 
 }

@@ -239,4 +239,43 @@ public class ProductService {
                         ()->new ProductNotFoundException(id)));
     }
 
+
+
+
+    public ProductResponseDTO updateProduct(Long productId, ProductRequestDTO productRequestDTO, ProductSpecsDTO productSpecsDTO) {
+
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty()) {
+            throw new RuntimeException("Product not found with ID: " + productId);
+        }
+        Product product = optionalProduct.get();
+
+        product.setName(productRequestDTO.getName());
+        product.setPrice(productRequestDTO.getPrice());
+        product.setDescription(productRequestDTO.getDescription());
+        product.setStock(productRequestDTO.getStock());
+        product.setBrandName(productRequestDTO.getBrandName());
+        product.setSubCategory(productRequestDTO.getSubCategory());
+        product.setImage(productRequestDTO.getImages().isEmpty() ? null : productRequestDTO.getImages().get(0)); // Set main image if present
+
+        Product updatedProduct = productRepository.save(product);
+
+        Optional<ProductSpecs> optionalSpecs = productSpecsRepository.findById(updatedProduct.getSpecsId());
+        ProductSpecs productSpecs;
+        if (optionalSpecs.isPresent()) {
+            productSpecs = optionalSpecs.get();
+        } else {
+            productSpecs = new ProductSpecs();
+            productSpecs.setId(updatedProduct.getSpecsId());
+        }
+        productSpecs.setProductId(updatedProduct.getId().toString());
+        productSpecs.setKey(productSpecsDTO.getKey());
+        productSpecs.setValue(productSpecsDTO.getValue());
+
+        //MongoDB
+        ProductSpecs updatedSpecs = productSpecsRepository.save(productSpecs);
+
+        return productMapper.toProductResponseDTO(updatedProduct, updatedSpecs);
+    }
+
 }

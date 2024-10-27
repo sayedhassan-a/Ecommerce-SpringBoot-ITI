@@ -1,5 +1,8 @@
 package org.example.ecommerce.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.example.ecommerce.dtos.CustomerDto;
 import org.example.ecommerce.dtos.customerConverters.CustomerDtoToCustomerConverter;
@@ -8,6 +11,10 @@ import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,14 +38,19 @@ public class CustomerController {
     }
 
     // Create a new customer
-    @PostMapping
+    @PostMapping("/register")
     public Result createCustomer(@Valid @RequestBody Customer customer) {
+        System.out.println("inside createCustomer: " + customer);
         Customer savedCustomer = customerService.save(customer);
         // Convert saved entity back to DTO
         CustomerDto savedCustomerDto = customerToCustomerDtoConverter.convert(savedCustomer);
         return new Result(true, StatusCode.SUCCESS, "Customer created successfully", savedCustomerDto);
     }
-
+//    Customer customer =
+//            customerService.findUserByEmail(
+//                    (String) ((Jwt)SecurityContextHolder.getContext()
+//                            .getAuthentication().getPrincipal()).getClaims().get(
+//                            "sub"));
     // Retrieve all customers
     @GetMapping
     public Result findAllCustomers() {
@@ -48,6 +60,12 @@ public class CustomerController {
                 .map(customerToCustomerDtoConverter::convert)
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Customers retrieved successfully", customerDtos);
+    }
+
+    @GetMapping("/checkEmail")
+    public ResponseEntity<String> checkEmail(@RequestParam String email) {
+        boolean exists = customerService.existsByEmail(email);
+        return ResponseEntity.ok(Boolean.toString(!exists)); // Return "true" if email is available, "false" if not
     }
 
     // Retrieve customer by ID

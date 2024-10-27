@@ -17,9 +17,7 @@
 	<!-- Site Title -->
 	<title>Electro</title>
 
-	<!--
-		CSS
-		============================================= -->
+	<!-- CSS -->
 	<link rel="stylesheet" href="../../assets/css/linearicons.css">
 	<link rel="stylesheet" href="../../assets/css/owl.carousel.css">
 	<link rel="stylesheet" href="../../assets/css/themify-icons.css">
@@ -30,150 +28,173 @@
 	<link rel="stylesheet" href="../../assets/css/main.css">
 	<link rel="stylesheet" href="../../assets/css/all.css">
 	<link rel="stylesheet" href="../../assets/css/style.css">
+	<link rel="stylesheet" href="../../assets/css/google-login.css">
 </head>
 
 <body>
 
-	<!-- Start Header Area -->
-	<header class="header_area sticky-header">
-		<div class="main_menu">
-			<nav class="navbar navbar-expand-lg navbar-light main_box">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-
-					<div class="logo-container">
-						<a class="navbar-brand logo_h" href="../index.html"
-						><img src="../../assets/img/electro-logo.png" alt="" class="logo-image"
-						/></a>
-					</div>
-
-					<button
-							class="navbar-toggler"
-							type="button"
-							data-toggle="collapse"
-							data-target="#navbarSupportedContent"
-							aria-controls="navbarSupportedContent"
-							aria-expanded="false"
-							aria-label="Toggle navigation"
-					>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div
-							class="collapse navbar-collapse offset"
-							id="navbarSupportedContent"
-					>
-						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item active">
-								<a class="nav-link" href="../index.html">Home</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="../category.html">Shop</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Login</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="../contact.html">Contact</a>
-							</li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item">
-								<button class="search">
-									<a href="#" class="cart"><span class="ti-bag"></span></a>
-								</button>
-							</li>
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<c:if test="${not empty sessionScope['customer-id']}">
-							<li class="nav-item">
-								<button class="search">
-									<a href="#" class="cart"><span class="lnr fa-regular fa-user" id="search"></span></a>
-								</button>
-							</li>
-							</c:if>
-						</ul>
-
-					</div>
+<!-- Start Header Area -->
+<header class="header_area sticky-header">
+	<div class="main_menu">
+		<nav class="navbar navbar-expand-lg navbar-light main_box">
+			<div class="container">
+				<div class="logo-container">
+					<a class="navbar-brand logo_h" href="../index.html">
+						<img src="../../assets/img/electro-logo.png" alt="" class="logo-image"/>
+					</a>
 				</div>
-			</nav>
-		</div>
-	</header>
-	<!-- End Header Area -->
-
-	<!-- Start Banner Area -->
-	<section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Login / Register</h1>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+						aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+					<ul class="nav navbar-nav menu_nav ml-auto">
+						<li class="nav-item active"><a class="nav-link" href="../index.html">Home</a></li>
+						<li class="nav-item"><a class="nav-link" href="../category.html">Shop</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+						<li class="nav-item"><a class="nav-link" href="../contact.html">Contact</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="nav-item">
+							<button class="search"><a href="#" class="cart"><span class="ti-bag"></span></a></button>
+						</li>
+					</ul>
 				</div>
 			</div>
-		</div>
-	</section>
-	<!-- End Banner Area -->
+		</nav>
+	</div>
+</header>
+<!-- End Header Area -->
 
-	<!--================Login Box Area =================-->
-	<section class="login_box_area section_gap">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="login_box_img">
-						<img class="img-fluid" src="../../assets/img/login.jpg" alt="">
-						<div class="hover">
-							<h4>New to our website?</h4>
-							<p>There are advances being made in science and technology everyday, and a good example of this is the</p>
-							<a class="primary-btn" href="registration.html">Create an Account</a>
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Login / Register</h1>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="login_box_img">
+					<img class="img-fluid" src="../../assets/img/login.jpg" alt="">
+					<div class="hover">
+						<h4>New to our website?</h4>
+						<p>Explore our latest offerings by creating an account.</p>
+						<a class="primary-btn" href="registration.html">Create an Account</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="login_form_inner">
+					<h3>Log in to enter</h3>
+					<form class="row login_form" id="loginForm">
+						<div class="col-md-12 form-group">
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+						</div>
+						<div class="col-md-12 form-group">
+							<input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+						</div>
+						<div class="col-md-12 form-group">
+							<div class="creat_account">
+								<input type="checkbox" id="rememberMe" name="rememberMe">
+								<label for="rememberMe">Keep me logged in</label>
+							</div>
+						</div>
+						<div id="loginError" class="text-danger" style="display: none;"></div>
+						<div class="col-md-12 form-group">
+							<button type="submit" class="primary-btn">Log In</button>
+						</div>
+					</form>
+					<script src="https://accounts.google.com/gsi/client" async defer></script>
+					<div class="col-md-12 form-group">
+						<div id="g_id_onload"
+							 data-client_id="516688200027-a5ouf65hcr858rf3lse81mg6q4lffg0h.apps.googleusercontent.com"
+							 data-login_uri="http://localhost:8080/oauth2/authorization/google"
+							 data-auto_prompt="false">
+						</div>
+						<div class="g_id_signin"
+							 data-type="standard"
+							 data-size="large"
+							 data-theme="outline"
+							 data-text="sign_in_with"
+							 data-shape="rectangular"
+							 data-logo_alignment="left">
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-6">
-					<div class="login_form_inner">
-						<h3>Log in to enter</h3>
-						<form class="row login_form" action="/ecommerce/web/auth/login" method="post" id="contactForm">
-							<div class="col-md-12 form-group">
-								<input type="email" class="form-control" id="email" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required>
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required>
-							</div>
-							<div class="col-md-12 form-group">
-								<div class="creat_account">
-									<input type="checkbox" id="f-option2" name="rememberMe">
-									<label for="f-option2">Keep me logged in</label>
-								</div>
-							</div>
-							<c:if test = "${loginErrorResponse!=null}">
-								<div id="loginError" class="text-danger">${loginErrorResponse.message}</div>
-							</c:if>
-							<div class="col-md-12 form-group">
-								<button type="submit" value="submit" class="primary-btn">Log In</button>
-							</div>
-						</form>
-					</div>
-				</div>
 			</div>
 		</div>
-	</section>
-	<!--================End Login Box Area =================-->
+	</div>
+</section>
+<!--================End Login Box Area =================-->
 
-	<!-- start footer Area -->
-	<footer class="footer-area section_gap">
-		<div class="container">
-			<div class="row">
-				<!-- Footer content remains the same as provided -->
-			</div>
-			<div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
-				<p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="../https://colorlib.com" target="_blank">Colorlib</a>
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-				</p>
-			</div>
+<script>
+	console.log('1 form submitted');
+	document.getElementById("loginForm").addEventListener('submit', function(event){
+		console.log('2 form submitted');
+		event.preventDefault();
+		const loginError = $('#loginError');
+		loginError.hide();
+		console.log('3 form submitted');
+
+		$.ajax({
+			url: 'http://localhost:8080/login',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				email: $('#email').val(),
+				password: $('#password').val(),
+			}),
+			success: function(response, status, xhr) {
+				// Capture the token from the response headers or body
+				const token = response.data.token;  // Adjust key as per your setup, e.g., 'Authorization'
+
+				if (token) {
+					// Store the token securely
+					localStorage.setItem('token', token);
+
+					// Redirect to home page
+					window.location.href = '/home';
+				} else {
+					loginError.text('Login failed: No token received').show();
+				}
+			},
+			error: function(xhr) {
+				const errorMsg = xhr.responseJSON && xhr.responseJSON.message
+						? xhr.responseJSON.message
+						: 'Invalid email or password.';
+				loginError.text(errorMsg).show();
+			}
+		});
+		return false;
+	});
+</script>
+
+<!-- start footer Area -->
+<footer class="footer-area section_gap">
+	<div class="container">
+		<div class="row">
+			<!-- Footer content remains the same as provided -->
 		</div>
-	</footer>
-	<!-- End footer Area -->
+		<div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
+			<p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+				Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="../https://colorlib.com" target="_blank">Colorlib</a>
+				<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+			</p>
+		</div>
+	</div>
+</footer>
+<!-- End footer Area -->
 
 
 	<script src="../../assets/js/vendor/jquery-2.2.4.min.js"></script>

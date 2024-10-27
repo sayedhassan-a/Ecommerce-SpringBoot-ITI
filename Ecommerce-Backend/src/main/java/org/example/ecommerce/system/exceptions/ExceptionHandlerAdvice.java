@@ -37,6 +37,8 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     Result handleValidationException(MethodArgumentNotValidException ex) {
+        System.out.println("                   MethodArgumentNotValidException or ValidationException");
+
         List<ObjectError> errors = ex.getBindingResult().getAllErrors();
         Map<String, String> map = new HashMap<>(errors.size());
         errors.forEach((error) -> {
@@ -46,6 +48,8 @@ public class ExceptionHandlerAdvice {
         });
         return new Result(false, StatusCode.INVALID_ARGUMENT, "Provided arguments are invalid, see data for details.", map);
     }
+
+
 
     @ExceptionHandler({UsernameNotFoundException.class, BadCredentialsException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -81,5 +85,21 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     Result handleOtherExceptions(Exception ex){
         return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "An internal server error occurred", ex.getMessage());
+    }
+
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    Result handleValidationException(ValidationException ex) {
+        System.out.println("                    ValidationException");
+
+        List<String> errors = ex.getValidationErrors();
+        Map<String, String> map = new HashMap<>(errors.size());
+        errors.forEach((error) -> {
+            String key = "error";
+            String val = error;
+            map.put(key, val);
+        });
+        return new Result(false, StatusCode.INVALID_ARGUMENT, "Provided arguments are invalid, see data for details.", map);
     }
 }

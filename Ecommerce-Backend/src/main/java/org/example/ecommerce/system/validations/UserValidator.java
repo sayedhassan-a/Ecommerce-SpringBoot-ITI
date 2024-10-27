@@ -4,8 +4,8 @@ import org.example.ecommerce.models.Address;
 import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,67 +14,73 @@ import java.util.List;
 public class UserValidator {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
-    // Main method to validate user attributes based on required fields for each context
-    public List<String> validateUserInput(User user, boolean isAddressRequired, boolean isRegistration) {
+    public List<String> validateCustomer(User user) {
         List<String> errors = new ArrayList<>();
 
-        // Custom validation for username, email, phone, password, and credit limit are no longer necessary
-        // since these fields are already validated using annotations in the User class.
+        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
+            errors.add("First name cannot be empty.");
+        }
 
-        // Validate address (optional for profile update, mandatory for orders)
-        if (isAddressRequired && !validateAddress(user)) {
-            errors.add("Invalid address: country, city, and street are required.");
+        if (!isValidPassword(user.getPassword())) {
+            errors.add("Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
         }
 
         return errors;
     }
 
-    // Validation for address (this part is not handled by annotations)
-private boolean validateAddress(User user) {
-    // if (user is a customer not an admin class)
-    if (!(user instanceof Customer)) {
-        return true; // Admin type or other types without address attribute
+    private List<String> validateAddress(Address address) {
+        List<String> errors = new ArrayList<>();
+        if(address.getAddressOne() == null || address.getAddressOne().trim().isEmpty()) {
+            errors.add("Address line 1 cannot be empty.");
+        }
+        if(address.getCity() == null || address.getCity().trim().isEmpty()) {
+            errors.add("City cannot be empty.");
+        }
+        if(address.getCountry() == null || address.getCountry().trim().isEmpty()) {
+            errors.add("Country cannot be empty.");
+        }
+        if(address.getZipCode() == null || address.getZipCode().trim().isEmpty()) {
+            errors.add("Zip code cannot be empty.");
+        }
+        // Add more address validation logic if needed
+        return errors;
     }
 
-    Customer customer = (Customer) user;
-    Address address = customer.getAddress();
-    if (address == null || isNullOrEmpty(address.getAddressOne()) || isNullOrEmpty(address.getCity()) || isNullOrEmpty(address.getCountry())) {
-        return false;
-    }
-    return true;
-}
-
-    // Validation for password change request
     public List<String> validateChangePassword(User user, String oldPassword, String newPassword) {
         List<String> errors = new ArrayList<>();
 
-        if (oldPassword == null || oldPassword.isEmpty() || newPassword == null || newPassword.isEmpty()) {
+        if (isNullOrEmpty(oldPassword) || isNullOrEmpty(newPassword)) {
             errors.add("Old password and new password cannot be empty.");
             return errors;
         }
 
-        // Custom password matching logic (this cannot be handled by annotations)
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             errors.add("Old password is incorrect.");
         }
 
-        // Password length validation is now handled by annotations in the User class
-        if (!validatePassword(newPassword)) {
-            errors.add("Invalid password: must be at least 6 characters long.");
+        if (!isValidPassword(newPassword)) {
+            errors.add("New password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
         }
 
         return errors;
     }
 
-    // Utility method for checking null or empty strings (for manual validations)
     private boolean isNullOrEmpty(String value) {
         return value == null || value.trim().isEmpty();
     }
 
-    // Password validation (minimal complexity requirements can be customized if needed)
-    private boolean validatePassword(String password) {
-        return password.length() >= 6;  // Additional complexity can be added here if needed
+    private boolean isValidPassword(String password) {
+        if (password.length() < 8 || password.length() > 20) {
+            return false;
+        }
+
+        boolean hasUppercase = password.chars().anyMatch(Character::isUpperCase);
+        boolean hasLowercase = password.chars().anyMatch(Character::isLowerCase);
+        boolean hasDigit = password.chars().anyMatch(Character::isDigit);
+        boolean hasSpecialChar = password.chars().anyMatch(ch -> !Character.isLetterOrDigit(ch));
+
+        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
     }
 }

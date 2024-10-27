@@ -149,12 +149,18 @@
 <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded',()=>{
-        var urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new URLSearchParams(window.location.search);
         const orderId = urlParams.get('orderId');
         // Replace 'orderId' with the actual order ID you want to fetch
-        var token = localStorage.getItem("adminToken");
+        var token = localStorage.getItem("token");
         // Fetch the order data from the endpoint
-        fetch(`http://localhost:9002/api/v1/orders/admin/${orderId}`)
+        fetch(`http://localhost:9002/api/v1/orders/customer/${orderId}`,{
+            method:"GET",
+            headers:{
+                Authorization: "Bearer "+token,
+                'Content-Type': "application/json"
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 const order = data.order;
@@ -187,7 +193,7 @@
 
     })
 </script>
-<script src="../assets/js/loadAdminHeader.js"></script>
-<script src="../assets/js/loadingAdminHeaderContent.js"></script>
+<script src="../assets/js/loading.js"></script>
+<script src="../assets/js/loadHeader.js"></script>
 </body>
 </html>

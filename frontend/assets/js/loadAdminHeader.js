@@ -4,7 +4,7 @@
         .then(response => response.text())
         .then(data => {
             document.getElementById('admin-header').innerHTML = data;
-            loadingHeaderContent();
+            loadingAdminHeaderContent();
         });
     }
     document.addEventListener("DOMContentLoaded", function() {

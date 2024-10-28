@@ -18,6 +18,7 @@
 	<title>Electro</title>
 
 	<!-- CSS -->
+	<script src="../../assets/js/loginCheck.js"></script>
 	<link rel="stylesheet" href="../../assets/css/linearicons.css">
 	<link rel="stylesheet" href="../../assets/css/owl.carousel.css">
 	<link rel="stylesheet" href="../../assets/css/themify-icons.css">
@@ -58,7 +59,9 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="nav-item">
-							<button class="search"><a href="#" class="cart"><span class="ti-bag"></span></a></button>
+							<a href="/web/cart.html" class="cart-icon" aria-label="Cart">
+								<i class="ti-bag"></i>
+							</a>
 						</li>
 					</ul>
 				</div>
@@ -164,6 +167,7 @@
 					if(response.data.userInfo.role==="ROLE_USER"){
 						// Store the token securely
 						localStorage.setItem('token', token);
+						mergeCart();
 					}
 					else{
 						// Store the token securely
@@ -187,6 +191,7 @@
 		return false;
 	});
 </script>
+<script src ="../../assets/js/mergeCart.js"></script>
 
 <!-- start footer Area -->
 <footer class="footer-area section_gap">

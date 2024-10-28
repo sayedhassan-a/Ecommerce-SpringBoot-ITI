@@ -64,8 +64,7 @@ public class SubCategoryService {
     // Method to get subcategory with specifications by ID
     public SubCategoryWithSpecificationDTO getSubCategoryWithSpecifications(Long id) {
         // Fetch the subcategory
-        SubCategory subCategory = subCategoryRepository.findById(id)
-                .orElse(null); // or throw an exception if not found
+        SubCategory subCategory = subCategoryRepository.findBy(id); // or throw an exception if not found
         // Fetch the associated SubCategorySpecification using the structureId
         SubCategorySpecification subCategorySpecification = subCategorySpecificationRepository.findById(subCategory.getStructureId())
                 .orElse(null);

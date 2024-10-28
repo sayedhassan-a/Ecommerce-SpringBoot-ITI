@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="../assets/css/main.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
       .img-container {
         width: 100%;
@@ -79,20 +81,7 @@
           <div class="col-lg-12">
             <div class="active-banner-slider owl-carousel">
               <!-- single-slide -->
-              <div class="row single-slide align-items-center d-flex">
-                <div class="col-lg-5 col-md-6 ">
-                  <div class="banner-content">
-                      <h1>Best In Class<br />And Out.</h1>
-                      <h4>
-                        Play, learn and create
-                        <br>
-                        accelerated with AI and
-                        <br>NIVIDA GetForce RTX
-                        <br>Laptops.
-                      </h4>
-                  </div>
-                </div>
-              </div>
+              
               <!-- single-slide -->
             </div>
           </div>
@@ -225,66 +214,34 @@
         </div>
       </div>
     </section>
-    <!-- End category Area -->
-
-    <!-- start product Area -->
-    <section class="owl-carousel active-product-area section_gap">
-      <!-- single product slide -->
-      <div class="single-product-slider">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-6 text-center">
-              <div class="section-title">
-                <h1>Latest Products</h1>
-              </div>
-            </div>
-          </div>
-          <div class="row" id="product-container">
-            <!-- single product -->
-            <script>
-              function addToCart(itemId, buyQuantity, action) {
-                // Make the asynchronous request to the server
-                handleAddItem(buyQuantity, itemId);
-              }
-              function showStockError(msg) {
-                var popup = document.getElementById("stock-error");
-                popup.innerHTML = msg;
-                popup.style.display = "block"; // Show the popup
-
-                // Hide the popup after 3 seconds (3000 milliseconds)
-                setTimeout(function () {
-                  popup.style.display = "none"; // Hide the popup
-                }, 3000);
-              }
-            </script>
-           
-          </div>
-        </div>
+    <div class="product-section latest-products">
+      <h2>Latest Products</h2>
+      <div class="product-slider" id="latest-products-slider">
+          <!-- Products will be dynamically inserted here -->
       </div>
-
-      <!-- single product slide -->
-      <div class="single-product-slider">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-6 text-center">
-              <div class="section-title">
-                <h1>Latest Products</h1>
-              </div>
-            </div>
-          </div>
-          <div class="row" id="product-container2">
-            <!-- single product -->
-            
-          </div>
-        </div>
+      <i class="fas fa-chevron-left slider-icon prev-icon" onclick="slide('latest-products-slider', 'prev')"></i>
+      <i class="fas fa-chevron-right slider-icon next-icon" onclick="slide('latest-products-slider', 'next')"></i>
+    </div>
+  
+    <div class="product-section on-sale">
+      <h2>On Sale</h2>
+      <div class="product-slider" id="on-sale-slider">
+          <!-- Products will be dynamically inserted here -->
       </div>
-    </section>
-    <!-- end product Area -->
-
-    <!-- Start exclusive deal Area -->
-    <!-- End exclusive deal Area -->
-
-    <!-- Start brand Area -->
+      <i class="fas fa-chevron-left slider-icon prev-icon" onclick="slide('on-sale-slider', 'prev')"></i>
+      <i class="fas fa-chevron-right slider-icon next-icon" onclick="slide('on-sale-slider', 'next')"></i>
+    </div>
+  
+    <div class="product-section flash-sale">
+      <h2>Flash Sale</h2>
+      <div class="product-slider" id="flash-sale-slider">
+          <!-- Products will be dynamically inserted here -->
+      </div>
+      <i class="fas fa-chevron-left slider-icon prev-icon" onclick="slide('flash-sale-slider', 'prev')"></i>
+      <i class="fas fa-chevron-right slider-icon next-icon" onclick="slide('flash-sale-slider', 'next')"></i>
+    </div>
+  
+  
     <section class="brand-area section_gap">
       <div class="container">
         <div class="row">
@@ -332,7 +289,7 @@
     <!-- End related-product Area -->
 
     <!-- start footer Area -->
-  <footer class="footer-area section_gap" id="footer"></footer>
+    <footer class="footer-area section_gap" id="footer"></footer>
     <!-- End footer Area -->
 
     <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
@@ -355,5 +312,49 @@
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/loadHeader.js"></script>
     <script src="../assets/js/loading.js"></script>
+    
+    <script>
+      async function fetchAndDisplayProducts(url, containerId) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const products = data.content || data; // Adjusts for "content" key if present
+        const container = document.getElementById(containerId);
+        
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <div class="product-details">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div class="price">₹${product.price / 100}</div>
+                    ${product.salePercentage ? `<div class="sale-percentage">${product.salePercentage}% OFF</div>` : ''}
+                </div>
+            `;
+            container.appendChild(productCard);
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+    }
+}
+
+// Fetch products on load
+fetchAndDisplayProducts("http://localhost:9002/api/products/latest", "latest-products-slider");
+fetchAndDisplayProducts("http://localhost:9002/api/products/onsale", "on-sale-slider");
+fetchAndDisplayProducts("http://localhost:9002/api/products/flash-sale", "flash-sale-slider");
+
+// Slider navigation
+function slide(containerId, direction) {
+    const container = document.getElementById(containerId);
+    const scrollAmount = 300; // Adjust scroll distance as needed
+    container.scrollBy({
+        left: direction === 'next' ? scrollAmount : -scrollAmount,
+        behavior: 'smooth'
+    });
+}
+
+    </script>
   </body>
 </html>

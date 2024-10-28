@@ -75,7 +75,7 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers(HttpMethod.PUT, "/customers/update-password").hasAuthority(Role.ROLE_USER.name())
-
+                                .requestMatchers(HttpMethod.GET, "/customers").hasAuthority(Role.ROLE_ADMIN.name())
 //                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()

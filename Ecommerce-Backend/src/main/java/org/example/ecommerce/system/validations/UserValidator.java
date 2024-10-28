@@ -79,11 +79,12 @@ public class UserValidator {
             return false;
         }
 
-        boolean hasUppercase = password.chars().anyMatch(Character::isUpperCase);
+//        boolean hasUppercase = password.chars().anyMatch(Character::isUpperCase);
         boolean hasLowercase = password.chars().anyMatch(Character::isLowerCase);
-        boolean hasDigit = password.chars().anyMatch(Character::isDigit);
-        boolean hasSpecialChar = password.chars().anyMatch(ch -> !Character.isLetterOrDigit(ch));
+//        boolean hasDigit = password.chars().anyMatch(Character::isDigit);
+//        boolean hasSpecialChar = password.chars().anyMatch(ch -> !Character.isLetterOrDigit(ch));
 
-        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
+//        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
+        return hasLowercase;
     }
 }

@@ -7,6 +7,8 @@ import org.example.ecommerce.repositories.CustomerRepository;
 import org.example.ecommerce.system.exceptions.ObjectNotFoundException;
 import org.example.ecommerce.system.exceptions.ValidationException;
 import org.example.ecommerce.system.validations.UserValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -100,8 +102,9 @@ public class CustomerService implements UserDetailsService {
                 .orElseThrow(() -> new ObjectNotFoundException(email));
     }
 
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
+    public Page<Customer> findAllByPage(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return customerRepository.findAll(pageRequest);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

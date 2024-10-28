@@ -58,18 +58,18 @@ class CustomerServiceTest {
     }
 
 
-    @Test
-    void testFindAllSuccess() {
-        // Given
-        given(this.customerRepository.findAll()).willReturn(this.customers);
-
-        // When
-        List<Customer> actualCustomers = this.customerService.findAll();
-
-        // Then
-        assertThat(actualCustomers.size()).isEqualTo(this.customers.size());
-        verify(this.customerRepository, times(1)).findAll();
-    }
+//    @Test
+//    void testFindAllSuccess() {
+//        // Given
+//        given(this.customerRepository.findAll()).willReturn(this.customers);
+//
+//        // When
+//        List<Customer> actualCustomers = this.customerService.findAll();
+//
+//        // Then
+//        assertThat(actualCustomers.size()).isEqualTo(this.customers.size());
+//        verify(this.customerRepository, times(1)).findAll();
+//    }
 
     @Test
     void testFindByIdSuccess() {

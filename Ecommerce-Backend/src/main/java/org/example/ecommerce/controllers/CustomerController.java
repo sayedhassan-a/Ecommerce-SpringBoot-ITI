@@ -18,6 +18,7 @@ import org.example.ecommerce.services.AuthService;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,15 +58,24 @@ public class CustomerController {
         return new Result(true, StatusCode.SUCCESS, "Customer created successfully", savedCustomerDto);
     }
 
-    // Retrieve all customers
     @GetMapping
-    public Result findAllCustomers() {
-        List<Customer> customers = customerService.findAll();
+    public Result findAllCustomers(@RequestParam(defaultValue = "0") int pageNumber,
+                                   @RequestParam(defaultValue = "10") int pageSize) {
+        Page<Customer> customers = customerService.findAllByPage(pageNumber, pageSize);
+
         // Convert list of entities to DTOs
         List<CustomerDto> customerDtos = customers.stream()
                 .map(customerToCustomerDtoConverter::convert)
                 .collect(Collectors.toList());
-        return new Result(true, StatusCode.SUCCESS, "Customers retrieved successfully", customerDtos);
+
+        // Create a pagination response object
+        Map<String, Object> response = new HashMap<>();
+        response.put("customers", customerDtos);
+        response.put("currentPage", customers.getNumber());
+        response.put("totalItems", customers.getTotalElements());
+        response.put("totalPages", customers.getTotalPages());
+
+        return new Result(true, StatusCode.SUCCESS, "Customers retrieved successfully", response);
     }
 
     @GetMapping("/checkEmail")

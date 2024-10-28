@@ -137,28 +137,6 @@ public class SecurityConfigurations {
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
-
-
-
-//                                .anyRequest().permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
-//                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
-//                                .requestMatchers(HttpMethod.PUT, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
-//                                .requestMatchers(HttpMethod.PUT, "/customers/update-password").hasAuthority(Role.ROLE_USER.name())
-//                                .requestMatchers(HttpMethod.GET, "/customers").hasAuthority(Role.ROLE_ADMIN.name())
-//                                .requestMatchers("/web/buffer.html").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-////                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
-//////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-//                                .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
-////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
-//                        .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

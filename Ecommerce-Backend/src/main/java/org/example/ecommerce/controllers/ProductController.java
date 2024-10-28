@@ -96,14 +96,14 @@ public class ProductController {
     }
 
     @GetMapping("/subcategory/{subCategoryId}")
-    public Page<ProductResponseDTO> getProductsBySubCategory(
+    public Page<SimpleProductDTO> getProductsBySubCategory(
             @PathVariable Long subCategoryId,
             Pageable pageable) {
         return productService.getProductsBySubCategory(subCategoryId, pageable);
     }
 
     @GetMapping("/subcategory/{subCategoryId}/filter")
-    public Page<ProductResponseDTO> getProducts(
+    public Page<SimpleProductDTO> getProducts(
             @PathVariable Long subCategoryId,    // <-- Ensure this is a @PathVariable
             @RequestParam String filters,
             @RequestParam(defaultValue = "0") int page,
@@ -114,7 +114,7 @@ public class ProductController {
     }
 
     @GetMapping("/subcategory/{subCategoryId}/search")
-    public Page<ProductResponseDTO> searchByName(
+    public Page<SimpleProductDTO> searchByName(
             @PathVariable Long subCategoryId,    // <-- Ensure this is a @PathVariable
             @RequestParam String name,
             @RequestParam(defaultValue = "0") int page,

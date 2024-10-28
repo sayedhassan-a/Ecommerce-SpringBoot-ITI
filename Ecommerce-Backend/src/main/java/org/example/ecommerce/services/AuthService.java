@@ -15,7 +15,11 @@ import org.example.ecommerce.system.exceptions.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -29,12 +33,14 @@ public class AuthService {
     private final UserMapper userMapper;
     private final CustomerRepository customerRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
+    private final JwtDecoder jwtDecoder;
 
 
-    public AuthService(JwtProvider jwtProvider, UserMapper userMapper, CustomerRepository customerRepository) {
+    public AuthService(JwtProvider jwtProvider, UserMapper userMapper, CustomerRepository customerRepository, JwtDecoder jwtDecoder) {
         this.jwtProvider = jwtProvider;
         this.userMapper = userMapper;
         this.customerRepository = customerRepository;
+        this.jwtDecoder = jwtDecoder;
     }
 
     public void registerOAuthUser(Customer customer, OAuthProvider provider) {
@@ -85,5 +91,10 @@ public class AuthService {
                 "userInfo", userDto,
                 "token", token
         );
+    }
+
+    public String extractEmail() {
+        return (String) ((Jwt) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getClaims().get("sub");
     }
 }

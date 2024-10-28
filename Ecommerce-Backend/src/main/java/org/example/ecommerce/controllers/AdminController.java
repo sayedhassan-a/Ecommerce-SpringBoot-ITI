@@ -1,6 +1,7 @@
 package org.example.ecommerce.controllers;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.adminConverters.AdminDtoToAdminConverter;
 import org.example.ecommerce.dtos.adminConverters.AdminToAdminDtoConverter;
@@ -25,20 +26,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/admins")
 @Validated
+@AllArgsConstructor
 public class AdminController {
 
-    @Autowired
     private AdminService adminService;
-    
-    @Autowired
     private AdminDtoToAdminConverter adminDtoToAdminConverter;
-
-    @Autowired
     private AdminToAdminDtoConverter adminToAdminDtoConverter;
-
-    @Autowired
     private ProductService productService;
-
     private ProductSpecsService productSpecsService;
 
     // Create a new admin

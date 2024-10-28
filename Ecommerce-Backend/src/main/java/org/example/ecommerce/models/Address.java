@@ -23,7 +23,7 @@ public class Address {
     private String ZipCode;
 
     @OneToOne(mappedBy = "address")
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "address_id")
     private Customer customer;
 
     @CreatedDate

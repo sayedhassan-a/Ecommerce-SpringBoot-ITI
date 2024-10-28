@@ -19,14 +19,21 @@ public class UserValidator {
     public List<String> validateCustomer(User user) {
         List<String> errors = new ArrayList<>();
 
-        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
-            errors.add("First name cannot be empty.");
-        }
+        errors.addAll(checkName(user));
+
 
         if (!isValidPassword(user.getPassword())) {
             errors.add("Password must be between 8 and 20 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
         }
 
+        return errors;
+    }
+
+    public List<String> checkName(User user) {
+        List<String> errors = new ArrayList<>();
+        if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {
+            errors.add("First name cannot be empty.");
+        }
         return errors;
     }
 
@@ -48,16 +55,12 @@ public class UserValidator {
         return errors;
     }
 
-    public List<String> validateChangePassword(User user, String oldPassword, String newPassword) {
+    public List<String> validateChangePassword(String newPassword) {
         List<String> errors = new ArrayList<>();
 
-        if (isNullOrEmpty(oldPassword) || isNullOrEmpty(newPassword)) {
-            errors.add("Old password and new password cannot be empty.");
+        if (isNullOrEmpty(newPassword)) {
+            errors.add("New password cannot be empty.");
             return errors;
-        }
-
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            errors.add("Old password is incorrect.");
         }
 
         if (!isValidPassword(newPassword)) {
@@ -76,11 +79,12 @@ public class UserValidator {
             return false;
         }
 
-        boolean hasUppercase = password.chars().anyMatch(Character::isUpperCase);
+//        boolean hasUppercase = password.chars().anyMatch(Character::isUpperCase);
         boolean hasLowercase = password.chars().anyMatch(Character::isLowerCase);
-        boolean hasDigit = password.chars().anyMatch(Character::isDigit);
-        boolean hasSpecialChar = password.chars().anyMatch(ch -> !Character.isLetterOrDigit(ch));
+//        boolean hasDigit = password.chars().anyMatch(Character::isDigit);
+//        boolean hasSpecialChar = password.chars().anyMatch(ch -> !Character.isLetterOrDigit(ch));
 
-        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
+//        return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
+        return hasLowercase;
     }
 }

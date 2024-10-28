@@ -125,39 +125,58 @@
         <script>
             var token = localStorage.getItem("token");
             function createOrder() {
-                const paymentMethod = document.getElementById('paymentMethod').value;
-
-                const orderRequestDTO = {
-                    paymentMethod: paymentMethod
-                };
-
-                fetch('http://localhost:9002/api/v1/orders', {
-                    method: 'POST',
+                fetch('http://localhost:9002/customers/check-info', {
+                    method: 'GET',
                     headers: {
                         Authorization: "Bearer " + token,
-                        'Content-Type':"application/json"
-                    },
-                    body: JSON.stringify(orderRequestDTO)
+                        'Content-Type': "application/json"
+                    }
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to create order');
-                        }
-                        return response.json();
-                    })
-                    .then(orderResponse => {
-                        console.log('Order created:', orderResponse);
-                        // Redirect or update UI based on the response
-                        if(paymentMethod === "CREDIT_CARD"){
-                            location.href = orderResponse.paymentLink;
-                        }
-                        else{
-                            location.href = location.origin + "/web/index.html";
-                        }
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.code)
+                        if (data.code == 400) {
+                            alert('Complete All info');
 
+                            location.href = 'profile.html';
+                        } else {
+                            const paymentMethod = document.getElementById('paymentMethod').value;
+
+                            const orderRequestDTO = {
+                                paymentMethod: paymentMethod
+                            };
+
+                            fetch('http://localhost:9002/api/v1/orders', {
+                                method: 'POST',
+                                headers: {
+                                    Authorization: "Bearer " + token,
+                                    'Content-Type': "application/json"
+                                },
+                                body: JSON.stringify(orderRequestDTO)
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to create order');
+                                    }
+                                    return response.json();
+                                })
+                                .then(orderResponse => {
+                                    console.log('Order created:', orderResponse);
+                                    // Redirect or update UI based on the response
+                                    if (paymentMethod === "CREDIT_CARD") {
+                                        location.href = orderResponse.paymentLink;
+                                    } else {
+                                        location.href = location.origin + "/web/index.html";
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error creating order:', error);
+                                    // Display error message to the user
+                                });
+                        }
                     })
                     .catch(error => {
-                        console.error('Error creating order:', error);
+                        console.error('Error checking customer info:', error);
                         // Display error message to the user
                     });
             }

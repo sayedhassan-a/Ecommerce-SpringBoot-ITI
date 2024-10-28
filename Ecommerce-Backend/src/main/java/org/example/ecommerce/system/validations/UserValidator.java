@@ -32,8 +32,10 @@ public class UserValidator {
     public List<String> vaildateCheckout(Customer customer) {
         List<String> errors = new ArrayList<>();
         errors.addAll(validateAddress(customer.getAddress()));
-        errors.addAll(validateCustomer(customer));
 
+        if(customer.getFirstName() == null || customer.getFirstName().trim().isEmpty()) {
+            errors.add("First name cannot be empty.");
+        }
         if(customer.getDateOfBirth() == null) {
             errors.add("Date of birth cannot be empty.");
         }

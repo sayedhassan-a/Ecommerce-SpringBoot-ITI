@@ -400,7 +400,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:8080/customers/profile",
+        url: "http://localhost:9002/customers/profile",
         type: "PUT",
         headers: {
           "Authorization": "Bearer " + token,
@@ -410,6 +410,9 @@
         success: function(response) {
           alert("Profile updated successfully");
           toggleEditForm();
+
+          // Optionally, reload profile data on success
+          location.reload();
           // Optionally, refresh profile data on success
         },
         error: function(xhr) {
@@ -429,7 +432,7 @@
     const newPassword = $('#password').val();
 
     $.ajax({
-      url: "http://localhost:8080/customers/update-password",
+      url: "http://localhost:9002/customers/update-password",
       type: "PUT",
       contentType: "application/json",
       headers: {

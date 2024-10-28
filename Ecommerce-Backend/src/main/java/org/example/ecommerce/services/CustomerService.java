@@ -175,6 +175,7 @@ public class CustomerService implements UserDetailsService {
         List<String> validationErrors = userValidator.vaildateCheckout(customer);
 
         if (!validationErrors.isEmpty()) {
+            System.out.println("Errors: " + validationErrors.get(0));
             throw new ValidationException(validationErrors);
         }
 

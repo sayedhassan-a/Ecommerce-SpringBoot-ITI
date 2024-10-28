@@ -1,11 +1,11 @@
 function loadingAdminHeaderContent(){
     const token = localStorage.getItem("token");
     if(token === null){
-        document.getElementById("login").innerHTML = '<a class="nav-link" href="/ecommerce/dashboard/auth/login.jsp">Login</a>';
+        document.getElementById("login").innerHTML = '<a class="nav-link" href="/web/auth/login.html">Login</a>';
 
     }
     else{
-        document.getElementById("login").innerHTML = '<a class="nav-link" href="/ecommerce/dashboard/auth/logout">Logout</a>';
+        document.getElementById("login").innerHTML = '<a class="nav-link" onclick="invalidateToken()">Logout</a>';
         document.getElementById("profileSection").innerHTML = `
                         <br>
                         <li class="nav-item">
@@ -14,4 +14,9 @@ function loadingAdminHeaderContent(){
                             </button>
                         </li>`
     }
+}
+
+function invalidateToken(){
+    localStorage.removeItem("adminToken");
+    location.href = "/web/index.html";
 }

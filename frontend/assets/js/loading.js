@@ -1,11 +1,11 @@
 function loadingHeaderContent(){
     const token = localStorage.getItem("token");
     if(token === null){
-        document.getElementById("login").innerHTML = '<a class="nav-link" href="/ecommerce/web/auth/login.jsp">Login</a>';
+        document.getElementById("login").innerHTML = '<a class="nav-link" href="/web/auth/login.html">Login</a>';
 
     }
     else{
-        document.getElementById("login").innerHTML = '<a class="nav-link" href="/ecommerce/web/auth/logout">Logout</a>\n';
+        document.getElementById("login").innerHTML = '<a class="nav-link" onclick="invalidateToken()">Logout</a>\n';
         document.getElementById("profileSection").innerHTML = `
                         <br>
                         <li class="nav-item">
@@ -14,4 +14,9 @@ function loadingHeaderContent(){
                             </button>
                         </li>`
     }
+}
+
+function invalidateToken(){
+    localStorage.removeItem("token");
+    location.href = "/web/index.html";
 }

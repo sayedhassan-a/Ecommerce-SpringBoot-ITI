@@ -188,26 +188,40 @@
           "Authorization": "Bearer " + token
         },
         success: function(data) {
-          $('#profile-name').text(data.firstName + " " + data.lastName);
-          $('#customer-firstname-value').text(data.firstName);
-          $('#firstName').val(data.firstName);
-          $('#customer-lastname-value').text(data.lastName);
-          $('#lastName').val(data.lastName);
-          $('#customer-email-value').text(data.email);
-          $('#email').val(data.email);
+          console.log(data);
+
+          // Access the customer and address from the data
+          const customer = data.data[0]; // Get the customer object
+          const address = data.data[1]; // Get the address object
+        console.log(address);
+
+          $('#profile-name').text(customer.firstName + " " + customer.lastName);
+          $('#customer-firstname-value').text(customer.firstName);
+          $('#firstName').val(customer.firstName);
+          $('#customer-lastname-value').text(customer.lastName);
+          $('#lastName').val(customer.lastName);
+          $('#customer-email-value').text(customer.email);
+          $('#email').val(customer.email);
+          console.log(data);
 
           // Check if address exists and has the necessary fields
-          if (data.address) {
+          if (address) {
+            console.log(data);
             $('#customer-address-value').text(
-                    (data.address.addressOne || '') + ", " +
-                    (data.address.city || '') + ", " +
-                    (data.address.country || '') + ", " +
-                    (data.address.zipCode || '')
+                    (address.AddressOne || '') + ", " +
+                    (address.City || '') + ", " +
+                    (address.Country || '') + ", " +
+                    (address.ZipCode || '')
             );
-            $('#addressOne').val(data.address.addressOne || '');
-            $('#city').val(data.address.city || '');
-            $('#country').val(data.address.country || '');
-            $('#zipCode').val(data.address.zipCode || '');
+            $('#addressOne').val(address.AddressOne || '');
+            $('#city').val(address.City || '');
+            $('#country').val(address.Country || '');
+            $('#zipCode').val(address.ZipCode || '');
+
+            $('#customer-address-one-value').text(address.AddressOne || '');
+            $('#customer-city-value').text(address.City || '');
+            $('#customer-country-value').text(address.Country || '');
+            $('#customer-zip-value').text(address.ZipCode || '');
           } else {
             // Clear or hide address fields if address data is missing
             $('#customer-address-value').text("No address provided");
@@ -217,11 +231,11 @@
             $('#zipCode').val('');
           }
 
-          $('#customer-phone-value').text(data.phone);
-          $('#phone').val(data.phone);
-          $('#customer-date-value').text(data.dateOfBirth);
+          $('#customer-phone-value').text(customer.phone);
+          $('#phone').val(customer.phone);
+          $('#customer-date-value').text(customer.dateOfBirth);
 
-          let date = new Date(data.dateOfBirth);
+          let date = new Date(customer.dateOfBirth);
           date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
           let formattedDate = date.toISOString().split('T')[0];
           $('#date').val(formattedDate);
@@ -355,6 +369,29 @@
       alert("No token found. Please log in.");
       window.location.href = '/web/auth/login.html';
     }
+  });
+
+  $('#passwordForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const newPassword = $('#password').val();
+
+    $.ajax({
+      url: "http://localhost:8080/customers/update-password",
+      type: "PUT",
+      contentType: "application/json",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem('token')
+      },
+      data: JSON.stringify({ newPassword: newPassword }),
+      success: function (response) {
+        alert(response);
+      },
+      error: function (xhr) {
+        console.error("Error updating password", xhr);
+        alert(xhr.responseJSON.message || "Failed to update password");
+      }
+    });
   });
 </script>
 

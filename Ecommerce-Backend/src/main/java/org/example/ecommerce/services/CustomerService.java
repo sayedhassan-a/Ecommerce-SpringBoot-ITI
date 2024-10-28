@@ -105,11 +105,18 @@ public class CustomerService implements UserDetailsService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void changePassword(Customer user, String oldPassword, String newPassword) {
-        List<String> validationErrors = userValidator.validateChangePassword(user, oldPassword, newPassword);
+    public void changePassword(String email, String newPassword) {
+
+        Customer user = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("Customer", email));
+
+        // Validate the new password
+        List<String> validationErrors = userValidator.validateChangePassword(newPassword);
         if (!validationErrors.isEmpty()) {
             throw new ValidationException(validationErrors);
         }
+
+        // Hash and save the new password
         user.setPassword(passwordEncoder.encode(newPassword));
         customerRepository.save(user);
     }

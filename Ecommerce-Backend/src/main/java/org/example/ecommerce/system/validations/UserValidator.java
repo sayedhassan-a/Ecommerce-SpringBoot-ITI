@@ -55,16 +55,12 @@ public class UserValidator {
         return errors;
     }
 
-    public List<String> validateChangePassword(User user, String oldPassword, String newPassword) {
+    public List<String> validateChangePassword(String newPassword) {
         List<String> errors = new ArrayList<>();
 
-        if (isNullOrEmpty(oldPassword) || isNullOrEmpty(newPassword)) {
-            errors.add("Old password and new password cannot be empty.");
+        if (isNullOrEmpty(newPassword)) {
+            errors.add("New password cannot be empty.");
             return errors;
-        }
-
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            errors.add("Old password is incorrect.");
         }
 
         if (!isValidPassword(newPassword)) {

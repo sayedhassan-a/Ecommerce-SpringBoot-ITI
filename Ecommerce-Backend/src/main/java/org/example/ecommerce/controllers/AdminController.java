@@ -92,8 +92,51 @@ public class AdminController {
 
     // this part is for managing products
 
-
     @PostMapping("/products")
+    public Result addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
+        return productService.addProductWithSpecs(productWithSpecsDTO);
+    }
+
+    @DeleteMapping("/products/{id}")
+    public Result deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return new Result(true, StatusCode.SUCCESS, "Product deleted successfully", null);
+    }
+
+    @GetMapping("/products/{id}")
+    public Result getProductById(@PathVariable Long id) {
+        ProductResponseDTO productResponse = productService.findProductById(id);
+        return new Result(true, StatusCode.SUCCESS, "Product retrieved successfully", productResponse);
+    }
+
+
+    @GetMapping("/products")
+    public Result getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ProductResponseDTO> products = productService.getAllProductsDto(page, size);
+        return new Result(true, StatusCode.SUCCESS, "Products retrieved successfully", products);
+    }
+
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @PathVariable Long id,
+            @RequestBody UpdateProductDTO updateProductDTO) {
+        ProductResponseDTO updatedProduct = productService.updateProduct(
+                id,
+                updateProductDTO.getProductDto(),
+                updateProductDTO.getProductSpecsDTO()
+        );
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+
+
+
+
+
+
+    /* @PostMapping("/products")
     public Result addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
         ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
         ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();
@@ -125,40 +168,6 @@ public class AdminController {
         productService.createProduct(savedProduct);
 
         return new Result(true, StatusCode.SUCCESS, "Product added successfully", savedProduct);
-    }
-
-    @DeleteMapping("/products/{id}")
-    public Result deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return new Result(true, StatusCode.SUCCESS, "Product deleted successfully", null);
-    }
-
-    @GetMapping("/products/{id}")
-    public Result getProductById(@PathVariable Long id) {
-        ProductResponseDTO productResponse = productService.findProductById(id);
-        return new Result(true, StatusCode.SUCCESS, "Product retrieved successfully", productResponse);
-    }
-
-
-    @GetMapping("/products")
-    public Result getAllProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ProductResponseDTO> products = productService.getAllProductsDto(page, size);
-        return new Result(true, StatusCode.SUCCESS, "Products retrieved successfully", products);
-    }
-
-
-    @PutMapping("/products/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(
-            @PathVariable Long id,
-            @RequestBody UpdateProductDTO updateProductDTO) {
-        ProductResponseDTO updatedProduct = productService.updateProduct(
-                id,
-                updateProductDTO.getProductDto(),
-                updateProductDTO.getProductSpecsDTO()
-        );
-        return ResponseEntity.ok(updatedProduct);
-    }
+    }*/
 
 }

@@ -2,8 +2,8 @@ package org.example.ecommerce.services;
 
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.payment.PaymentDTO;
-import org.example.ecommerce.exceptionHandling.exception.BadRequestException;
-import org.example.ecommerce.exceptionHandling.exception.NotFoundException;
+import org.example.ecommerce.system.exceptions.exceptionHandling.exception.BadRequestException;
+import org.example.ecommerce.system.exceptions.exceptionHandling.exception.NotFoundException;
 import org.example.ecommerce.mappers.OrderMapper;
 import org.example.ecommerce.mappers.OrderViewMapper;
 import org.example.ecommerce.models.*;

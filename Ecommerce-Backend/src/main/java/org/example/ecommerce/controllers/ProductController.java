@@ -74,11 +74,6 @@ public class ProductController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @GetMapping("/{id}/specs")
-    public ResponseEntity<ProductSpecs> getProductSpecs(@PathVariable Long id) {
-        Product product=productService.getProductById(id);
-        return ResponseEntity.ok(productSpecsService.getProductSpecificationById(product.getSpecsId()));
-    }
     @GetMapping("/search")
     public ResponseEntity<Page<ProductResponseDTO>> searchProducts(
             @RequestParam(required = false, defaultValue = "") String name,

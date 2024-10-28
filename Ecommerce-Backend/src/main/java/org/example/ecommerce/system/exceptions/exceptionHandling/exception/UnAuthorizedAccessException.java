@@ -1,4 +1,4 @@
-package org.example.ecommerce.exceptionHandling.exception;
+package org.example.ecommerce.system.exceptions.exceptionHandling.exception;
 
 import lombok.Data;
 

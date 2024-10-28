@@ -16,13 +16,13 @@ import java.util.Set;
 public class ProductResponseDTO {
    private Long id;
    private String name;
-   private BigDecimal price;
+   private int price;
    private String description;
    private String image;
    private String categoryName;
    private Long subCategoryId;
    private String brandName;
-   private String stock;
+   private int stock;
    private int salePercentage;
    private Set<Image> productImages=new HashSet<>();
    private ProductSpecs productSpecs;

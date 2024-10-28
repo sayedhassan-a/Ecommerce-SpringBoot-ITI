@@ -129,11 +129,10 @@ public class AdminController {
     @PutMapping("/products/{id}")
     public ProductResponseDTO updateProduct(
             @PathVariable Long id,
-            @RequestBody UpdateProductDTO updateProductDTO) {
+            @RequestBody ProductResponseDTO updateProductDTO) {
         ProductResponseDTO updatedProduct = productService.updateProduct(
                 id,
-                updateProductDTO.getProductDto(),
-                updateProductDTO.getProductSpecsDTO()
+                updateProductDTO
         );
         return updatedProduct;
     }

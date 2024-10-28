@@ -64,5 +64,8 @@ public class Product {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @Column(name = "sales")
+    private int salePercentage;
+
     boolean deleted = false;
 }

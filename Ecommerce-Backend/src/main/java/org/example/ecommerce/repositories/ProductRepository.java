@@ -1,5 +1,6 @@
 package org.example.ecommerce.repositories;
 
+import org.example.ecommerce.dtos.ProductResponseDTO;
 import org.example.ecommerce.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +56,18 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     Page<Product> findAllByDeleted(boolean deleted, Pageable pageable);
 
+
+    // fetching latest products
+    @Query("SELECT p FROM Product p WHERE p.deleted = false ORDER BY p.createdAt DESC limit 10")
+    List<Product> findTop10ByOrderByCreatedAtDesc();
+
+    // fetching products on sale
+    @Query("SELECT p FROM Product p WHERE p.deleted = false AND p.salePercentage > 0 ORDER BY p.createdAt DESC")
+    Page<Product> findProductsOnSale(Pageable pageable);
+
+    // fetching products on flash sale
+    @Query("SELECT p FROM Product p WHERE p.salePercentage > 50 AND p.deleted = false")
+    Page<Product> findFlashSaleProducts(Pageable pageable);
 
 
 }

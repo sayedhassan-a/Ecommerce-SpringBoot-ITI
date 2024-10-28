@@ -1299,8 +1299,11 @@ h6 {
 
 /* Main Menu */
 .header_area .main_menu .main_box {
-  margin: 0 auto; 
+  margin: 0 auto;
   max-width: 1200px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Soft border-radius for modern look */
+  transition: all 0.3s ease;
 }
 
 /* Navbar */
@@ -1339,6 +1342,7 @@ h6 {
 
 
 /* Dropdown Menu */
+/* General styling for dropdown menus */
 .dropdown-menu {
   position: absolute;
   background-color: #2c2c2c; /* Dark dropdown background */
@@ -1351,6 +1355,7 @@ h6 {
   transform: translateY(10px);
   transition: all 0.3s ease;
   padding: 10px 0;
+  min-width: 200px;
 }
 
 /* Show the dropdown when hovering */
@@ -1958,6 +1963,52 @@ h6 {
 
 .single-product .product-details .prd-bottom .social-info:hover span {
   background-color: #828bb2;
+.single-product .product-details .prd-bottom .social-info span:after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+.single-product .product-details .prd-bottom .social-info .hover-text {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 100px;
+  left: -40px;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  color: #222222;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  opacity: 0;
+  visibility: hidden;
+}
+.single-product .product-details .prd-bottom .social-info:hover {
+  width: 115px;
+}
+.single-product .product-details .prd-bottom .social-info:hover span:after {
+  opacity: 1;
+  visibility: visible;
+}
+.single-product .product-details .prd-bottom .social-info:hover .hover-text {
+  opacity: 1;
+  visibility: visible;
+  left: 20px;
+}
+.single-product .product-details .prd-bottom .social-info {
+  display:flex;
+  flex-direction:row;
+  justify-content: flex-start;
 }
 
 /* end product area css

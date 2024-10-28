@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <h6>${(Number.parseFloat(product.price) / 100).toFixed(2)} EGP</h6>
                             </div>
                             <div class="prd-bottom">
-                                <div class="social-info" onclick="event.preventDefault(); handleAddItem(1,${product.id},trueg);">
+                                <div class="social-info" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </div>
@@ -257,7 +257,7 @@ function fetchFilteredProducts(subId, filters) {
             const leftArrow = document.createElement('a');
             leftArrow.classList.add('arrow', 'prev-arrow');
             leftArrow.innerHTML = '<i class="fa fa-long-arrow-left" aria-hidden="true"></i>';
-            leftArrow.style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
+            leftArrow.style.pointerEvents = currentPage === 0 ? 'none' : 'auto';
 
             leftArrow.onclick = function() {
                 if (currentPage > 0) {
@@ -272,7 +272,7 @@ function fetchFilteredProducts(subId, filters) {
             const rightArrow = document.createElement('a');
             rightArrow.classList.add('arrow', 'next-arrow');
             rightArrow.innerHTML = '<i class="fa fa-long-arrow-right" aria-hidden="true"></i>';
-            rightArrow.style.pointerEvents = currentPage === totalPages ? 'none' : 'auto';
+            rightArrow.style.pointerEvents = currentPage === totalPages - 1 ? 'none' : 'auto';
 
             rightArrow.onclick = function() {
                 if (currentPage < totalPages - 1) {

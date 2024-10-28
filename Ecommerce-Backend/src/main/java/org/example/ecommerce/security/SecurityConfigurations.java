@@ -66,10 +66,10 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-//                                .anyRequest().permitAll()
+                               .anyRequest().permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
-                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/login/validate-token").hasAnyAuthority(Role.ROLE_USER.name(), Role.ROLE_ADMIN.name())
+//                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/login/validate-token").hasAnyAuthority(Role.ROLE_USER.name(), Role.ROLE_ADMIN.name())
 //                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()

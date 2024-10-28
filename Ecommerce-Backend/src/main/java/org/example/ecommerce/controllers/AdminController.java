@@ -103,6 +103,7 @@ public class AdminController {
         Product savedProduct = productService.addProduct(productWithSpecsDTO);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/products/{id}")
     public Result deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

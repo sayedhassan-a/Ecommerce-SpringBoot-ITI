@@ -1246,49 +1246,75 @@ h6 {
     top: 0;
   }
 }
-/* General Styling for Header */
+/* Cart Icon Styles */
+/* Cart Icon Styles */
+.cart-icon {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for scaling and color */
+  padding: 10px; /* Add some padding for better click area */
+}
+
+.cart-icon:hover {
+  transform: scale(1.1); /* Scale up on hover */
+  color: #1abc9c; /* Change color on hover */
+}
+
+/* Cart Icon itself */
+.cart-icon .ti-bag {
+  font-size: 24px; /* Adjust size for a modern look */
+  color: #ffffff; /* White color for dark theme */
+  transition: transform 0.3s ease; /* Smooth transition for icon */
+}
+
+.cart-icon:hover .ti-bag {
+  animation: bounce 0.5s; /* Bounce animation on hover */
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px); /* Move up slightly */
+  }
+  60% {
+    transform: translateY(-3px); /* Move up slightly less */
+  }
+}
+
 .header_area {
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 99;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px); /* Adds a slight blur for a modern look */
+  background: rgba(34, 34, 34, 0.9); /* Lighter dark background with slight transparency */
+  backdrop-filter: blur(10px); /* Keeps the blur effect */
   transition: background 0.4s, all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft shadow for a floating effect */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Increased shadow for a floating effect */
 }
 
 /* Main Menu */
 .header_area .main_menu .main_box {
-  background: #fff;
-  margin: 0 auto;
+  margin: 0 auto; 
   max-width: 1200px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 8px; /* Soft border-radius for modern look */
-  transition: all 0.3s ease;
 }
 
 /* Navbar */
 .header_area .navbar {
-  background: transparent; /* Keep navbar transparent to match header */
-  padding: 10px 0;
-  border: none;
-  display: flex;
-  justify-content: space-between;
-}
-
-.header_area .navbar .navbar-collapse {
-  flex-grow: 1;
+  padding: 5px 0; /* Further reduced padding for a more compact look */
 }
 
 /* Navbar Toggler */
-.header_area .navbar .navbar-toggler .icon-bar {
-  background: #333;
-  height: 2px;
-  width: 20px;
-  display: block;
-  margin: 6px 0;
+.header_area .navbar .navbar-toggler {
+  border: none; /* Remove border */
+}
+
+.header_area .navbar .navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"%3E%3Cpath stroke="%23ffffff" stroke-width="2" d="M5 7h20M5 15h20M5 23h20"/%3E%3C/svg%3E');
 }
 
 /* Navigation Links */
@@ -1298,26 +1324,25 @@ h6 {
 
 .header_area .navbar .nav .nav-link {
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 12px; /* Keep reduced font size */
   font-weight: 600;
-  color: #333;
-  padding: 10px 15px;
-  display: inline-block;
-  position: relative;
+  color: #ffffff; /* White color for dark theme */
+  padding: 6px 10px; /* Adjust padding for smaller links */
   transition: color 0.3s ease;
 }
 
+/* Hover Effect */
 .header_area .navbar .nav .nav-link:hover,
 .header_area .navbar .nav .nav-item.active .nav-link {
-  color: #007bff;
+  color: #fe8411; /* Highlight color on hover */
 }
 
+
 /* Dropdown Menu */
-/* General styling for dropdown menus */
 .dropdown-menu {
   position: absolute;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #2c2c2c; /* Dark dropdown background */
+  border: 1px solid #444; /* Darker border */
   border-radius: 4px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   z-index: 1000;
@@ -1326,7 +1351,6 @@ h6 {
   transform: translateY(10px);
   transition: all 0.3s ease;
   padding: 10px 0;
-  min-width: 200px;
 }
 
 /* Show the dropdown when hovering */
@@ -1338,90 +1362,24 @@ h6 {
 
 .dropdown-item {
   font-size: 14px;
-  color: #333;
+  color: #ffffff; /* White color for dropdown items */
   padding: 10px 20px;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #f8f9fa;
-  color: #007bff;
-}
-
-/* Submenu on right side */
-.dropdown-submenu {
-  position: relative;
-}
-
-/* Style the right-side submenu */
-.dropdown-submenu .dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -1px;
-  margin-left: 0px; /* Keep submenu visually connected to main dropdown */
-  display: none; /* Hidden until hover */
-  min-width: 200px;
-  border-left: 1px solid #ddd; /* Creates a connecting line */
-}
-
-/* Show the right-side submenu on hover */
-.dropdown-submenu:hover .dropdown-menu {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Styling for submenu items */
-.dropdown-submenu .dropdown-item {
-  white-space: nowrap;
-  padding: 10px 20px;
-}
-
-/* Triangle indicator for dropdown */
-.dropdown-toggle::after {
-  content: '▼';
-  margin-left: 0.5rem;
-  font-size: 12px;
-}
-
-/* Hover delay fix: Keep dropdown visible while transitioning to submenu */
-.nav-item {
-  position: relative;
-}
-
-.nav-item:hover .dropdown-menu,
-.nav-item:hover .dropdown-submenu .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Custom style for connecting the submenu */
-.dropdown-submenu .dropdown-menu::before {
-  content: "";
-  position: absolute;
-  top: 15px;
-  left: -10px; /* Position to overlap the parent menu */
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-left: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  transform: rotate(45deg); /* Rotated to look like a connecting triangle */
-  z-index: -1; /* Keep behind the submenu */
+  background-color: #444; /* Darker background on hover */
+  color: #1abc9c; /* Highlight color on hover */
 }
 
 /* Responsive Adjustments */
 @media (max-width: 991px) {
   .header_area .navbar {
-    padding: 15px;
-  }
-  .header_area .navbar-collapse {
-    margin-top: 20px;
+      padding: 10px;
   }
   .header_area .navbar .nav-item {
-    padding: 10px;
+      padding: 5px;
   }
 }
 
@@ -1765,58 +1723,61 @@ h6 {
 
 /* start features area css
 ============================================================================================ */
-@media (max-width: 768px) {
-  .features-area {
-    padding-top: 0;
-  }
-}
-.features-area .col-lg-3:last-child .single-features {
-  border-right: 0;
-}
-@media (max-width: 575px) {
-  .features-area .col-lg-3:last-child .single-features {
-    margin-top: 30px;
-  }
-}
-.features-area .col-lg-3:nth-child(3) .single-features,
-.features-area .col-lg-3:nth-child(4) .single-features {
-  margin-bottom: 0;
+.features-area {
+  padding: 80px 0;
+   /* Dark background for the section */
 }
 
 .features-inner {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 40px 0;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
 }
 
 .single-features {
+  background: rgba(34, 34, 34, 0.9);; /* Darker card background */
+  color: #ffffff; /* White font for text */
+  border-radius: 8px;
+  padding: 20px;
+  width: 160px; /* Smaller card width */
+  height: 160px; /* Smaller card height */
   text-align: center;
-  border-right: 1px solid #eeeeee;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-@media (max-width: 991px) {
-  .single-features {
-    border-right: none;
-    margin-bottom: 30px;
-  }
+
+.single-features:hover {
+  transform: translateY(-8px); /* Smooth hover effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Subtle shadow on hover */
 }
+
 .single-features .f-icon {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
+
 .single-features .f-icon img {
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
+  width: 30px;
+  transition: transform 0.3s, opacity 0.3s;
 }
-.single-features h6 {
-  font-size: 16px;
-  margin-bottom: 0;
-}
-.single-features p {
-  margin-bottom: 0;
-}
+
 .single-features:hover .f-icon img {
-  opacity: 0.5;
+  transform: scale(1.1);
+  opacity: 0.8;
 }
+
+.single-features h6 {
+  color: #d5d5d5;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.single-features p {
+  font-size: 14px;
+  color: #b5b5b5; /* Light gray for text contrast */
+  line-height: 1.5;
+}
+
 
 /* start features area css
 ============================================================================================ */
@@ -1824,54 +1785,43 @@ h6 {
 ============================================================================================ */
 .single-deal {
   position: relative;
-  margin-bottom: 30px;
+  overflow: hidden;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.single-deal:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
 .single-deal .overlay {
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  content: "";
-  background: #000;
+  background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
+  transition: opacity 0.3s, visibility 0.3s;
 }
+
+.single-deal:hover .overlay {
+  opacity: 0.7;
+  visibility: visible;
+}
+
 .single-deal .deal-details {
   position: absolute;
-  left: 50%;
-  top: 115%;
-  display: inline-block;
-  text-align: center;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  visibility: hidden;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-}
-.single-deal .deal-details h6 {
   color: #fff;
-  text-transform: uppercase;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(10px);
 }
-.single-deal:hover .overlay {
-  opacity: 0.5;
-  visibility: visible;
-}
+
 .single-deal:hover .deal-details {
-  top: 50%;
   opacity: 1;
-  visibility: visible;
+  transform: translateY(0);
 }
+
 
 /* end category area css
 ============================================================================================ */
@@ -1976,100 +1926,38 @@ h6 {
     right: 28%;
   }
 }
-
-.single-product {
-  margin-bottom: 50px;
-}
 .single-product img {
-  margin-bottom: 20px;
-  width: 100%;
+  border-radius: 10px;
+  transition: transform 0.3s;
 }
+
+.single-product:hover img {
+  transform: scale(1.05);
+}
+
+.single-product .product-details {
+  text-align: center;
+  margin-top: 10px;
+}
+
 .single-product .product-details h6 {
   font-size: 16px;
-  text-transform: uppercase;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
+
 .single-product .product-details .price h6 {
+  color: #828bb2;
   font-size: 14px;
-  display: inline-block;
-  padding-right: 15px;
-  margin: 0;
 }
-.single-product .product-details .price .l-through {
-  text-decoration: line-through;
-  color: #cccccc;
-  margin-bottom: 0;
-}
-.single-product .product-details .prd-bottom {
-  position: relative;
-  margin-top: 20px;
-}
+
 .single-product .product-details .prd-bottom .social-info {
-  position: relative;
-  display: inline-block;
-  width: 35px;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  overflow: hidden;
+  transition: background-color 0.3s, color 0.3s;
 }
-.single-product .product-details .prd-bottom .social-info span {
-  position: relative;
-  height: 30px;
-  width: 30px;
-  line-height: 30px;
-  text-align: center;
-  background: #828bb2;
-  border-radius: 50%;
-  display: inline-block;
-  color: #fff;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  z-index: 1;
-}
-.single-product .product-details .prd-bottom .social-info span:after {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  content: "";
-  border-radius: 50%;
-  opacity: 0;
-  visibility: hidden;
-  z-index: -1;
-}
-.single-product .product-details .prd-bottom .social-info .hover-text {
-  position: absolute;
-  left: 0;
-  top: 3px;
-  width: 100px;
-  left: -40px;
-  text-transform: uppercase;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  color: #222222;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  opacity: 0;
-  visibility: hidden;
-}
-.single-product .product-details .prd-bottom .social-info:hover {
-  width: 115px;
-}
-.single-product .product-details .prd-bottom .social-info:hover span:after {
-  opacity: 1;
-  visibility: visible;
-}
-.single-product .product-details .prd-bottom .social-info:hover .hover-text {
-  opacity: 1;
-  visibility: visible;
-  left: 40px;
+
+.single-product .product-details .prd-bottom .social-info:hover span {
+  background-color: #828bb2;
 }
 
 /* end product area css

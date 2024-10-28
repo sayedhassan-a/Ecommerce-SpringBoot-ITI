@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+
+
 @Component
 public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -54,9 +56,11 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
             String jwtToken = authService.handleOAuthLoginOrRegister(principal, OAuthProvider.GOOGLE);
 
             // Return the JWT and status message to the client
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"token\": \"" + jwtToken + "\", \"message\": \"Authentication successful\"}");
+
+            // send token inside the redirect
+            response.setHeader("Authorization", "Bearer " + jwtToken);
+
+            response.sendRedirect("/web/buffer.html?token=" + jwtToken);
         } catch (Exception e) {
             // Log error and respond with JSON error message
             e.printStackTrace();

@@ -2,6 +2,7 @@ package org.example.ecommerce.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.dtos.adminConverters.AdminDtoToAdminConverter;
 import org.example.ecommerce.dtos.adminConverters.AdminToAdminDtoConverter;
@@ -15,6 +16,7 @@ import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +94,15 @@ public class AdminController {
 
     // this part is for managing products
 
-    @PostMapping("/products")
-    public Result addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
-        return productService.addProductWithSpecs(productWithSpecsDTO);
-    }
 
+
+
+
+    @PostMapping("/products")
+    public ResponseEntity<Product> addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
+        Product savedProduct = productService.addProduct(productWithSpecsDTO);
+        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+    }
     @DeleteMapping("/products/{id}")
     public Result deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
@@ -118,6 +124,7 @@ public class AdminController {
         return new Result(true, StatusCode.SUCCESS, "Products retrieved successfully", products);
     }
 
+
     @PutMapping("/products/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable Long id,
@@ -130,13 +137,7 @@ public class AdminController {
         return ResponseEntity.ok(updatedProduct);
     }
 
-
-
-
-
-
-
-    /* @PostMapping("/products")
+     /* @PostMapping("/products")
     public Result addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
         ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
         ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();

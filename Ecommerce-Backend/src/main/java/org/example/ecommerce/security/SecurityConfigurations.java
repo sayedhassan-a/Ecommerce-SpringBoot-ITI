@@ -97,7 +97,9 @@ public class SecurityConfigurations {
                         //Customer
                                 .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers("/customers/checkEmail").permitAll()
-                                .requestMatchers("/customers/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/customers/register").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/customers/check-info").permitAll()
+//                                .requestMatchers(HttpMethod.GET,"/customers").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Orders
                                 .requestMatchers("/api/v1/orders/admin/**").hasAuthority(Role.ROLE_ADMIN.name())

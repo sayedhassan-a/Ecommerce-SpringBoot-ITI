@@ -1,7 +1,5 @@
 package org.example.ecommerce.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.mappers.ProductCartMapper;
 import org.example.ecommerce.mappers.ProductMapper;
@@ -12,22 +10,17 @@ import org.example.ecommerce.repositories.ProductRepository;
 import org.example.ecommerce.repositories.ProductSpecificationRepository;
 import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.exceptions.ProductNotFoundException;
-import org.example.ecommerce.system.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Service
 public class ProductService {
@@ -74,19 +67,19 @@ public class ProductService {
         product.setBrandName(productDTO.getBrandName());
         product.setSubCategory(productDTO.getSubCategory());
 
-        // Save product in MySQL
+        // MySQL
         Product savedProduct = productRepository.save(product);
 
-        // Create ProductSpecs for MongoDB
+        //MongoDB
         ProductSpecs specs = new ProductSpecs();
         specs.setProductId(savedProduct.getId().toString());
         specs.setKey(specsDTO.getKey());
         specs.setValue(specsDTO.getValue());
 
-        // Save specs in MongoDB
+        // MongoDB
         ProductSpecs savedSpecs = productSpecsService.saveProductSpecification(specs);
 
-        // Update product with specsId (MongoDB ID) and save again in MySQL
+        // (MongoDB ID) and save again in MySQL
         savedProduct.setSpecsId(savedSpecs.getId());
         return productRepository.save(savedProduct);
     }
@@ -163,7 +156,6 @@ public class ProductService {
         }
 
 
-
     public Page<ProductResponseDTO> searchProducts(
             String name,
             Integer minPrice,
@@ -233,8 +225,6 @@ public class ProductService {
     }
 
 
-
-
     public ProductResponseDTO updateProduct(Long productId, ProductRequestDTO productRequestDTO, ProductSpecsDTO productSpecsDTO) {
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
@@ -272,9 +262,7 @@ public class ProductService {
         return productMapper.toProductResponseDTO(updatedProduct, updatedSpecs);
     }
 
-
-
-   // latest products
+    // latest products
    public List<ProductResponseDTO> getLatestProducts() {
        List<Product> latestProducts = productRepository.findTop10ByOrderByCreatedAtDesc();
        return latestProducts.stream()
@@ -302,5 +290,49 @@ public class ProductService {
         return flashSaleProducts.map(product -> productMapper.toProductResponseDTO(
                 product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)));
     }
+
+
+
+    /*public Result addProductWithSpecs(ProductWithSpecsDTO productWithSpecsDTO) {
+        ProductRequestDTO productDTO = productWithSpecsDTO.getProductDto();
+        ProductSpecsDTO specsDTO = productWithSpecsDTO.getProductSpecsDTO();
+
+        // Initialize and populate the Product entity
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setDescription(productDTO.getDescription());
+        product.setStock(productDTO.getStock());
+        product.setImage(productDTO.getImages().get(0));
+        product.setImages(productDTO.getImages().stream().skip(1).map(image -> {
+            Image image1 = new Image();
+            image1.setUrl(image);
+            image1.setProduct(product);
+            return image1;
+        }).collect(Collectors.toSet()));
+        product.setBrandName(productDTO.getBrandName());
+        product.setSubCategory(productDTO.getSubCategory());
+
+        // Save the Product entity
+        Product savedProduct = createProduct(product);
+
+        // Initialize and populate the ProductSpecs entity
+        ProductSpecs specs = new ProductSpecs();
+        specs.setProductId(savedProduct.getId().toString());
+        specs.setKey(specsDTO.getKey());
+        specs.setValue(specsDTO.getValue());
+
+        // Save the ProductSpecs and update the product with specsId
+        ProductSpecs savedSpecs = productSpecsService.saveProductSpecification(specs);
+        savedProduct.setSpecsId(savedSpecs.getId());
+        createProduct(savedProduct);  // Save updated product with specsId
+
+        return new Result(true, StatusCode.SUCCESS, "Product added successfully", savedProduct);
+    }*/
+
+
+
+
+
 
 }

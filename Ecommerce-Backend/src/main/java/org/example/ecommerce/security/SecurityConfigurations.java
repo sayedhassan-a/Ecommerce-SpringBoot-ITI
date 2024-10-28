@@ -66,10 +66,82 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+
+                        //Login
+                                .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        //Auth
+                                .requestMatchers(HttpMethod.POST,
+                                        "/login/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/login/validate-token").hasAnyAuthority(
+                                                Role.ROLE_USER.name(), Role.ROLE_ADMIN.name())
+
+
+                                //Carts
+                                .requestMatchers("/api/v1/carts/**").hasAuthority(Role.ROLE_USER.name())
+
+                        //Categories
+                                .requestMatchers(HttpMethod.GET,"/api" +
+                                        "/categories/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT,"/api" +
+                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/api" +
+                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE,"/api" +
+                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        //Credit Card
+                                .requestMatchers("/api/v1/credit-card").hasAuthority(Role.ROLE_USER.name())
+
+                        //Customer
+                                .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())
+                                .requestMatchers("/customers/checkEmail").permitAll()
+                                .requestMatchers("/customers/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        //Orders
+                                .requestMatchers("/api/v1/orders/admin/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers("/api/v1/orders/customer/**").hasAuthority(Role.ROLE_USER.name())
+                                .requestMatchers(HttpMethod.POST,"/api/v1" +
+                                        "/orders").hasAuthority(Role.ROLE_USER.name())
+
+                        //Payment
+                                .requestMatchers("/api/v1/payment/**").permitAll()
+
+                        //Products
+                                .requestMatchers(HttpMethod.GET,"/api" +
+                                        "/products/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT,"/api" +
+                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/api" +
+                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE,"/api" +
+                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        //Products Specification
+                                .requestMatchers(HttpMethod.GET,"/api" +
+                                        "/product-specification/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT,"/api" +
+                                        "/product-specification/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/api" +
+                                        "/product-specification/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE,"/api" +
+                                        "/product-specification/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        // Sub Categories
+                                .requestMatchers(HttpMethod.GET,"/api" +
+                                        "/subcategories/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT,"/api" +
+                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/api" +
+                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE,"/api" +
+                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+
+
 //                                .anyRequest().permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
-                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/login/validate-token").hasAnyAuthority(Role.ROLE_USER.name(), Role.ROLE_ADMIN.name())
 //                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()

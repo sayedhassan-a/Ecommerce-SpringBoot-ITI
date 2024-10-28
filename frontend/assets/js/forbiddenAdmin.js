@@ -1,11 +1,11 @@
-checkAuth();
-function checkAuth(){
-    var adminToken = localStorage.getItem("adminToken");
-    if(adminToken){
-        location.href = location.origin + "/dashboard/list-product.html";
+checkAdminAuth();
+function checkAdminAuth(){
+    var userToken = localStorage.getItem("token");
+    if(userToken){
+        location.href = location.origin + "/web/profile.html";
         return;
     }
-    var token = localStorage.getItem("token");
+    var token = localStorage.getItem("adminToken");
     if(token){
         $.ajax({
                    url: `http://localhost:9002/api/v1/validate-token`, // Servlet URL
@@ -14,17 +14,17 @@ function checkAuth(){
                        Authorization: "Bearer " + token,
                    },
                    success: function(response) {
-                       if(response.data.userInfo.role==="ROLE_USER"){
+                       if(response.data.userInfo.role!=="ROLE_USER"){
 
                        }else{
-                           localStorage.removeItem("token");
+                           localStorage.removeItem("adminToken");
                            location.href = location.origin + "/web/auth/login.html";
 
                        }
                    },
                    error: function() {
                        token = null;
-                       localStorage.removeItem("token");
+                       localStorage.removeItem("adminToken");
                        location.href = location.origin + "/web/auth/login.html";
                    }
                });

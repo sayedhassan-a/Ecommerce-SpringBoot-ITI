@@ -37,4 +37,7 @@ function checkAdminAuth() {
                 location.href = "/dashboard/auth/login.html";
             });
     }
+    else{
+        location.href = "/web/index.html";
+    }
 }

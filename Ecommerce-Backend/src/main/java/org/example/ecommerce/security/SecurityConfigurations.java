@@ -139,6 +139,12 @@ public class SecurityConfigurations {
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        //google
+                                .requestMatchers("/google/**").permitAll()
+                                .requestMatchers("/google/login").permitAll()
+                                .requestMatchers("/google/login/**").permitAll()
+                                .requestMatchers("/oauth2/**").permitAll()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

@@ -65,16 +65,16 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                            .anyRequest().permitAll()
-                                /*.requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
-                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+                              .anyRequest().permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-                        .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()*/
-////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
-//                        .anyRequest().authenticated()
+//                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
+//                        .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
+//////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
+////                        .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

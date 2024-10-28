@@ -53,8 +53,10 @@ public class AuthController {
     }
 
     @GetMapping("/validate-token")
-    public ResponseEntity<?> validateToken() {
+    public Result validateToken() {
         System.out.println("Validating token");
-        return ResponseEntity.ok(this.authService.validateToken());
+        return new Result(true, StatusCode.SUCCESS, "User Info and Json Web " +
+                "Token", this.authService.validateToken());
+
     }
 }

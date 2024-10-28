@@ -17,6 +17,7 @@
 	<!-- Site Title -->
 	<title>Electro</title>
 	<!-- CSS -->
+	<script src="../assets/js/invalidateToken.js"></script>
 	<link rel="stylesheet" href="../assets/css/linearicons.css">
 	<link rel="stylesheet" href="../assets/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../assets/css/themify-icons.css">
@@ -97,7 +98,7 @@
 					</ul>
 					<p id="product-description"></p>
 					<div class="product_count">
-						<label for="qty">Quantity:</label>
+						<label>Quantity:</label>
 						<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
 						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
 								class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>

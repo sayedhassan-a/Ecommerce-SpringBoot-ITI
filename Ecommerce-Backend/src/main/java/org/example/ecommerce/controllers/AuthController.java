@@ -52,13 +52,9 @@ public class AuthController {
         return new Result(true, StatusCode.SUCCESS, "User Info and Json Web Token", this.authService.createLoginInfo(authentication));
     }
 
-    @PostMapping("/validate-token")
-    public ResponseEntity<?> validateToken(@RequestBody String accessToken) {
-        try {
-            Map<String, Object> userInfo = googleTokenValidator.validateAccessToken(accessToken);
-            return ResponseEntity.ok(userInfo);  // Return user info if token is valid
-        } catch (JwtException e) {
-            return ResponseEntity.status(401).body("Invalid token: " + e.getMessage());
-        }
+    @GetMapping("/validate-token")
+    public ResponseEntity<?> validateToken() {
+        System.out.println("Validating token");
+        return ResponseEntity.ok(this.authService.validateToken());
     }
 }

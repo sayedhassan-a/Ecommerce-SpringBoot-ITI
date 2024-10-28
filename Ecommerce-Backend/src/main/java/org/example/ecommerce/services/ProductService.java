@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.ecommerce.dtos.*;
 import org.example.ecommerce.mappers.ProductCartMapper;
 import org.example.ecommerce.mappers.ProductMapper;
+import org.example.ecommerce.mappers.SimpleProductMapper;
 import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
 import org.example.ecommerce.repositories.ProductRepository;
@@ -36,16 +37,17 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final ProductCartMapper productCartMapper;
     private final ProductSpecsService productSpecsService;
+    private final SimpleProductMapper simpleProductMapper;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
-                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper, ProductSpecsService productSpecsService) {
+                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper, ProductSpecsService productSpecsService, SimpleProductMapper simpleProductMapper) {
         this.productRepository = productRepository;
         this.productSpecsRepository = productSpecificationRepository;
         this.productMapper = productMapper;
         this.productCartMapper = productCartMapper;
         this.productSpecsService = productSpecsService;
-
+        this.simpleProductMapper = simpleProductMapper;
     }
 
     public Product createProduct(Product product) {
@@ -190,19 +192,17 @@ public class ProductService {
         });
     }
 
-    public Page<ProductResponseDTO> getProductsBySubCategory(Long subCategoryId, Pageable pageable) {
+    public Page<SimpleProductDTO> getProductsBySubCategory(Long subCategoryId,
+                                            Pageable pageable) {
         Page<Product> products = productRepository.findBySubCategory(subCategoryId, pageable);
-        return products.map(product -> {
-            ProductSpecs productSpecs = fetchProductSpecs(product.getSpecsId());
-            return productMapper.toProductResponseDTO(product, productSpecs);
-        });
+        return products.map(simpleProductMapper::toDTO);
     }
 
     private ProductSpecs fetchProductSpecs(String specsId) {
         return new ProductSpecs(); // Replace with actual fetching logic
     }
 
-    public Page<ProductResponseDTO> getProductsByFilters(Long subCategoryId, Map<String, List<String>> filters, int page, int size) {
+    public Page<SimpleProductDTO> getProductsByFilters(Long subCategoryId, Map<String, List<String>> filters, int page, int size) {
 
         List<ProductSpecs> matchingSpecs = productSpecsRepository.findByDynamicFilters(filters);
         List<String> specsIds = matchingSpecs.stream().map(ProductSpecs::getId).collect(Collectors.toList());
@@ -210,15 +210,10 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> matchingProducts = productRepository.findBySubCategoryIdAndSpecsIds(subCategoryId, specsIds, pageable);
 
-        return matchingProducts.map(product -> {
-            ProductSpecs productSpecs = matchingSpecs.stream()
-                    .filter(spec -> spec.getId().equals(product.getSpecsId()))
-                    .findFirst().orElse(null);
-            return productMapper.toProductResponseDTO(product, productSpecs);
-        });
+        return matchingProducts.map(simpleProductMapper::toDTO);
     }
 
-    public Page<ProductResponseDTO> getProductsByName(Long subCategoryId,
+    public Page<SimpleProductDTO> getProductsByName(Long subCategoryId,
                                                       String name, int page,
                                                       int size) {
 
@@ -227,10 +222,7 @@ public class ProductService {
                 productRepository.findBySubCategoryIdAndNameLikeIgnoreCaseAndDeletedFalse(subCategoryId,
                 "%"+name+"%", pageable);
 
-        return matchingProducts.map(product -> {
-            return productMapper.toProductResponseDTO(product,
-                    productSpecsRepository.findById(product.getSpecsId()).orElse(null));
-        });
+        return matchingProducts.map(simpleProductMapper::toDTO);
 
     }
 

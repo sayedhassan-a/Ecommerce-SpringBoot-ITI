@@ -27,16 +27,12 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
 
     private final AuthService authService; // Inject your AuthService
     private final OAuth2AuthorizedClientService authorizedClientService;
-    private final JwtProvider jwtProvider;
-    private final UserMapper userMapper;
     @Value("${ui.base.url}")
     private String UI_BASE_URL;
 
-    public CustomOAuth2LoginSuccessHandler(@Lazy AuthService authService, OAuth2AuthorizedClientService authorizedClientService, @Lazy JwtProvider jwtProvider, UserMapper userMapper) {
+    public CustomOAuth2LoginSuccessHandler(@Lazy AuthService authService, OAuth2AuthorizedClientService authorizedClientService) {
         this.authService = authService;
         this.authorizedClientService = authorizedClientService;
-        this.jwtProvider = jwtProvider;
-        this.userMapper = userMapper;
     }
 
     @Override

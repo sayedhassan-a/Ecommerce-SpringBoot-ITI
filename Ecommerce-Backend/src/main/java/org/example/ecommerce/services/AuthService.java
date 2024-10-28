@@ -97,4 +97,15 @@ public class AuthService {
         return (String) ((Jwt) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal()).getClaims().get("sub");
     }
+
+    public String validateToken() {
+        try {
+            System.out.println("Validating token service");
+           return (String)((Jwt) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal()).getClaims().get("authorities");
+
+        } catch (JwtException e) {
+            throw new JwtException("Invalid token");
+        }
+    }
 }

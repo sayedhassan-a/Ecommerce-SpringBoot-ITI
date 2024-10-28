@@ -62,6 +62,7 @@ public class CustomerController {
     public Result findAllCustomers(@RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = "10") int pageSize) {
         Page<Customer> customers = customerService.findAllByPage(pageNumber, pageSize);
+        System.out.println("inside findAllCustomers: " + customers);
 
         // Convert list of entities to DTOs
         List<CustomerDto> customerDtos = customers.stream()
@@ -89,6 +90,7 @@ public class CustomerController {
     public Result findCustomerById(@PathVariable Long id) {
         Customer foundCustomer = customerService.findById(id);
         CustomerDto customerDto = customerToCustomerDtoConverter.convert(foundCustomer);
+        System.out.println("inside findCustomerById: " + customerDto);
         return new Result(true, StatusCode.SUCCESS, "Customer retrieved successfully", customerDto);
     }
 
@@ -132,10 +134,12 @@ public class CustomerController {
         customerMap.add(customerDto);
 
         System.out.println("in here " + "       " + customerMap);
-        Address address= foundCustomer.getAddress();
+        Address address = foundCustomer.getAddress();
+        AddressDto addressDto = null;
 
-        AddressDto addressDto = new AddressDto(address.getAddressOne(), address.getCity(), address.getCountry(), address.getZipCode());
-
+        if (address != null) {
+            addressDto = new AddressDto(address.getAddressOne(), address.getCity(), address.getCountry(), address.getZipCode());
+        }
         customerMap.add(addressDto);
 
         System.out.println(addressDto);

@@ -66,16 +66,26 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                              .anyRequest().permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
+                                .anyRequest().permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
 //                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+//                                .requestMatchers(HttpMethod.PUT, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
+//                                .requestMatchers(HttpMethod.PUT, "/customers/update-password").hasAuthority(Role.ROLE_USER.name())
+//                                .requestMatchers(HttpMethod.GET, "/customers").hasAuthority(Role.ROLE_ADMIN.name())
+//                                .requestMatchers("/web/buffer.html").permitAll()
+////                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
+////                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
 ////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-//                        .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
-//////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
-////                        .anyRequest().authenticated()
+////                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
+//////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
+//                                .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
+////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
+//                        .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())
@@ -89,7 +99,12 @@ public class SecurityConfigurations {
                 .oauth2Login(oauth2Login -> oauth2Login
                         .defaultSuccessUrl("/web/index.html", true)
                         .successHandler(customOAuth2LoginSuccessHandler)
-                        .failureUrl("/login?error=true")
+                        .failureUrl("/web/auth/login.html?error=true")
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/web/auth/login.html")
+                        .defaultSuccessUrl("/web/index.html", true)
+                        .failureUrl("/web/auth/login.html?error=true")
                 )
                 .build();
     }

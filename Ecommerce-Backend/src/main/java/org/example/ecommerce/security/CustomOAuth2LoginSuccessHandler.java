@@ -60,7 +60,7 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
             // send token inside the redirect
             response.setHeader("Authorization", "Bearer " + jwtToken);
 
-            response.sendRedirect("/web/buffer.html?token=" + jwtToken);
+            response.sendRedirect("http://localhost:8082/web/buffer.html?token=" + jwtToken);
         } catch (Exception e) {
             // Log error and respond with JSON error message
             e.printStackTrace();

@@ -71,20 +71,22 @@
 
                     // Populate the customer table
                     $('#customerTableBody').empty();
+                    // Inside the success function for your AJAX call in list-customer.html
                     customers.forEach(customer => {
                         $('#customerTableBody').append(
                             `<tr>
-                            <td>${customer.Id}</td>
-                            <td>${customer.firstName}</td>
-                            <td>${customer.lastName}</td>
-                            <td>${customer.email}</td>
-                            <td>${customer.phone}</td>
-                            <td>
-                                <button class="btn btn-success" onclick="window.location.href='/ecommerce/dashboard/customer?id=${customer.Id}'">View</button>
-                            </td>
-                        </tr>`
+            <td>${customer.Id}</td>
+            <td>${customer.firstName}</td>
+            <td>${customer.lastName}</td>
+            <td>${customer.email}</td>
+            <td>${customer.phone}</td>
+            <td>
+                <button class="btn btn-success" onclick="window.location.href='review-customer.html?id=${customer.Id}'">View</button>
+            </td>
+        </tr>`
                         );
                     });
+
 
                     // Update pagination display
                     $('#paginationInfo').text(`Page ${currentPage + 1} of ${totalPages}`);

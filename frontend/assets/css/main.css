@@ -77,7 +77,6 @@
 .gradient-bg,
 .primary-btn,
 .add-bag .add-btn,
-.single-product .product-details .prd-bottom .social-info span:after,
 .grid-btn:hover,
 .list-btn:hover,
 .grid-btn.active,
@@ -2093,7 +2092,7 @@ h6 {
 .single-product .product-details .prd-bottom .social-info .hover-text {
   position: absolute;
   left: 0;
-  top: 3px;
+  top:-6px;
   width: 100px;
   left: -40px;
   text-transform: uppercase;

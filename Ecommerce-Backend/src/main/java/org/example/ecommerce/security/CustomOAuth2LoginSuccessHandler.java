@@ -8,6 +8,7 @@ import org.example.ecommerce.models.OAuthProvider;
 import org.example.ecommerce.models.User;
 import org.example.ecommerce.services.AuthService;
 import org.example.ecommerce.services.MyUserPrincipal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -28,6 +29,8 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final JwtProvider jwtProvider;
     private final UserMapper userMapper;
+    @Value("${ui.base.url}")
+    private String UI_BASE_URL;
 
     public CustomOAuth2LoginSuccessHandler(@Lazy AuthService authService, OAuth2AuthorizedClientService authorizedClientService, @Lazy JwtProvider jwtProvider, UserMapper userMapper) {
         this.authService = authService;
@@ -60,7 +63,7 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
             // send token inside the redirect
             response.setHeader("Authorization", "Bearer " + jwtToken);
 
-            response.sendRedirect("http://localhost:8082/web/buffer.html?token=" + jwtToken);
+            response.sendRedirect(UI_BASE_URL + "/web/buffer.html?token=" + jwtToken);
         } catch (Exception e) {
             // Log error and respond with JSON error message
             e.printStackTrace();

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.ecommerce.system.validations.ValidAddress;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -21,7 +23,7 @@ import java.util.Set;
 public class Customer extends User{
 
 //    @ValidAddress
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
@@ -32,9 +34,11 @@ public class Customer extends User{
     private LocalDate dateOfBirth;
 
     @OneToMany(mappedBy = "customer")
+    @Fetch(FetchMode.SUBSELECT)
     private Set<CartItem> cart = new HashSet<>();
 
     @OneToMany(mappedBy = "customer")
+    @Fetch(FetchMode.SUBSELECT)
     private Set<Order> orders = new HashSet<>();
 
     private OAuthProvider provider;

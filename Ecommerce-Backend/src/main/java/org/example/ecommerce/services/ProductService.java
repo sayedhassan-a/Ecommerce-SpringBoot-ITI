@@ -6,8 +6,10 @@ import org.example.ecommerce.mappers.ProductMapper;
 import org.example.ecommerce.mappers.SimpleProductMapper;
 import org.example.ecommerce.models.Image;
 import org.example.ecommerce.models.Product;
+import org.example.ecommerce.models.SubCategory;
 import org.example.ecommerce.repositories.ProductRepository;
 import org.example.ecommerce.repositories.ProductSpecificationRepository;
+import org.example.ecommerce.repositories.SubCategoryRepository;
 import org.example.ecommerce.specifications.ProductSpecs;
 import org.example.ecommerce.system.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +33,18 @@ public class ProductService {
     private final ProductCartMapper productCartMapper;
     private final ProductSpecsService productSpecsService;
     private final SimpleProductMapper simpleProductMapper;
+    private final SubCategoryRepository subCategoryRepository;
 
     @Autowired
     public ProductService(ProductRepository productRepository,
-                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper, ProductSpecsService productSpecsService, SimpleProductMapper simpleProductMapper) {
+                          ProductSpecificationRepository productSpecificationRepository, ProductMapper productMapper, ProductCartMapper productCartMapper, ProductSpecsService productSpecsService, SimpleProductMapper simpleProductMapper, SubCategoryRepository subCategoryRepository) {
         this.productRepository = productRepository;
         this.productSpecsRepository = productSpecificationRepository;
         this.productMapper = productMapper;
         this.productCartMapper = productCartMapper;
         this.productSpecsService = productSpecsService;
         this.simpleProductMapper = simpleProductMapper;
+        this.subCategoryRepository = subCategoryRepository;
     }
 
     public Product createProduct(Product product) {
@@ -225,7 +229,7 @@ public class ProductService {
     }
 
 
-    public ProductResponseDTO updateProduct(Long productId, ProductRequestDTO productRequestDTO, ProductSpecsDTO productSpecsDTO) {
+    public ProductResponseDTO updateProduct(Long productId, ProductResponseDTO productRequestDTO) {
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isEmpty()) {
@@ -238,9 +242,10 @@ public class ProductService {
         product.setDescription(productRequestDTO.getDescription());
         product.setStock(productRequestDTO.getStock());
         product.setBrandName(productRequestDTO.getBrandName());
-        product.setSubCategory(productRequestDTO.getSubCategory());
+        SubCategory subCategory = subCategoryRepository.findBy(productRequestDTO.getSubCategoryId());
+        product.setSubCategory(subCategory);
         product.setSalePercentage(productRequestDTO.getSalePercentage());
-        product.setImage(productRequestDTO.getImages().isEmpty() ? null : productRequestDTO.getImages().get(0)); // Set main image if present
+        product.setImage(productRequestDTO.getImage()); // Set main image if present
 
         Product updatedProduct = productRepository.save(product);
 
@@ -253,8 +258,8 @@ public class ProductService {
             productSpecs.setId(updatedProduct.getSpecsId());
         }
         productSpecs.setProductId(updatedProduct.getId().toString());
-        productSpecs.setKey(productSpecsDTO.getKey());
-        productSpecs.setValue(productSpecsDTO.getValue());
+        productSpecs.setKey(productRequestDTO.getProductSpecs().getKey());
+        productSpecs.setValue(productRequestDTO.getProductSpecs().getValue());
 
         //MongoDB
         ProductSpecs updatedSpecs = productSpecsRepository.save(productSpecs);

@@ -1,8 +1,8 @@
-package org.example.ecommerce.exceptionHandling.exceptionHandler;
+package org.example.ecommerce.system.exceptions.exceptionHandling.exceptionHandler;
 
-import org.example.ecommerce.exceptionHandling.errorResponse.ErrorResponse;
-import org.example.ecommerce.exceptionHandling.errorResponse.ValidationResponse;
-import org.example.ecommerce.exceptionHandling.exception.BadRequestException;
+import org.example.ecommerce.system.exceptions.exceptionHandling.errorResponse.ErrorResponse;
+import org.example.ecommerce.system.exceptions.exceptionHandling.errorResponse.ValidationResponse;
+import org.example.ecommerce.system.exceptions.exceptionHandling.exception.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

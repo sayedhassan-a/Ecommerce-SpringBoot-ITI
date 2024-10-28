@@ -1,7 +1,7 @@
-package org.example.ecommerce.exceptionHandling.exceptionHandler;
+package org.example.ecommerce.system.exceptions.exceptionHandling.exceptionHandler;
 
-import org.example.ecommerce.exceptionHandling.errorResponse.ErrorResponse;
-import org.example.ecommerce.exceptionHandling.exception.UnAuthorizedAccessException;
+import org.example.ecommerce.system.exceptions.exceptionHandling.errorResponse.ErrorResponse;
+import org.example.ecommerce.system.exceptions.exceptionHandling.exception.UnAuthorizedAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

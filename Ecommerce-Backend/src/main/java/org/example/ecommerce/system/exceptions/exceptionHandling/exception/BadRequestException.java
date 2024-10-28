@@ -1,4 +1,4 @@
-package org.example.ecommerce.exceptionHandling.exception;
+package org.example.ecommerce.system.exceptions.exceptionHandling.exception;
 
 public class BadRequestException extends RuntimeException{
     public BadRequestException(String message) {

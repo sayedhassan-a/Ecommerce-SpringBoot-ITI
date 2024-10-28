@@ -2,9 +2,8 @@ package org.example.ecommerce.services;
 
 import org.example.ecommerce.dtos.CartItemRequestDTO;
 import org.example.ecommerce.dtos.CartItemResponseDTO;
-import org.example.ecommerce.dtos.ProductCartDTO;
-import org.example.ecommerce.exceptionHandling.exception.BadRequestException;
-import org.example.ecommerce.exceptionHandling.exception.NotFoundException;
+import org.example.ecommerce.system.exceptions.exceptionHandling.exception.BadRequestException;
+import org.example.ecommerce.system.exceptions.exceptionHandling.exception.NotFoundException;
 import org.example.ecommerce.mappers.ProductCartMapper;
 import org.example.ecommerce.models.*;
 import org.example.ecommerce.repositories.CartItemRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CartItemService {

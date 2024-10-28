@@ -1,4 +1,4 @@
-package org.example.ecommerce.exceptionHandling.exception;
+package org.example.ecommerce.system.exceptions.exceptionHandling.exception;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(String message) {

@@ -168,4 +168,13 @@ public class CustomerController {
         return ResponseEntity.ok("Password updated successfully");
     }
 
+    @GetMapping("/check-info")
+    public Result checkInfo() {
+        String email = authService.extractEmail();
+
+        customerService.isCustomerInfoComplete(email);
+
+        return new Result(true, StatusCode.SUCCESS, "Customer information is complete", null);
+    }
+
 }

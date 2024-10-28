@@ -29,6 +29,22 @@ public class UserValidator {
         return errors;
     }
 
+    public List<String> vaildateCheckout(Customer customer) {
+        List<String> errors = new ArrayList<>();
+        errors.addAll(validateAddress(customer.getAddress()));
+        errors.addAll(validateCustomer(customer));
+
+        if(customer.getDateOfBirth() == null) {
+            errors.add("Date of birth cannot be empty.");
+        }
+
+        if(customer.getPhone() == null || customer.getPhone().trim().isEmpty()) {
+            errors.add("Phone number cannot be empty.");
+        }
+
+        return errors;
+    }
+
     public List<String> checkName(User user) {
         List<String> errors = new ArrayList<>();
         if (user.getFirstName() == null || user.getFirstName().trim().isEmpty()) {

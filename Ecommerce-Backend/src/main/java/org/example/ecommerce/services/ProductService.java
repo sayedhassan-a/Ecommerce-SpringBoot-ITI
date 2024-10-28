@@ -239,7 +239,7 @@ public class ProductService {
         product.setStock(productRequestDTO.getStock());
         product.setBrandName(productRequestDTO.getBrandName());
         product.setSubCategory(productRequestDTO.getSubCategory());
-        product.setSalePercentage(product.getSalePercentage());
+        product.setSalePercentage(productRequestDTO.getSalePercentage());
         product.setImage(productRequestDTO.getImages().isEmpty() ? null : productRequestDTO.getImages().get(0)); // Set main image if present
 
         Product updatedProduct = productRepository.save(product);

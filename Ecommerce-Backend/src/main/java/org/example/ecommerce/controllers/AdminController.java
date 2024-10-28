@@ -110,9 +110,9 @@ public class AdminController {
     }
 
     @GetMapping("/products/{id}")
-    public Result getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
         ProductResponseDTO productResponse = productService.findProductById(id);
-        return new Result(true, StatusCode.SUCCESS, "Product retrieved successfully", productResponse);
+        return  ResponseEntity.ok(productResponse);
     }
 
 
@@ -126,7 +126,7 @@ public class AdminController {
 
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(
+    public ProductResponseDTO updateProduct(
             @PathVariable Long id,
             @RequestBody UpdateProductDTO updateProductDTO) {
         ProductResponseDTO updatedProduct = productService.updateProduct(
@@ -134,7 +134,7 @@ public class AdminController {
                 updateProductDTO.getProductDto(),
                 updateProductDTO.getProductSpecsDTO()
         );
-        return ResponseEntity.ok(updatedProduct);
+        return updatedProduct;
     }
 
      /* @PostMapping("/products")

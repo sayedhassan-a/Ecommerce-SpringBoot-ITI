@@ -20,6 +20,7 @@ public interface ProductMapper {
             @Mapping(source = "product.specsId", target = "productSpecs.id"),
             @Mapping(source = "productSpecs", target = "productSpecs"),
             @Mapping(source = "product.subCategory.name", target = "categoryName"),
+            @Mapping(source = "product.subCategory.id", target = "subCategoryId"),
             @Mapping(source = "product.brandName", target = "brandName"),
             @Mapping(source = "product.salePercentage", target = "salePercentage"),
             @Mapping(source = "product.stock", target = "stock")

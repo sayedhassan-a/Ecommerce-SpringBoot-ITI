@@ -149,7 +149,7 @@
 		console.log('3 form submitted');
 
 		$.ajax({
-			url: 'http://localhost:8080/login',
+			url: 'http://localhost:9002/login',
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify({
@@ -161,11 +161,18 @@
 				const token = response.data.token;  // Adjust key as per your setup, e.g., 'Authorization'
 
 				if (token) {
-					// Store the token securely
-					localStorage.setItem('token', token);
+					if(response.data.userInfo.role==="ROLE_USER"){
+						// Store the token securely
+						localStorage.setItem('token', token);
+					}
+					else{
+						// Store the token securely
+						localStorage.setItem('adminToken', token);
+					}
+
 
 					// Redirect to home page
-					window.location.href = '/home';
+					window.location.href = '/web/index.html';
 				} else {
 					loginError.text('Login failed: No token received').show();
 				}

@@ -20,6 +20,7 @@ public class ProductResponseDTO {
    private String description;
    private String image;
    private String categoryName;
+   private Long subCategoryId;
    private String brandName;
    private String stock;
    private int salePercentage;

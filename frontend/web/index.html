@@ -68,6 +68,75 @@
         color: white;
         /* Make sure it's on top */
       }
+    /* Slider styles */
+    .carousel-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh; /* Full viewport height */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade transition */
+        }
+
+        .banner_taital {
+            font-size: 2.5rem; /* Adjust font size */
+            color: white; /* Title color */
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8); /* Text shadow for readability */
+            margin-bottom: 20px; /* Space between title and button */
+        }
+
+        /* Style for the "Buy Now" button */
+        .buy-now-btn {
+            display: inline-block; /* Makes the button behave like a block element */
+            padding: 10px 20px; /* Padding for the button */
+            background-color: #FF6F61; /* Button background color */
+            color: white; /* Button text color */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.3s ease; /* Smooth background color transition */
+        }
+
+        .buy-now-btn:hover {
+            background-color: #FF3E3E; /* Darker color on hover */
+        }
+
+        /* Navigation buttons styles */
+        .carousel-control-prev,
+        .carousel-control-next {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            border-radius: 50%; /* Round buttons */
+            height: 50px;
+            width: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease; /* Smooth background change */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+        }
+
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(255, 255, 255, 1); /* Full white on hover */
+        }
+
+        .carousel-control-prev i,
+        .carousel-control-next i {
+            color: #333; /* Arrow color */
+            font-size: 20px; /* Arrow size */
+        }
+
+        /* Adjust position of navigation buttons */
+        .carousel-control-prev {
+            left: 15px;
+            margin-top: 30%; /* Space from the left */
+        }
+
+        .carousel-control-next {
+            right: 15px;
+            margin-top: 30%; /* Space from the right */
+        }
+
     </style>
   </head>
 
@@ -79,20 +148,35 @@
     <!-- start banner Area -->
     <section class="banner-area">
       <div class="container">
-        <div class="row fullscreen align-items-center justify-content-start">
-          <div class="col-lg-12">
-            <div class="active-banner-slider owl-carousel">
-              <!-- single-slide -->
-              
-              <!-- single-slide -->
-            </div>
+          <div class="row fullscreen align-items-center justify-content-start">
+              <div class="col-lg-12">
+                  <div class="active-banner-slider owl-carousel">
+                      <!-- single-slide -->
+                      <div class="banner_section layout_padding">
+                        <div class="container">
+                            <div id="my_slider" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <div class="row justify-content-center align-items-center" style="height: 100%;">
+                                            <div class="col-sm-12 text-center">
+                                                <h1 class="banner_taital">Get Start <br>Your favorite shopping</h1>
+                                                <div class="buynow_bt"><a href="#" class="buy-now-btn">Buy Now</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                      <!-- single-slide -->
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
-      <div id="stock-error" class="popup">
-       quantity out of stock!
-      </div>
-    </section>
+  </section>
+  <!-- End banner Area -->
     <!-- End banner Area -->
 
     <!-- start features Area -->
@@ -324,18 +408,24 @@
         const container = document.getElementById(containerId);
         
         products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-            productCard.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <div class="product-details">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                    <div class="price">₹${product.price / 100}</div>
-                    ${product.salePercentage ? `<div class="sale-percentage">${product.salePercentage}% OFF</div>` : ''}
-                </div>
-            `;
-            container.appendChild(productCard);
+            // Check if product.image is null, and if so, use the first image in productImages
+            const imageUrl = product.image || (product.productImages && product.productImages.length > 0 ? product.productImages[0].url : "");
+
+            // Only create a card if an image URL is available
+            if (imageUrl) {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${imageUrl}" alt="${product.name}">
+                    <a class="product-details" href="/web/single-product.html?id=${product.id}">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="price">EGP${product.price / 100}</div>
+                        ${product.salePercentage ? `<div class="sale-percentage">${product.salePercentage}% OFF</div>` : ''}
+                    </a>
+                `;
+                container.appendChild(productCard);
+            }
         });
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -357,6 +447,30 @@ function slide(containerId, direction) {
     });
 }
 
+    </script>
+      <script>
+        $(document).ready(function () {
+            let currentIndex = 0;
+            const items = $('.carousel-item');
+            const totalItems = items.length;
+
+            // Automatically move to the next slide every 5 seconds
+            setInterval(function () {
+                currentIndex = (currentIndex + 1) % totalItems; // Cycle through the slides
+                items.removeClass('active').eq(currentIndex).addClass('active');
+            }, 1000); // Change slide every 5 seconds
+
+            // Manually control previous and next buttons
+            $('.carousel-control-prev').click(function () {
+                currentIndex = (currentIndex - 1 + totalItems) % totalItems; // Move to previous slide
+                items.removeClass('active').eq(currentIndex).addClass('active');
+            });
+
+            $('.carousel-control-next').click(function () {
+                currentIndex = (currentIndex + 1) % totalItems; // Move to next slide
+                items.removeClass('active').eq(currentIndex).addClass('active');
+            });
+        });
     </script>
   </body>
 </html>

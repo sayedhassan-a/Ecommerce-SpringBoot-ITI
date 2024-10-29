@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -17,6 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +52,7 @@ public class Product {
     private SubCategory subCategory;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     private Set<Image> images = new HashSet<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)

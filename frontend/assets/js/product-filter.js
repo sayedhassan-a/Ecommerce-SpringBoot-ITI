@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // Render specification filters
     function renderSpecifications(specs) {
         filterContainer.innerHTML = '';
-
         specs.forEach(spec => {
             const headDiv = document.createElement('div');
             headDiv.classList.add('head');
@@ -81,8 +80,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const queryParams = new URLSearchParams({ page: currentPage, size: currentSize }).toString();
         fetch(`http://localhost:9002/api/products/subcategory/${subId}?${queryParams}`)
             .then(response => response.json())
-            .then(data => {renderProducts(data.content);
-                createPagination(data.totalPages,data.pageable.pageNumber);
+            .then(data => {
+                renderProducts(data.content);
+                createPagination(data.totalPages, data.pageable.pageNumber);
             })
             .catch(error => console.error('Error fetching products:', error));
     }
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
         products.forEach(product => {
             const productHtml = `
                 <div class="col-lg-4 col-md-6">
-                    <div class="single-product">
+                    <div class="single-product modern-style">
                         <div class="img-container">
                             <img class="img-fluid" src="${product.image}" alt="${product.name}">
                         </div>
@@ -104,14 +104,15 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <h6>${(Number.parseFloat(product.price) / 100).toFixed(2)} EGP</h6>
                             </div>
                             <div class="prd-bottom">
-                                <div class="social-info" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </div>
-                                <div class="social-info" href="/web/single-product.html?id=${product.id}">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </div>
+                             <div class="social-info add-to-cart" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
+    <span class="ti-bag"></span>
+    <p class="hover-text">Add to Bag</p>
+
+</div>
+<a class="social-info view-more" href="/web/single-product.html?id=${product.id}">
+    <span class="lnr lnr-move"></span>
+    <p class="hover-text">View More</p>
+</a>
                             </div>
                         </div>
                     </div>
@@ -120,6 +121,10 @@ document.addEventListener("DOMContentLoaded", function() {
             productBox.innerHTML += productHtml;
         });
     }
+
+    // Rest of the code (fetchFilteredProducts, applyFilters, pagination functions, etc.)
+
+
 
     // Apply filters and fetch filtered products
  // Apply filters and fetch filtered products

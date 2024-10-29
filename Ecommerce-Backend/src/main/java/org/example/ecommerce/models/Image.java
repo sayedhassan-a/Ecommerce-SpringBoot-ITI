@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "image")
 @NoArgsConstructor
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

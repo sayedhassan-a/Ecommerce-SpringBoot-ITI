@@ -52,53 +52,56 @@
             background-color: #ffff;
         }
 
-        .single-product {
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            margin-bottom: 30px;
-            background-color: transparent;
-            position: relative;
-        }
+        .single-product.modern-style {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
+        position: relative;
+        margin-bottom: 30px;
+        cursor: pointer;
+    }
 
-        .single-product:hover {
-            transform: scale(1.05);
-        }
+    .single-product.modern-style:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    }
 
-        .img-container {
-            position: relative;
-            overflow: hidden;
-            height: 250px;
-        }
+    .img-container {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+        border-radius: 15px 15px 0 0;
+    }
 
-        .img-fluid {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
 
-        .product-details {
-            text-align: center;
-            padding: 15px;
-            background-color: transparent;
-        }
+    .img-container:hover img {
+        transform: scale(1.1);
+    }
 
-        .product-details h6 {
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0;
-        }
+    .product-details {
+        text-align: center;
+        padding: 20px;
+        background-color: #f9f9f9;
+    }
 
-        .price {
-            margin: 10px 0;
-        }
+    .product-details h6 {
+        font-size: 20px;
+        color: #333;
+        margin: 10px 0;
+    }
 
-        .price h6 {
-            font-size: 16px;
-            color: #e74c3c;
-        }
+    .price h6 {
+        font-size: 18px;
+        color: #e74c3c;
+    }
 
         .prd-bottom {
             display: flex;
@@ -108,40 +111,55 @@
         }
 
         .social-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #34495e;
-            position: relative;
-            transition: color 0.3s;
-            text-align: center;
-        }
+    display: inline-flex; /* Use flex for better alignment */
+    align-items: center; /* Center icons and text vertically */
+    margin: 10px;
+    padding: 10px 15px; /* Padding for better click area */
+    color: #333; /* Default text color */
+    text-decoration: none; /* Remove underline from links */
+    font-size: 16px; /* Font size for text */
+    transition: color 0.3s ease; /* Smooth transition for color change */
+    cursor: pointer; /* Change cursor on hover */
+}
 
-        .social-info i {
-            font-size: 40px;
-            transition: transform 0.3s, color 0.3s;
-        }
+.social-info span {
+    margin-right: 8px; /* Space between icon and text */
+    font-size: 20px; /* Size for icons */
+    transition: color 0.3s ease; /* Transition for icon color */
+}
 
-        .social-info:hover i {
-            transform: scale(1.2);
-            color: #e74c3c;
-        }
+/* Add to Cart button styles */
+.add-to-cart {
+    color: #333; /* Default green color */
+}
 
-        .hover-text {
-            display: block;
-            opacity: 1;
-            transform: translateY(10px);
-            transition: opacity 0.3s, transform 0.3s;
-            color: #34495e;
-            font-weight: bold;
-            font-size: 20px;
-        }
+.add-to-cart:hover {
+    color: #fe8411; /* Darker green on hover */
+}
 
-        .social-info:hover .hover-text {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* View More button styles */
+.view-more {
+    color: #333; /* Default blue color */
+}
+
+.view-more:hover {
+    color: #fe8411; /* Darker blue on hover */
+}
+
+/* Add a slight bounce effect on hover */
+.social-info:hover span {
+    animation: bounce 0.3s forwards; /* Apply bounce animation */
+}
+
+/* Keyframes for bounce effect */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px); /* Slight upward movement */
+    }
+}
 
         .filter-bar {
             padding: 10px;

@@ -65,9 +65,9 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll()).build();
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 
-                     /*   //Login
+                        //Login
                                 .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Auth
@@ -165,7 +165,7 @@ public class SecurityConfigurations {
                         .defaultSuccessUrl("/web/index.html", true)
                         .failureUrl("/web/auth/login.html?error=true")
                 )
-                .build();*/
+                .build();
 
     }
 

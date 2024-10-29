@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
         searchButton.innerText = "Apply Filters";
         searchButton.classList.add('filter-search-button');
         searchButton.addEventListener('click', applyFilters);
+
         filterContainer.appendChild(searchButton);
     }
 
@@ -103,12 +104,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <h6>${(Number.parseFloat(product.price) / 100).toFixed(2)} EGP</h6>
                             </div>
                             <div class="prd-bottom">
-                                <span class="social-info add-to-cart" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
-                                    <i class="ti-bag"></i>
-                                </span>
-                                <span class="social-info view-more">
-                                    <i class="lnr lnr-move"></i>
-                                </span>
+                                <div class="social-info" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
+                                    <span class="ti-bag"></span>
+                                    <p class="hover-text">add to bag</p>
+                                </div>
+                                <div class="social-info" href="/web/single-product.html?id=${product.id}">
+                                    <span class="lnr lnr-move"></span>
+                                    <p class="hover-text">view more</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
             productBox.innerHTML += productHtml;
         });
     }
-    
+
     // Rest of the code (fetchFilteredProducts, applyFilters, pagination functions, etc.)
 
 

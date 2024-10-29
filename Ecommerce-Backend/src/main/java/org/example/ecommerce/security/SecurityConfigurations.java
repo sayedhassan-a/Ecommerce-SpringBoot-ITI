@@ -68,7 +68,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 
                         //Login
-                                .requestMatchers("/admins/**").permitAll()
+                                .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Auth
                                 .requestMatchers(HttpMethod.POST,
@@ -85,20 +85,21 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/categories/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/categories/**").permitAll()
+                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/categories/**").permitAll()
+                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Credit Card
-                                .requestMatchers("/api/v1/credit-card").hasAuthority(Role.ROLE_USER.name())
+                                .requestMatchers("/api/v1/credit-card/**").hasAuthority(Role.ROLE_USER.name())
 
                         //Customer
                                 .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers("/customers/checkEmail").permitAll()
-                                .requestMatchers("/customers/register").permitAll()
-                                .requestMatchers("/customers/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/customers/register").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/customers/check-info").permitAll()
+//                                .requestMatchers(HttpMethod.GET,"/customers").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Orders
                                 .requestMatchers("/api/v1/orders/admin/**").hasAuthority(Role.ROLE_ADMIN.name())
@@ -113,11 +114,11 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/products/**").permitAll()
+                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/products/**").permitAll()
+                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
-                                        "/products/**").permitAll()
+                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Products Specification
                                 .requestMatchers(HttpMethod.GET,"/api" +
@@ -133,11 +134,17 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/subcategories/**").permitAll()
+                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/subcategories/**").permitAll()
+                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+
+                        //google
+                                .requestMatchers("/google/**").permitAll()
+                                .requestMatchers("/google/login").permitAll()
+                                .requestMatchers("/google/login/**").permitAll()
+                                .requestMatchers("/oauth2/**").permitAll()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

@@ -25,7 +25,7 @@
       left: 0;
       top: 150px;
       width: 250px; /* Increase width for more space */
-      height: 60%; /* Make it span the full viewport height */
+      height: 70%; /* Make it span the full viewport height */
       padding: 30px;
       background-color: #fff;
       border-radius: 0 10px 10px 0;
@@ -66,7 +66,7 @@
       color: #333;
       margin-bottom: 10px;
     }
-    .edit-profile-btn, .edit-password-btn , .my-orders-btn{
+    .edit-profile-btn, .edit-password-btn , .my-orders-btn, .card-btn{
       width: 180px;
       padding: 12px;
       margin-top: 15px;
@@ -106,7 +106,7 @@
     .profile-form input:focus {
       box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
     }
-    .save-btn, .cancel-btn {
+    .save-btn, .cancel-btn, .delete-card-btn {
       background-color: #067e46;
       color: white;
       border: none;
@@ -117,11 +117,91 @@
     .save-btn:hover {
       background-color: #055a35;
     }
-    .cancel-btn {
+    .delete-card-btn, .cancel-btn {
       background-color: #f44336;
     }
-    .cancel-btn:hover {
+    .cancel-btn:hover, delete-card-btn:hover {
       background-color: #c33c2d;
+    }
+    /* Credit Card Section Enhancements */
+    /* Credit Card Section Styling */
+    #creditCardSection {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #creditCardSection h2 {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: #343a40;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Credit Card List Styling */
+    .credit-card-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .credit-card-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      margin-bottom: 10px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .credit-card-list li:hover {
+      transform: scale(1.02);
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card Text Styling */
+    .credit-card-list li::before {
+      content: "💳 ";
+    }
+
+    .credit-card-list li span {
+      font-size: 1.2em;
+      font-weight: 500;
+      color: #495057;
+    }
+
+    /* Delete Button Styling */
+    .delete-card-btn {
+      background-color: #e63946;
+      color: #ffffff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    .delete-card-btn:hover {
+      background-color: #d62828;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .credit-card-list li {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .delete-card-btn {
+        margin-top: 8px;
+      }
     }
 
     /* Animation Keyframes */
@@ -150,6 +230,7 @@
           <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="User Avatar">          <h2 class="profile-name" id="profile-name">John Doe</h2>
           <button class="edit-profile-btn" onclick="toggleForm('profileForm')">Edit Profile</button>
           <button class="edit-password-btn" onclick="toggleForm('passwordForm')">Change Password</button>
+          <button class="card-btn" id="loadCreditCardsBtn" onclick="toggleForm('creditCardSection')">Show My Credit Cards</button>
           <button class="my-orders-btn" onclick="window.location.href='list-orders.html'">My Orders</button>
         </div>
 
@@ -200,6 +281,14 @@
           <p><strong>Email:</strong> <span id="customer-email-value">john@example.com</span></p>
           <p><strong>Address:</strong> <span id="customer-address-value">1234 Elm Street, Springfield</span></p>
         </div>
+        <!-- Credit Card Section -->
+        <<section id="creditCardSection">
+        <h2>My Credit Cards</h2>
+        <ul id="creditCardList" class="credit-card-list">
+          <!-- Credit card items will be appended here by JavaScript -->
+        </ul>
+      </section>
+
       </div>
     </div>
   </div>
@@ -219,6 +308,65 @@
 <script src="../assets/js/main.js"></script>
 <script>
   $(document).ready(function(){
+    document.getElementById("loadCreditCardsBtn").addEventListener("click", function () {
+      fetchCreditCards();
+    });
+
+    // Function to fetch credit cards
+    function fetchCreditCards() {
+      fetch("http://localhost:9002/api/v1/credit-card", {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }).then(response => {
+        if (response.ok) return response.json();
+        else if (response.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          window.location.href = '/web/auth/login.html';
+        } else {
+          throw new Error("Failed to fetch credit card data.");
+        }
+      }).then(data => {
+        const creditCardList = document.getElementById("creditCardList");
+        creditCardList.innerHTML = "";
+
+        data.forEach(card => {
+          const cardItem = document.createElement("li");
+          cardItem.textContent = card.masked_pan;
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.className = "delete-card-btn";
+          deleteButton.onclick = () => deleteCreditCard(card.id);
+          cardItem.appendChild(deleteButton);
+          creditCardList.appendChild(cardItem);
+        });
+      }).catch(error => {
+        console.error("Error fetching credit card data:", error);
+      });
+    }
+
+    // Function to delete a credit card
+    function deleteCreditCard(cardId) {
+      fetch(`http://localhost:9002/api/v1/credit-card/${cardId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }).then(response => {
+        if (response.ok) {
+          alert("Credit card deleted successfully.");
+          fetchCreditCards(); // Refresh the list without reloading the page
+        } else if (response.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          window.location.href = '/web/auth/login.html';
+        } else {
+          throw new Error("Failed to delete credit card.");
+        }
+      }).catch(error => {
+        console.error("Error deleting credit card:", error);
+      });
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
@@ -310,6 +458,8 @@
     }
   }
 
+
+
   function toggleEditForm() {
     const profileForm = document.getElementById("profileForm");
     const passwordForm = document.getElementById("passwordForm");
@@ -400,7 +550,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:8080/customers/profile",
+        url: "http://localhost:9002/customers/profile",
         type: "PUT",
         headers: {
           "Authorization": "Bearer " + token,
@@ -410,6 +560,9 @@
         success: function(response) {
           alert("Profile updated successfully");
           toggleEditForm();
+
+          // Optionally, reload profile data on success
+          location.reload();
           // Optionally, refresh profile data on success
         },
         error: function(xhr) {
@@ -429,7 +582,7 @@
     const newPassword = $('#password').val();
 
     $.ajax({
-      url: "http://localhost:8080/customers/update-password",
+      url: "http://localhost:9002/customers/update-password",
       type: "PUT",
       contentType: "application/json",
       headers: {
@@ -448,5 +601,6 @@
 </script>
 
 <script src="../assets/js/loadHeader.js"></script>
+<script src="../assets/js/loading.js"></script>
 </body>
 </html>

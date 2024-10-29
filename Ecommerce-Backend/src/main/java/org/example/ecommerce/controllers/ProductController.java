@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,14 +100,21 @@ public class ProductController {
 
     @GetMapping("/subcategory/{subCategoryId}/filter")
     public Page<SimpleProductDTO> getProducts(
-            @PathVariable Long subCategoryId,    // <-- Ensure this is a @PathVariable
+            @PathVariable Long subCategoryId,
             @RequestParam String filters,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Map<String, List<String>> filtersMap = parseFilters(filters);
+
+        // Check if filtersMap is null, meaning no filters were applied
+        if (filtersMap == null) {
+            return productService.getAllProductsBySubCategory(subCategoryId, page, size);
+        }
+
         return productService.getProductsByFilters(subCategoryId, filtersMap, page, size);
     }
+
 
     @GetMapping("/subcategory/{subCategoryId}/search")
     public Page<SimpleProductDTO> searchByName(
@@ -120,11 +128,14 @@ public class ProductController {
 
     private Map<String, List<String>> parseFilters(String filters) {
         try {
-            return objectMapper.readValue(filters, new TypeReference<Map<String, List<String>>>() {});
+            Map<String, List<String>> filterMap = objectMapper.readValue(filters, new TypeReference<Map<String, List<String>>>() {});
+            // Check if the map is empty
+            return filterMap.isEmpty() ? null : filterMap;
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid filters format", e);
+            return null;
         }
     }
+
 
 
     @GetMapping("/{id}/stock")

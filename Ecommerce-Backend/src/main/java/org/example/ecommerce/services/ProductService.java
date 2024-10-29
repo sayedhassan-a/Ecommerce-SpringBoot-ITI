@@ -336,6 +336,13 @@ public class ProductService {
     }*/
 
 
+    public Page<SimpleProductDTO> getAllProductsBySubCategory(Long subCategoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> product=productRepository.findBySubCategoryId(subCategoryId,pageable);
+        return product.map(simpleProductMapper::toDTO);
+    }
+
+
 
 
 

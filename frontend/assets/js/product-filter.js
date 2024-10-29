@@ -104,14 +104,15 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <h6>${(Number.parseFloat(product.price) / 100).toFixed(2)} EGP</h6>
                             </div>
                             <div class="prd-bottom">
-                                <div class="social-info" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </div>
-                                <div class="social-info" href="/web/single-product.html?id=${product.id}">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </div>
+                             <div class="social-info add-to-cart" onclick="event.preventDefault(); handleAddItem(1,${product.id},true);">
+    <span class="ti-bag"></span>
+    <p class="hover-text">Add to Bag</p>
+
+</div>
+<a class="social-info view-more" href="/web/single-product.html?id=${product.id}">
+    <span class="lnr lnr-move"></span>
+    <p class="hover-text">View More</p>
+</a>
                             </div>
                         </div>
                     </div>

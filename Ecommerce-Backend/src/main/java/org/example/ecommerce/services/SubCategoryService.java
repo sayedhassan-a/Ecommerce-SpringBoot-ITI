@@ -33,10 +33,21 @@ public class SubCategoryService {
     }
 
     public List<SubCategoryDTO> getAllSubCategories(){
-        return subCategoryRepository.findAll()
+        long startTime = System.nanoTime(); // Capture start time
+
+        List<SubCategoryDTO> result = subCategoryRepository.findAll()
                 .stream()
                 .map(subCategoryMapper::toSubCategoryDTO)
                 .collect(Collectors.toList());
+
+        long endTime = System.nanoTime(); // Capture end time
+        long duration = endTime - startTime; // Calculate duration in nanoseconds
+
+        // Optionally log the duration
+        System.out.println("Execution time: " + duration + " ns");
+
+        return result;
+
     }
     public SubCategoryWithSpecificationDTO createSubCategoryWithSpecification(SubCategoryWithSpecificationDTO dto) {
         Category category = categoryRepository.findByName(dto.getSubCategory().getCategoryName());

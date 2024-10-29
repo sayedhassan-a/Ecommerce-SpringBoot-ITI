@@ -69,6 +69,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query("SELECT p FROM Product p WHERE p.salePercentage > 50 AND p.deleted = false")
     Page<Product> findFlashSaleProducts(Pageable pageable);
 
+    @Query("SELECT p FROM Product p WHERE p.subCategory.id = :subCategoryId AND p.deleted = false")
+    Page<Product> findBySubCategoryId(@Param("subCategoryId") Long subCategoryId, Pageable pageable);
+
 
 }
 

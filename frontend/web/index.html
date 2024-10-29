@@ -324,18 +324,24 @@
         const container = document.getElementById(containerId);
         
         products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-            productCard.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <div class="product-details">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                    <div class="price">₹${product.price / 100}</div>
-                    ${product.salePercentage ? `<div class="sale-percentage">${product.salePercentage}% OFF</div>` : ''}
-                </div>
-            `;
-            container.appendChild(productCard);
+            // Check if product.image is null, and if so, use the first image in productImages
+            const imageUrl = product.image || (product.productImages && product.productImages.length > 0 ? product.productImages[0].url : "");
+
+            // Only create a card if an image URL is available
+            if (imageUrl) {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${imageUrl}" alt="${product.name}">
+                    <div class="product-details">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="price">EGP${product.price / 100}</div>
+                        ${product.salePercentage ? `<div class="sale-percentage">${product.salePercentage}% OFF</div>` : ''}
+                    </div>
+                `;
+                container.appendChild(productCard);
+            }
         });
     } catch (error) {
         console.error("Error fetching products:", error);

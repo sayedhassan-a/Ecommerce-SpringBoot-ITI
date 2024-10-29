@@ -68,7 +68,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 
                         //Login
-                                .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers("/admins/**").permitAll()
 
                         //Auth
                                 .requestMatchers(HttpMethod.POST,
@@ -85,9 +85,9 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/categories/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/categories/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/categories/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
@@ -97,6 +97,7 @@ public class SecurityConfigurations {
                         //Customer
                                 .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers("/customers/checkEmail").permitAll()
+                                .requestMatchers("/customers/register").permitAll()
                                 .requestMatchers("/customers/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Orders
@@ -112,11 +113,11 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
-                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/products/**").permitAll()
 
                         //Products Specification
                                 .requestMatchers(HttpMethod.GET,"/api" +
@@ -132,9 +133,9 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
                 )

@@ -172,7 +172,7 @@
         if (customerId) {
             // Fetch customer details using AJAX or Fetch API
             $.ajax({
-                url: `http://localhost:8080/customers/${customerId}`, // Adjust the endpoint as necessary
+                url: `http://localhost:9002/customers/${customerId}`, // Adjust the endpoint as necessary
                 type: "GET",
                 success: function(customer) {
                     console.log("Customer details:", customer);

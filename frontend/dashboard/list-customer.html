@@ -59,7 +59,7 @@
 
         if (token) {
             $.ajax({
-                url: `http://localhost:8080/customers?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+                url: `http://localhost:9002/customers?pageNumber=${pageNumber}&pageSize=${pageSize}`,
                 type: "GET",
                 headers: {
                     "Authorization": "Bearer " + token

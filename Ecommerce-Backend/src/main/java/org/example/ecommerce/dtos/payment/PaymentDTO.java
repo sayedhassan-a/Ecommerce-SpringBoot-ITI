@@ -33,8 +33,6 @@ public class PaymentDTO {
         this.currency = "EGP";
         this.expiration = 60*15;
         this.payment_methods.add(4719614);
-        Dotenv dotenv = Dotenv.load();
-        this.notification_url = dotenv.get("TRANSACTION_PROCESSED_CALLBACK");
         this.card_tokens =
                 customer.getCreditCard().stream()
                         .map(CreditCard::getToken).toList();

@@ -96,6 +96,7 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
+
                         //Credit Card
                                 .requestMatchers("/api/v1/credit-card/**").hasAuthority(Role.ROLE_USER.name())
 
@@ -144,6 +145,9 @@ public class SecurityConfigurations {
                                         "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                        //Swagger
+                                .requestMatchers(HttpMethod.GET,"http://localhost:9002/swagger-ui.html").permitAll()
+                                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
 
                         //google
                                 .requestMatchers("/google/**").permitAll()

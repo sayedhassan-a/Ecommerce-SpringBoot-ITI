@@ -31,6 +31,7 @@ public class EcommerceApplication {
         System.setProperty("MONGO_PASSWORD", dotenv.get("MONGO_PASSWORD"));
         System.setProperty("MONGO_CLUSTER", dotenv.get("MONGO_CLUSTER"));
         System.setProperty("UI_BASE_URL", dotenv.get("UI_BASE_URL"));
+        System.setProperty("TRANSACTION_PROCESSED_CALLBACK", dotenv.get("TRANSACTION_PROCESSED_CALLBACK"));
         SpringApplication.run(EcommerceApplication.class, args);
     }
 }

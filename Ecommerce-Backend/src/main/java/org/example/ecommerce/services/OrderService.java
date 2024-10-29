@@ -10,6 +10,7 @@ import org.example.ecommerce.models.*;
 import org.example.ecommerce.repositories.OrderItemRepository;
 import org.example.ecommerce.repositories.OrderRepository;
 import org.example.ecommerce.specifications.OrderSpecs;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,8 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final PaymentService paymentService;
     private final CustomerService customerService;
+    @Value("${payment-transaction-callback}")
+    private String TRANSACTION_PROCESSED_CALLBACK;
     public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, OrderViewMapper orderViewMapper, CartItemService cartItemService, OrderItemRepository orderItemRepository, PaymentService paymentService, CustomerService customerService) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
@@ -186,6 +189,7 @@ public class OrderService {
 
         if (order.getPaymentMethod().equals(PaymentMethod.CREDIT_CARD)){
             PaymentDTO paymentDTO = new PaymentDTO(customer,order);
+            paymentDTO.setNotification_url(TRANSACTION_PROCESSED_CALLBACK);
             String paymentLink = paymentService.generateLink(paymentDTO);
             orderResponseDTO.setPaymentLink(paymentLink);
         }

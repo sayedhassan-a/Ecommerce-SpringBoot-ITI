@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="content">
+<!-- Search and Add Product Button -->
+<div class="search_input" id="search_input_box" style="z-index: 1">
+    <div class="container">
+        <form class="d-flex justify-content-between" action="products" method="get">
+            <input
+                type="text"
+                class="form-control"
+                id="search_input"
+                placeholder="Search Here"
+                name="name"
+            />
+            <button type="submit" class="btn">Search</button>
+            <span
+                class="lnr lnr-cross"
+                id="close_search"
+                title="Close Search"
+            ></span>
+        </form>
+    </div>
+</div>
+
+<section class="container section_gap">
+    <span>
+        <h3 style="display: inline-block">Product List</h3>
+        <button class="btn btn-success" onclick="window.location.href='add-product.html'">Add Product</button>
+    </span>
+    
+    <!-- Product Grid -->
+    <div class="product-grid" id="productGrid">
+        <!-- Product cards will be inserted here dynamically -->
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination" id="pagination">
+            <!-- Pagination controls will be inserted here dynamically -->
+        </ul>
+    </nav>
+
+</section>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentPage = 0;
+        const pageSize = 10;
+
+        // Load initial products
+        fetchProducts(currentPage, pageSize);
+
+        function fetchProducts(page, size) {
+            const url = `http://localhost:9002/admins/products?page=${page}&size=${size}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    renderProducts(data.data.content);
+                    createPagination(data.data.totalPages, data.data.pageable.pageNumber);
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                    alert('An error occurred while fetching products.');
+                });
+        }
+
+        function renderProducts(products) {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = ''; // Clear existing content
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.classList.add('product-card');
+                card.innerHTML = `
+                    <h4 class="product-title">${product.name}</h4>
+                    <p class="product-price">$${(product.price / 100).toFixed(2)}</p>
+                    <p class="product-stock">Stock: ${product.stock}</p>
+                    <p class="product-brand">Brand: ${product.brandName}</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="window.location.href='update-product.html?productId=${product.id}'">Update</button>
+                        <button class="btn btn-danger" onclick="confirmDelete(${product.id})">Delete</button>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+
+        function confirmDelete(productId) {
+            const isConfirmed = confirm("Are you sure you want to delete this product?");
+            if (isConfirmed) {
+                deleteProduct(productId);
+            }
+        }
+
+        function deleteProduct(productId) {
+            fetch(`http://localhost:9002/admins/products/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Product deleted successfully.');
+                    fetchProducts(currentPage, pageSize);
+                } else {
+                    alert('Failed to delete product.');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting product:', error);
+                alert('An error occurred while deleting the product.');
+            });
+        }
+
+        function createPagination(totalPages, currentPage) {
+            const paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = '';
+
+            for (let i = 0; i < totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.className = `page-item ${currentPage === i ? 'active' : ''}`;
+                pageItem.innerHTML = `
+                    <button class="page-link" onclick="fetchProducts(${i}, ${pageSize})">${i + 1}</button>
+                `;
+                paginationElement.appendChild(pageItem);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

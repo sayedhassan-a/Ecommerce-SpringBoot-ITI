@@ -1,0 +1,27 @@
+services:
+  #Server
+  ecommerce-api:
+    container_name: ecommerce-api
+    image: sayed121/ecommerce-server:latest
+    networks:
+      - ecommerce-emara
+    build: ./Ecommerce-Backend
+    env_file:
+      - ./Ecommerce-Backend/.env
+    ports:
+      - "9002:9002"
+  #Client
+  client:
+    container_name: client
+    image: sayed121/ecommerce-client:latest
+
+    build: ./frontend
+    networks:
+      - ecommerce-emara
+    ports:
+      - "8082:80"
+
+networks:
+  ecommerce-emara:
+    name: ecommerce-emara
+    driver: bridge

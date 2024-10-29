@@ -165,7 +165,7 @@
 				const token = response.data.token;  // Adjust key as per your setup, e.g., 'Authorization'
 
 				if (token) {
-					if(response.data.userInfo.role==="ROLE_USER"){
+					if(response.data.userInfo.role=="ROLE_USER"){
 						// Store the token securely
 						localStorage.setItem('token', token);
 						mergeCart();

@@ -67,8 +67,13 @@ public class SecurityConfigurations {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll()).build();
 
+
+                        //Login
+                                .requestMatchers("/admins/**").permitAll()
+
                      /*   //Login
                                 .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
+
 
                         //Auth
                                 .requestMatchers(HttpMethod.POST,

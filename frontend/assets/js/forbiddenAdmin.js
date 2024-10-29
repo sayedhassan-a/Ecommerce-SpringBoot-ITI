@@ -23,17 +23,17 @@ function checkAdminAuth() {
             })
             .then(data=>{
                 console.log(data)
-                if (data.data == "ROLE_USER") {
+                if (data.data != "ROLE_USER") {
 
                 }
                 else {
-                    localStorage.removeItem("token");
+                    localStorage.removeItem("adminToken");
                     location.href = "/dashboard/auth/login.html";
                 }
             })
             .catch(error => {
                 console.error('Error during token validation:', error);
-                localStorage.removeItem("token");
+                localStorage.removeItem("adminToken");
                 location.href = "/dashboard/auth/login.html";
             });
     }

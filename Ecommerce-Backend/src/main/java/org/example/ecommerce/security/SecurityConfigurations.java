@@ -65,9 +65,9 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.anyRequest().permitAll()).build();
 
-                        //Login
+                     /*   //Login
                                 .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Auth
@@ -114,11 +114,11 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/products/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
-                                        "/products/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/products/**").permitAll()
 
                         //Products Specification
                                 .requestMatchers(HttpMethod.GET,"/api" +
@@ -134,9 +134,9 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.GET,"/api" +
                                         "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT,"/api" +
-                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api" +
-                                        "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                        "/subcategories/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
@@ -165,7 +165,8 @@ public class SecurityConfigurations {
                         .defaultSuccessUrl("/web/index.html", true)
                         .failureUrl("/web/auth/login.html?error=true")
                 )
-                .build();
+                .build();*/
+
     }
 
     @Bean

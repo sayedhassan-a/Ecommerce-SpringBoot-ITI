@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category and Subcategory List</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 80px; /* Collapsed width */
+            height: 100vh;
+            background-color: #1c1c2e;
+            color: #fff;
+            position: fixed;
+            transition: width 0.3s ease; /* Smooth transition for expanding */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Hide overflow for smooth expand effect */
+        }
+
+        .sidebar:hover {
+            width: 250px; /* Expanded width */
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background-color: #28293d;
+            font-weight: bold;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            position: relative;
+        }
+
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #3a3b5a;
+            cursor: pointer;
+        }
+
+        .sidebar nav ul li a i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar nav ul li a span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover nav ul li a span {
+            opacity: 1;
+        }
+
+        .sidebar nav ul li a:hover i {
+            transform: scale(1.1);
+            color: #f1c40f; /* Example hover color */
+        }
+
+        /* Content Area */
+        .content {
+            margin-left: 80px; /* Space for collapsed sidebar */
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+            width: calc(100% - 80px);
+        }
+
+        .sidebar:hover ~ .content {
+            margin-left: 250px; /* Adjust for expanded sidebar */
+            width: calc(100% - 250px); /* Adjust width for expanded sidebar */
+        }
+
+        /* Global Typography and Colors */
+        h1 {
+            font-size: 2rem;
+            color: #1c1c2e;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card h5 {
+            margin: 10px 0;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">Admin Dashboard</div>
+        <nav>
+            <ul>
+                <li><a href="list-product.html"><i class="fas fa-box"></i> <span>Products</span></a></li>
+                <li><a href="list-category.html"><i class="fas fa-th-list"></i> <span>Categories</span></a></li>
+                <li><a href="list-subcategories.html"><i class="fas fa-tags"></i> <span>SubCategories</span></a></li>
+                <li><a href="list-orders.html"><i class="fas fa-shopping-cart"></i> <span>Orders</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="content" id="content">
+        <div class="search_input" id="search_input_box">
+            <div class="container"></div>
+        </div>
+
+        <section class="container section_gap">
+            <span>
+                <h3 style="display: inline-block">Category List</h3>
+                <button class="btn btn-success" onclick="window.location.href='add-category.html'">Add Category</button>
+            </span>
+
+            <!-- Category Grid -->
+            <div class="grid" id="categoryGrid">
+                <!-- Category cards will be inserted here dynamically -->
+            </div>
+        </section>
+
+        <section class="container section_gap">
+            <span>
+                <h3 style="display: inline-block">Subcategory List</h3>
+                <button class="btn btn-success" onclick="window.location.href='add-subcategory.html'">Add Subcategory</button>
+            </span>
+
+            <!-- Subcategory Grid -->
+            <div class="grid" id="subcategoryGrid">
+                <!-- Subcategory cards will be inserted here dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchCategories(); // Initial fetch for categories
+            fetchSubcategories(); // Initial fetch for subcategories
+
+            function fetchCategories() {
+                const url = 'http://localhost:9002/api/categories';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        renderCategories(data); // Pass the full category data
+                    })
+                    .catch(error => {
+                        console.error('Error fetching categories:', error);
+                        alert('An error occurred while fetching categories.');
+                    });
+            }
+
+            function renderCategories(categories) {
+                const grid = document.getElementById('categoryGrid');
+                grid.innerHTML = ''; // Clear existing content
+
+                categories.forEach(category => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h5>${category.name}</h5>
+                        <button class="btn btn-primary" onclick="window.location.href='update-category.html?categoryId=${category.id}'">Update</button>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            function fetchSubcategories() {
+                const url = 'http://localhost:9002/api/subcategories';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        renderSubcategories(data); // Pass the full subcategory data
+                    })
+                    .catch(error => {
+                        console.error('Error fetching subcategories:', error);
+                        alert('An error occurred while fetching subcategories.');
+                    });
+            }
+
+            function renderSubcategories(subcategories) {
+                const grid = document.getElementById('subcategoryGrid');
+                grid.innerHTML = ''; // Clear existing content
+
+                subcategories.forEach(subcategory => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h5>${subcategory.name}</h5>
+                        <p>Category: ${subcategory.categoryName}</p>
+                        <button class="btn btn-primary" onclick="window.location.href='update-subcategory.html?subcategoryId=${subcategory.id}'">Update</button>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

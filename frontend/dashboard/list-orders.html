@@ -6,95 +6,306 @@
   <title>Orders List</title>
   <script src="../assets/js/forbiddenAdmin.js"></script>
   <link rel="stylesheet" href="../assets/css/bootstrap.css">
-  <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="stylesheet" href="../assets/css/all.css">
   <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f; /* Dark background for body */
+      color: #f4f4f4; /* Light text color */
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 80px; /* Collapsed width */
+      height: 100vh;
+      background-color: #1c1c2e; /* Dark background for sidebar */
+      color: #f4f4f4; /* Light text color */
+      position: fixed;
+      transition: width 0.3s ease; /* Smooth transition for expanding */
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      overflow: hidden; /* Hide overflow for smooth expand effect */
+      z-index: 1000; /* Ensures sidebar is above content */
+    }
+
+    .sidebar:hover {
+      width: 250px; /* Expanded width */
+    }
+
+    .sidebar .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            background-color: #28293d;
+            font-weight: bold;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Logo image */
+        .sidebar .logo img {
+            width: 40px; /* Adjust logo size */
+            height: auto;
+            transition: opacity 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        /* Image when expanded */
+        .sidebar:hover .logo img.expand {
+            opacity: 1; /* Show full logo on hover */
+            width: 120px;
+        }
+
+        /* Image when collapsed */
+        .sidebar .logo img.collapsed {
+            opacity: 0; /* Hide the expanded logo when collapsed */
+        }
+
+    .sidebar nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar nav ul li {
+      position: relative;
+    }
+
+    .sidebar nav ul li a {
+      display: flex;
+      align-items: center;
+      color: #f4f4f4; /* Light text color */
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar nav ul li a:hover {
+      background-color: #3a3b5a; /* Darker background on hover */
+      cursor: pointer;
+    }
+
+    .sidebar nav ul li a i {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .sidebar nav ul li a span {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .sidebar:hover nav ul li a span {
+      opacity: 1;
+    }
+
+    .sidebar nav ul li a:hover i {
+      transform: scale(1.1);
+      color: #f1c40f; /* Example hover color */
+    }
+
+    /* Main Content Area */
+    .main-content {
+      margin-left: 80px; /* Initial space for collapsed sidebar */
+      padding: 2rem;
+      transition: margin-left 0.3s ease, width 0.3s ease;
+      width: calc(100% - 80px); /* Width accounting for collapsed sidebar */
+      background-color: #2a2a3a; /* Dark background for main content */
+      border-radius: 8px; /* Rounded corners */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar:hover ~ .main-content {
+      margin-left: 250px; /* Adjust for expanded sidebar */
+      width: calc(100% - 250px); /* Adjust width for expanded sidebar */
+    }
+
+    /* Section Gap */
+    .section_gap {
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      background: #2a2a3a; /* Dark background for section gaps */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .header_area {
+      background: #343a40; /* Dark header background */
+      padding: 20px;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    h4 {
+      color: #ffffff; /* Light text for headers */
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #ffffff; /* Light text for labels */
+    }
+
+    .btn {
+      border-radius: 50px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .btn-primary {
+      background-color: #007bff; /* Bootstrap primary color */
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3; /* Darker primary color on hover */
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: #6c757d; /* Bootstrap secondary color */
+      border: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268; /* Darker secondary color on hover */
+      transform: translateY(-2px);
+    }
+
+    table {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 15px;
+      border-bottom: 1px solid #4b4b61; /* Darker border for table rows */
+    }
+
+    th {
+      background-color: #007bff; /* Darker background for table header */
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #3a3b5a; /* Dark hover effect for table rows */
+      transition: background-color 0.2s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: static; /* Change position for smaller screens */
+        width: 100%; /* Full width for sidebar */
+        height: auto; /* Auto height for sidebar */
+      }
+
+      .main-content {
+        margin-left: 0; /* Reset margin for small screens */
+        width: 100%; /* Full width for main content */
+      }
+
+      .section_gap {
+        padding: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<header class="header_area sticky-header" id="admin-header"></header>
-
-<section class="container section_gap" >
-  <br>
-  <br>
-
-  <div style="display: flex;flex-direction: row;width: fit-content">
-  <!-- Sidebar for Filters -->
-  <aside class="col-md-3">
-    <h4>Filter Orders</h4>
-    <form id="filterForm">
-      <!-- Date Range -->
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" class="form-control mb-2">
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" class="form-control mb-2">
-
-      <!-- Price Range -->
-      <label for="minPrice">Min Price (EGP):</label>
-      <input type="number" id="minPrice" class="form-control mb-2">
-      <label for="maxPrice">Max Price (EGP):</label>
-      <input type="number" id="maxPrice" class="form-control mb-2">
-
-      <!-- Order Status -->
-      <label>Order Status:</label><br>
-      <div>
-        <input type="checkbox" value="PLACED" id="statePlaced">
-        <label for="statePlaced">Placed</label><br>
-        <input type="checkbox" value="CONFIRMED" id="stateConfirmed">
-        <label for="stateConfirmed">Shipped</label><br>
-        <input type="checkbox" value="DELIVERED" id="stateDelivered">
-        <label for="stateDelivered">Delivered</label><br>
-        <input type="checkbox" value="CANCELLED" id="stateCanceled">
-        <label for="stateCanceled">Canceled</label><br>
-      </div>
-
-      <!-- Customer ID -->
-      <label for="customerId">Customer ID:</label>
-      <input type="number" id="customerId" class="form-control mb-2">
-
-      <!-- Payment Method -->
-      <label>Payment Method:</label><br>
-      <div>
-        <input type="checkbox" value="CREDIT_CARD" id="paymentCreditCard">
-        <label for="paymentCreditCard">Credit Card</label><br>
-        <input type="checkbox" value="CASH" id="paymentCash">
-        <label for="paymentCash">Bank Transfer</label><br>
-      </div>
-
-      <!-- Apply Filters Button -->
-      <button type="button" class="btn btn-primary mt-3" onclick="applyFilters()">Apply Filters</button>
-      <button type="button" class="btn btn-secondary mt-3" id="resetButton">Reset Filters</button>
-    </form>
-  </aside>
-  <!-- Product Table -->
-  <div class="col-md-10">
-    <h3>Orders List</h3>
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Customer ID</th>
-        <th>Payment Method</th>
-        <th>Total Price</th>
-        <th>Date</th>
-        <th>Status</th>
-      </tr>
-      </thead>
-      <tbody id="productTableBody">
-      <!-- Dynamic content will be populated here -->
-      </tbody>
-    </table>
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-      <ul class="pagination" id="pagination">
-        <!-- Pagination buttons will be populated here -->
-      </ul>
+  <aside class="sidebar">
+    <div class="logo">
+        <img src="../assets/img/logo4.png" alt="Logo" class="expand"> <!-- Image when expanded -->
+        <img src="image2.png" alt="Logo" class="collapsed"> <!-- Image when collapsed -->
+    </div>
+    <nav>
+        <ul>
+            <li><a href="list-product.html"><i class="fas fa-box"></i><span style="margin-left: 10px;">Products</span></a></li>
+            <li><a href="list-orders.html"><i class="fas fa-shopping-cart"></i><span style="margin-left: 10px;">Orders</span></a></li>
+        </ul>
     </nav>
-  </div>
+</aside>
+
+  <div class="main-content">
+    <section class="container section_gap">
+      <h3>Orders List</h3>
+      <div style="display: flex; flex-direction: row;">
+        <!-- Sidebar for Filters -->
+        <aside class="col-md-3">
+          <h4>Filter Orders</h4>
+          <form id="filterForm">
+            <!-- Date Range -->
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" class="form-control mb-2">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" class="form-control mb-2">
+
+            <!-- Price Range -->
+            <label for="minPrice">Min Price (EGP):</label>
+            <input type="number" id="minPrice" class="form-control mb-2" min="0">
+            <label for="maxPrice">Max Price (EGP):</label>
+            <input type="number" id="maxPrice" class="form-control mb-2" min="0">
+
+            <!-- Order Status -->
+            <label>Order Status:</label><br>
+            <div>
+              <input type="checkbox" value="PLACED" id="statePlaced">
+              <label for="statePlaced">Placed</label><br>
+              <input type="checkbox" value="CONFIRMED" id="stateConfirmed">
+              <label for="stateConfirmed">Confirmed</label><br>
+              <input type="checkbox" value="DELIVERED" id="stateDelivered">
+              <label for="stateDelivered">Delivered</label><br>
+              <input type="checkbox" value="CANCELLED" id="stateCanceled">
+              <label for="stateCanceled">Canceled</label><br>
+            </div>
+
+            <!-- Customer ID -->
+            <label for="customerId">Customer ID:</label>
+            <input type="number" id="customerId" class="form-control mb-2" min="0">
+
+            <!-- Payment Method -->
+            <label>Payment Method:</label><br>
+            <div>
+              <input type="checkbox" value="CREDIT_CARD" id="paymentCreditCard">
+              <label for="paymentCreditCard">Credit Card</label><br>
+              <input type="checkbox" value="PAYPAL" id="paymentPayPal">
+              <label for="paymentPayPal">PayPal</label><br>
+            </div>
+
+            <!-- Filter Button -->
+            <button type="button" class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+          </form>
+        </aside>
+
+        <!-- Orders Table -->
+        <div class="col-md-9">
+          <table class="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Date</th>
+                <th>Total Amount (EGP)</th>
+                <th>Payment Method</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <!-- Dynamic Order Rows will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
 
 
-</section>
 
 <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
 <script src="../assets/js/vendor/bootstrap.min.js"></script>
@@ -103,10 +314,10 @@
 
 <script>
   var token = localStorage.getItem("adminToken");
+
   // Function to fetch orders from the API and populate the table
   async function loadOrders(page = 0, size = 10, filters = {}) {
     try {
-      // Build the URL with query parameters for filters
       let url = `http://localhost:9002/api/v1/orders/admin?page=${page}&size=${size}`;
 
       // Append filter parameters if provided
@@ -115,7 +326,6 @@
       if (filters.minPrice) url += `&minPrice=${filters.minPrice}`;
       if (filters.maxPrice) url += `&maxPrice=${filters.maxPrice}`;
       if (filters.customerId) url += `&customerId=${filters.customerId}`;
-
       if (filters.states) {
         filters.states.forEach(state => url += `&states=${state}`);
       }
@@ -123,15 +333,15 @@
         filters.paymentMethods.forEach(method => url += `&paymentMethods=${method}`);
       }
 
-      const response = await fetch(url,{
-        method:"GET",
+      const response = await fetch(url, {
+        method: "GET",
       });
+
       if (!response.ok) throw new Error('Network response was not ok');
 
       const data = await response.json();
       populateTable(data.content);
       populatePagination(data.pageable.pageNumber + 1, data.totalPages);
-
     } catch (error) {
       console.error('Error loading orders:', error);
     }
@@ -139,48 +349,20 @@
 
   // Apply filters function
   function applyFilters(page = 0, size = 10) {
-
-    const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(document.getElementById('endDate').value);
-    var minPrice = undefined;
-    if(document.getElementById('minPrice').value)minPrice = parseFloat(document.getElementById('minPrice').value);
-    var maxPrice = undefined;
-    if(document.getElementById('maxPrice').value)maxPrice = parseFloat(document.getElementById('maxPrice').value);
-    let errors = [];
-
-    // Check if start date is less than or equal to end date
-    if (startDate && endDate && startDate > endDate) {
-      errors.push("Start date must be less than or equal to end date.");
-    }
-
-    // Check if min price is less than max price
-    if (minPrice && maxPrice && minPrice > maxPrice) {
-      errors.push("Minimum price must be less than maximum price.");
-    }
-
-    // Display errors if any
-    if (errors.length > 0) {
-      alert(errors.join("\n")); // Show error messages
-
-    }
-
-    // Collect filter values from the form
     const filters = {
       startDate: document.getElementById('startDate').value,
       endDate: document.getElementById('endDate').value,
-      minPrice: document.getElementById('minPrice').value?document.getElementById('minPrice').value*100-1:undefined,
-      maxPrice: document.getElementById('maxPrice').value?document.getElementById('maxPrice').value*100+1:undefined,
+      minPrice: document.getElementById('minPrice').value,
+      maxPrice: document.getElementById('maxPrice').value,
       customerId: document.getElementById('customerId').value,
       states: Array.from(document.querySelectorAll('input[type="checkbox"][id^="state"]:checked')).map(opt => opt.value),
-      paymentMethods: Array.from(document.querySelectorAll('input[type="checkbox"][id^="payment"]:checked')).map(opt => opt.value)
+      paymentMethods: Array.from(document.querySelectorAll('input[type="checkbox"][id^="payment"]:checked')).map(opt => opt.value),
     };
 
-
-    // Load orders with the applied filters
     loadOrders(page, size, filters);
   }
 
-  // Function to dynamically populate table with orders
+  // Function to dynamically populate the table with orders
   function populateTable(orders) {
     const tableBody = document.getElementById('productTableBody');
     tableBody.innerHTML = ''; // Clear the table first
@@ -191,71 +373,39 @@
         <td>${order.id}</td>
         <td>${order.customerId}</td>
         <td>${order.paymentMethod}</td>
-        <td>${(order.totalPrice / 100).toFixed(2)} EGP</td>
+        <td>${order.totalPrice} EGP</td>
         <td>${new Date(order.date).toLocaleDateString()}</td>
-        <td>${order.state}</td>
+        <td>${order.status}</td>
         <td>
-          <button class="btn btn-success" onclick="viewOrder(${order.id})">View</button>
+          <button class="btn btn-primary" onclick="viewOrder(${order.id})">View</button>
         </td>
       `;
       tableBody.appendChild(row);
     });
   }
 
+  // Function to handle viewing a specific order (redirect)
+  function viewOrder(orderId) {
+    window.location.href = `/dashboard/view-order.html?orderId=${orderId}`;
+  }
 
-
-  // Function to dynamically populate pagination
+  // Populate pagination
   function populatePagination(currentPage, totalPages) {
     const pagination = document.getElementById('pagination');
-    pagination.innerHTML = ''; // Clear previous pagination buttons
+    pagination.innerHTML = ''; // Clear current pagination
 
     for (let i = 1; i <= totalPages; i++) {
       const li = document.createElement('li');
       li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-      li.innerHTML = `<a class="page-link" href="#" onclick="applyFilters(${i-1})">${i}</a>`;
+      li.innerHTML = `<a class="page-link" href="#" onclick="loadOrders(${i - 1})">${i}</a>`;
       pagination.appendChild(li);
     }
-  }
-
-  // Function to handle viewing a specific order (redirect or open modal)
-  function viewOrder(orderId) {
-    window.location.href = `/dashboard/review-order.html?orderId=${orderId}`;
   }
 
   // Initial load
   document.addEventListener('DOMContentLoaded', () => loadOrders());
   document.getElementById('resetButton').addEventListener('click', function() {
     document.getElementById('filterForm').reset();
-  });
-  document.getElementById('minPrice').addEventListener('keydown', function(e) {
-    // Allow: backspace, delete, tab, escape, enter, and numbers
-    if (
-            [46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 || // delete, backspace, tab, escape, enter
-            (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+A
-            (e.keyCode >= 35 && e.keyCode <= 39) // home, end, left, right
-    ) {
-      // Allow
-      return;
-    }
-    // Ensure that it is a number and stop the keypress
-    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-      e.preventDefault();
-    }
-  });
-  document.getElementById('maxPrice').addEventListener('keydown', function(e) {
-    // Allow: backspace, delete, tab, escape, enter, and numbers
-    if (
-            [46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 || // delete, backspace, tab, escape, enter
-            (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+A
-            (e.keyCode >= 35 && e.keyCode <= 39) // home, end, left, right
-    ) {
-      // Allow
-      return;
-    }
-    // Ensure that it is a number and stop the keypress
-    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-      e.preventDefault();
-    }
   });
 </script>
 </body>

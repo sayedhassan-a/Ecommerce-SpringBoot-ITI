@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </div>
-                                <div class="social-info">
+                                <div class="social-info" href="/web/single-product.html?id=${product.id}">
                                     <span class="lnr lnr-move"></span>
                                     <p class="hover-text">view more</p>
                                 </div>

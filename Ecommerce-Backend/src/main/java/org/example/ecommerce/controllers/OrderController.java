@@ -4,11 +4,15 @@ import org.example.ecommerce.dtos.OrderResponseDTO;
 import org.example.ecommerce.dtos.OrderRequestDTO;
 import org.example.ecommerce.dtos.OrderViewDTO;
 import org.example.ecommerce.dtos.OrderWithItemsDTO;
+import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.models.OrderState;
 import org.example.ecommerce.models.PaymentMethod;
+import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.services.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,8 +24,10 @@ import java.util.Map;
 @RequestMapping("/api/v1/orders")
 public class OrderController {
     private final OrderService orderService;
-    public OrderController(OrderService orderService) {
+    private final CustomerService customerService;
+    public OrderController(OrderService orderService, CustomerService customerService) {
         this.orderService = orderService;
+        this.customerService = customerService;
     }
 
     @GetMapping("/admin")
@@ -67,7 +73,12 @@ public class OrderController {
         if(minPrice != null)map.put("minPrice", minPrice);
         if(maxPrice != null)map.put("maxPrice", maxPrice);
         if(paymentMethods != null)map.put("paymentMethods", paymentMethods);
-
+        Customer customer =
+                customerService.findUserByEmail(
+                        (String) ((Jwt) SecurityContextHolder.getContext()
+                                .getAuthentication().getPrincipal()).getClaims().get(
+                                "sub"));
+        map.put("customerId",customer.getId());
         return ResponseEntity.ok(orderService.findAllBySpecs(page, size, map));
 
     }

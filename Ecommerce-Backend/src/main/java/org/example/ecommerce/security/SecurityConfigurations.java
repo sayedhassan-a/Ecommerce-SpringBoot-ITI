@@ -92,7 +92,7 @@ public class SecurityConfigurations {
                                         "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Credit Card
-                                .requestMatchers("/api/v1/credit-card").hasAuthority(Role.ROLE_USER.name())
+                                .requestMatchers("/api/v1/credit-card/**").hasAuthority(Role.ROLE_USER.name())
 
                         //Customer
                                 .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())

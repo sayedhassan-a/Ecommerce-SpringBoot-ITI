@@ -92,12 +92,14 @@ public class SecurityConfigurations {
                                         "/categories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Credit Card
-                                .requestMatchers("/api/v1/credit-card").hasAuthority(Role.ROLE_USER.name())
+                                .requestMatchers("/api/v1/credit-card/**").hasAuthority(Role.ROLE_USER.name())
 
                         //Customer
                                 .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers("/customers/checkEmail").permitAll()
-                                .requestMatchers("/customers/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers(HttpMethod.POST,"/customers/register").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/customers/check-info").permitAll()
+//                                .requestMatchers(HttpMethod.GET,"/customers").hasAuthority(Role.ROLE_ADMIN.name())
 
                         //Orders
                                 .requestMatchers("/api/v1/orders/admin/**").hasAuthority(Role.ROLE_ADMIN.name())
@@ -138,27 +140,11 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.DELETE,"/api" +
                                         "/subcategories/**").hasAuthority(Role.ROLE_ADMIN.name())
 
-
-
-//                                .anyRequest().permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
-//                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
-//                                .requestMatchers(HttpMethod.PUT, "/customers/profile").hasAuthority(Role.ROLE_USER.name())
-//                                .requestMatchers(HttpMethod.PUT, "/customers/update-password").hasAuthority(Role.ROLE_USER.name())
-//                                .requestMatchers(HttpMethod.GET, "/customers").hasAuthority(Role.ROLE_ADMIN.name())
-//                                .requestMatchers("/web/buffer.html").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/login/validate-token").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-////                                .requestMatchers(HttpMethod.GET, "/customers/checkEmail").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "https://accounts.google.com/signin/oauth/").permitAll()
-//////                                .requestMatchers(HttpMethod.POST, "/customers/register").permitAll()
-//                                .requestMatchers("/login", "/login/google", "/login/oauth2/**", "/register/**").permitAll()
-////                        .requestMatchers(HttpMethod.GET, "/customers").permitAll()
-//                        .anyRequest().authenticated()
+                        //google
+                                .requestMatchers("/google/**").permitAll()
+                                .requestMatchers("/google/login").permitAll()
+                                .requestMatchers("/google/login/**").permitAll()
+                                .requestMatchers("/oauth2/**").permitAll()
                 )
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthEntryPoint))
                 .csrf(csrf -> csrf.disable())

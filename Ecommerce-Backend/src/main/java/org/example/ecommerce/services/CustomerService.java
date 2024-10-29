@@ -167,4 +167,18 @@ public class CustomerService implements UserDetailsService {
         // Save and return the updated customer
         return customerRepository.save(foundCustomer);
     }
+
+    public boolean isCustomerInfoComplete(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("Customer", email));
+
+        List<String> validationErrors = userValidator.vaildateCheckout(customer);
+
+        if (!validationErrors.isEmpty()) {
+            System.out.println("Errors: " + validationErrors.get(0));
+            throw new ValidationException(validationErrors);
+        }
+
+        return validationErrors.isEmpty();
+    }
 }

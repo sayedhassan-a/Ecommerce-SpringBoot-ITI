@@ -10,7 +10,7 @@ function loadingHeaderContent(){
                         <br>
                         <li class="nav-item">
                             <button class="search">
-                                <a href="/web/profile.html" class="cart"><span class="lnr fa-regular fa-user" id="search"></span></a>
+                                <a href="/web/profile.html" class="cart"><span class="lnr fa-regular fa-user" style="color: white" id="search"></span></a>
                             </button>
                         </li>`
     }

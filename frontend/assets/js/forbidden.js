@@ -37,4 +37,7 @@ function checkAuth() {
                 location.href = "/web/auth/login.html";
             });
     }
+    else{
+        location.href = "/web/index.html";
+    }
 }

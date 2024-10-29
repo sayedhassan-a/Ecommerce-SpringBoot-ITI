@@ -4,84 +4,210 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <link rel="icon" href="../assets/img/electro-logo.png" />
   <meta name="author" content="CodePixar" />
-  <meta name="description" content="" />
-  <meta name="keywords" content="" />
   <meta charset="UTF-8" />
   <title>Electro</title>
-  <script src ="../assets/js/forbidden.js"></script>
-  <link rel="stylesheet" href="../assets/css/linearicons.css" />
-  <link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="../assets/css/themify-icons.css" />
   <link rel="stylesheet" href="../assets/css/bootstrap.css" />
-  <link rel="stylesheet" href="../assets/css/owl.carousel.css" />
-  <link rel="stylesheet" href="../assets/css/nice-select.css" />
-  <link rel="stylesheet" href="../assets/css/nouislider.min.css" />
-  <link rel="stylesheet" href="../assets/css/ion.rangeSlider.css" />
-  <link rel="stylesheet" href="../assets/css/ion.rangeSlider.skinFlat.css" />
-  <link rel="stylesheet" href="../assets/css/magnific-popup.css" />
   <link rel="stylesheet" href="../assets/css/main.css" />
   <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/header.css"/>
   <style>
+    /* Profile Section Styling */
     .profile-container {
       padding: 50px 0;
       background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
     }
     .profile-header {
-      text-align: center;
-      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: fixed;
+      left: 0;
+      top: 150px;
+      width: 250px; /* Increase width for more space */
+      height: 70%; /* Make it span the full viewport height */
+      padding: 30px;
       background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 0 10px 10px 0;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+      overflow-y: auto; /* Allow scrolling if content overflows */
+      z-index: 1000; /* Ensure it stays above other elements */
+    }
+
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+    }
+
+    .profile-header h2 {
+      font-size: 24px;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .profile-header button {
+      width: 100%;
+      margin: 10px 0;
     }
     .profile-picture {
       width: 150px;
       height: 150px;
       border-radius: 50%;
       margin-bottom: 20px;
+      transition: transform 0.3s;
+    }
+    .profile-picture:hover {
+      transform: scale(1.05);
     }
     .profile-name {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
     }
-    .edit-profile-btn, .edit-password-btn {
-      width: 170px;
-      margin-top: 20px;
-      padding: 10px 20px;
+    .edit-profile-btn, .edit-password-btn , .my-orders-btn, .card-btn{
+      width: 180px;
+      padding: 12px;
+      margin-top: 15px;
       border: none;
+      border-radius: 5px;
       background-color: #3C5B6F;
       color: white;
-      border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
-    .profile-form input, .cancel-btn {
+    .edit-profile-btn:hover, .edit-password-btn:hover, .my-orders-btn:hover {
+      background-color: #2d4355;
+    }
+    .profile-form, .profile-details {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .profile-form.active, .profile-details.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .profile-form input, .cancel-btn, .save-btn {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
+      margin-top: 10px;
       border-radius: 5px;
       border: 1px solid #ddd;
+      transition: box-shadow 0.3s;
     }
-    .profile-form label {
-      font-weight: bold;
+    .profile-form input:focus {
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
     }
-    .save-btn {
-      padding: 10px 20px;
+    .save-btn, .cancel-btn, .delete-card-btn {
       background-color: #067e46;
       color: white;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
+      margin-top: 15px;
+      transition: background-color 0.3s;
     }
-    .cancel-btn {
-      padding: 10px 20px;
+    .save-btn:hover {
+      background-color: #055a35;
+    }
+    .delete-card-btn, .cancel-btn {
       background-color: #f44336;
-      color: white;
+    }
+    .cancel-btn:hover, delete-card-btn:hover {
+      background-color: #c33c2d;
+    }
+    /* Credit Card Section Enhancements */
+    /* Credit Card Section Styling */
+    #creditCardSection {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #creditCardSection h2 {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: #343a40;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Credit Card List Styling */
+    .credit-card-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .credit-card-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      margin-bottom: 10px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .credit-card-list li:hover {
+      transform: scale(1.02);
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card Text Styling */
+    .credit-card-list li::before {
+      content: "💳 ";
+    }
+
+    .credit-card-list li span {
+      font-size: 1.2em;
+      font-weight: 500;
+      color: #495057;
+    }
+
+    /* Delete Button Styling */
+    .delete-card-btn {
+      background-color: #e63946;
+      color: #ffffff;
       border: none;
+      padding: 8px 12px;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
     }
-    .profile-details {
-      margin-top: 10px;
+
+    .delete-card-btn:hover {
+      background-color: #d62828;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .credit-card-list li {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .delete-card-btn {
+        margin-top: 8px;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -101,17 +227,19 @@
     <div class="row justify-content-center">
       <div class="col-lg-6 col-md-8">
         <div class="profile-header">
-          <h2 class="profile-name" id="profile-name"></h2>
-          <button class="edit-profile-btn" onclick="toggleEditForm()">Edit Profile</button>
-          <button class="edit-password-btn" onclick="togglePasswordForm()">Change Password</button>
+          <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="User Avatar">          <h2 class="profile-name" id="profile-name">John Doe</h2>
+          <button class="edit-profile-btn" onclick="toggleForm('profileForm')">Edit Profile</button>
+          <button class="edit-password-btn" onclick="toggleForm('passwordForm')">Change Password</button>
+          <button class="card-btn" id="loadCreditCardsBtn" onclick="toggleForm('creditCardSection')">Show My Credit Cards</button>
+          <button class="my-orders-btn" onclick="window.location.href='list-orders.html'">My Orders</button>
         </div>
 
         <!-- Profile Edit Form -->
-        <form class="profile-form mt-4" id="profileForm" style="display: none" action="/ecommerce/web/profile" method="post">
+        <form class="profile-form mt-4" id="profileForm" action="/ecommerce/web/profile" method="post">
           <label for="firstName">First Name</label>
-          <input type="text" id="firstName" name="firstName" required/>
+          <input type="text" id="firstName" name="firstName" required />
           <label for="lastName">Last Name</label>
-          <input type="text" id="lastName" name="lastName" required/>
+          <input type="text" id="lastName" name="lastName" required />
           <label for="email">Email</label>
           <input type="email" id="email" name="email" readonly required />
           <div id="emailError" class="text-danger"></div>
@@ -136,31 +264,31 @@
 
 
         <!-- Password Change Form -->
-        <form class="profile-form mt-4" id="passwordForm" style="display: none" action="/ecommerce/web/update-password" method="post">
+        <form class="profile-form mt-4" id="passwordForm" action="/ecommerce/web/update-password" method="post">
           <label for="password">New Password</label>
-          <input type="password" id="password" placeholder="Enter new password" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,30}" name="password" required />
-
+          <input type="password" id="password" name="password" required />
           <label for="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" placeholder="Enter password confirmation" required />
-          <div id="confirmPasswordError" class="text-danger"></div>
-
+          <input type="password" id="confirmPassword" required />
           <input type="submit" class="save-btn" value="Change Password" />
-          <button type="button" class="cancel-btn" onclick="togglePasswordForm()">Cancel</button>
+          <button type="button" class="cancel-btn" onclick="toggleForm('passwordForm')">Cancel</button>
         </form>
 
         <!-- Profile Details Section -->
-        <div id="profileDetails" class="profile-details">
+        <div id="profileDetails" class="profile-details active">
           <h4>About</h4>
-          <p><strong id="customer-firstname">First Name:</strong> <span id="customer-firstname-value"></span></p>
-          <p><strong id="customer-lastname">Last Name:</strong> <span id="customer-lastname-value"></span></p>
-          <p><strong id="customer-email">Email:</strong> <span id="customer-email-value"></span></p>
-          <p><strong id="customer-address-one">Address Line 1:</strong> <span id="customer-address-one-value"></span></p>
-          <p><strong id="customer-city">City:</strong> <span id="customer-city-value"></span></p>
-          <p><strong id="customer-country">Country:</strong> <span id="customer-country-value"></span></p>
-          <p><strong id="customer-zip">Zip Code:</strong> <span id="customer-zip-value"></span></p>
-          <p><strong id="customer-phone">Phone:</strong> <span id="customer-phone-value"></span></p>
-          <p><strong id="customer-date">Date Of Birth:</strong> <span id="customer-date-value"></span></p>
+          <p><strong>First Name:</strong> <span id="customer-firstname-value">John</span></p>
+          <p><strong>Last Name:</strong> <span id="customer-lastname-value">Doe</span></p>
+          <p><strong>Email:</strong> <span id="customer-email-value">john@example.com</span></p>
+          <p><strong>Address:</strong> <span id="customer-address-value">1234 Elm Street, Springfield</span></p>
         </div>
+        <!-- Credit Card Section -->
+        <<section id="creditCardSection">
+        <h2>My Credit Cards</h2>
+        <ul id="creditCardList" class="credit-card-list">
+          <!-- Credit card items will be appended here by JavaScript -->
+        </ul>
+      </section>
+
       </div>
     </div>
   </div>
@@ -180,10 +308,69 @@
 <script src="../assets/js/main.js"></script>
 <script>
   $(document).ready(function(){
+    document.getElementById("loadCreditCardsBtn").addEventListener("click", function () {
+      fetchCreditCards();
+    });
+
+    // Function to fetch credit cards
+    function fetchCreditCards() {
+      fetch("http://localhost:9002/api/v1/credit-card", {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }).then(response => {
+        if (response.ok) return response.json();
+        else if (response.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          window.location.href = '/web/auth/login.html';
+        } else {
+          throw new Error("Failed to fetch credit card data.");
+        }
+      }).then(data => {
+        const creditCardList = document.getElementById("creditCardList");
+        creditCardList.innerHTML = "";
+
+        data.forEach(card => {
+          const cardItem = document.createElement("li");
+          cardItem.textContent = card.masked_pan;
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.className = "delete-card-btn";
+          deleteButton.onclick = () => deleteCreditCard(card.id);
+          cardItem.appendChild(deleteButton);
+          creditCardList.appendChild(cardItem);
+        });
+      }).catch(error => {
+        console.error("Error fetching credit card data:", error);
+      });
+    }
+
+    // Function to delete a credit card
+    function deleteCreditCard(cardId) {
+      fetch(`http://localhost:9002/api/v1/credit-card/${cardId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      }).then(response => {
+        if (response.ok) {
+          alert("Credit card deleted successfully.");
+          fetchCreditCards(); // Refresh the list without reloading the page
+        } else if (response.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          window.location.href = '/web/auth/login.html';
+        } else {
+          throw new Error("Failed to delete credit card.");
+        }
+      }).catch(error => {
+        console.error("Error deleting credit card:", error);
+      });
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:8080/customers/profile",
+        url: "http://localhost:9002/customers/profile",
         type: "GET",
         headers: {
           "Authorization": "Bearer " + token
@@ -194,7 +381,7 @@
           // Access the customer and address from the data
           const customer = data.data[0]; // Get the customer object
           const address = data.data[1]; // Get the address object
-        console.log(address);
+          console.log(address);
 
           $('#profile-name').text(customer.firstName + " " + customer.lastName);
           $('#customer-firstname-value').text(customer.firstName);
@@ -255,24 +442,38 @@
     }
   });
 
+  function toggleForm(formId) {
+    const form = document.getElementById(formId);
+
+    if (form.classList.contains("active")) {
+      form.classList.remove("active");
+      setTimeout(() => form.style.display = "none", 400);
+    } else {
+      document.querySelectorAll(".profile-form").forEach(f => {
+        f.classList.remove("active");
+        f.style.display = "none";
+      });
+      form.style.display = "block";
+      setTimeout(() => form.classList.add("active"), 10);
+    }
+  }
+
+
+
   function toggleEditForm() {
     const profileForm = document.getElementById("profileForm");
     const passwordForm = document.getElementById("passwordForm");
-    const details = document.getElementById("profileDetails");
 
     profileForm.style.display = profileForm.style.display === "none" ? "block" : "none";
     passwordForm.style.display = "none";
-    details.style.display = details.style.display === "none" ? "block" : "none";
   }
 
   function togglePasswordForm() {
     const profileForm = document.getElementById("profileForm");
     const passwordForm = document.getElementById("passwordForm");
-    const details = document.getElementById("profileDetails");
 
     passwordForm.style.display = passwordForm.style.display === "none" ? "block" : "none";
     profileForm.style.display = "none";
-    details.style.display = "none";
   }
 
   var mailIsAvailable = true;
@@ -349,7 +550,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:8080/customers/profile",
+        url: "http://localhost:9002/customers/profile",
         type: "PUT",
         headers: {
           "Authorization": "Bearer " + token,
@@ -359,6 +560,9 @@
         success: function(response) {
           alert("Profile updated successfully");
           toggleEditForm();
+
+          // Optionally, reload profile data on success
+          location.reload();
           // Optionally, refresh profile data on success
         },
         error: function(xhr) {
@@ -378,7 +582,7 @@
     const newPassword = $('#password').val();
 
     $.ajax({
-      url: "http://localhost:8080/customers/update-password",
+      url: "http://localhost:9002/customers/update-password",
       type: "PUT",
       contentType: "application/json",
       headers: {
@@ -397,5 +601,6 @@
 </script>
 
 <script src="../assets/js/loadHeader.js"></script>
+<script src="../assets/js/loading.js"></script>
 </body>
 </html>

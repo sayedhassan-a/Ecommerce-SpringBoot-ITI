@@ -79,7 +79,7 @@ public class CustomerController {
     public Result findCustomerById(@PathVariable Long id) {
         Customer foundCustomer = customerService.findById(id);
         CustomerDto customerDto = customerToCustomerDtoConverter.convert(foundCustomer);
-        System.out.println("inside findCustomerById: " + customerDto);
+//        System.out.println("inside findCustomerById: " + customerDto);
         return new Result(true, StatusCode.SUCCESS, "Customer retrieved successfully", customerDto);
     }
 
@@ -168,6 +168,17 @@ public class CustomerController {
         }
 
         return new Result(true, StatusCode.SUCCESS, "Customer information is complete", null);
+    }
+
+    //search users by email or name
+    @GetMapping("/search")
+    public Page<CustomerDto> searchByEmailOrName(@RequestParam String email, @RequestParam(defaultValue = "0") int pageNumber,
+                                                 @RequestParam(defaultValue = "10") int pageSize) {
+        System.out.println("CustomerController.searchByEmailOrName");
+        System.out.println("email: " + email +  " pageNumber: " + pageNumber + " pageSize: " + pageSize);
+        Page<Customer> customers = customerService.searchByEmail(email, pageNumber, pageSize);
+        System.out.println("inside searchByEmailOrName: " + customers.getTotalElements());
+        return customers.map(customerToCustomerDtoConverter::convert);
     }
 
 }

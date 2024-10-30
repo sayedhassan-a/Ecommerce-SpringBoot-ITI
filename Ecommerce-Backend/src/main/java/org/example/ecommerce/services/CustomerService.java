@@ -182,4 +182,9 @@ public class CustomerService implements UserDetailsService {
 
         return validationErrors;
     }
+
+    public Page<Customer> searchByEmail(String email, int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return customerRepository.findByEmailContaining(email, pageRequest);
+    }
 }

@@ -94,7 +94,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponseDTO> createOrder(
             @RequestBody OrderRequestDTO orderRequestDTO){
-
+        System.out.println("inside createOrder: " + orderRequestDTO);
         return ResponseEntity.ok(orderService.initOrder(
                 orderRequestDTO).orElse(null));
     }

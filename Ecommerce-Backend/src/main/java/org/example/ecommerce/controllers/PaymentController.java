@@ -19,6 +19,7 @@ public class PaymentController {
 
     @PostMapping
     public void updateOrderStatus(@RequestBody TransactionDTO transactionDTO) {
+        System.out.println("PaymentController.updateOrderStatus");
         paymentService.handleTransactionStatus(transactionDTO);
     }
     @PostMapping("token")

@@ -16,16 +16,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (category.subCategories && category.subCategories.length > 0) {
                             return `
                                 <div class="dropdown-submenu">
-                                    <a class="dropdown-item dropdown-toggle" href="category.html?cat=${category.id}">${category.name}</a>
+                                    <a class="dropdown-item dropdown-toggle" href="/web/category.html?cat=${category.id}">${category.name}</a>
                                     <div class="dropdown-menu">
                                         ${category.subCategories.map(subCat => `
-                                            <a class="dropdown-item" href="category.html?cat=${category.id}&sub=${subCat.id}">${subCat.name}</a>
+                                            <a class="dropdown-item" href="/web/category.html?cat=${category.id}&sub=${subCat.id}">${subCat.name}</a>
                                         `).join('')}
                                     </div>
                                 </div>
                             `;
                         } else {
-                            return `<a class="dropdown-item" href="category.html?cat=${category.id}">${category.name}</a>`;
+                            return `<a class="dropdown-item" href="/web/category.html?cat=${category.id}">${category.name}</a>`;
                         }
                     }).join('')}
                 </div>

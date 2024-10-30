@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
 
-    <!--<script src="../assets/js/forbiddenAdmin.js"></script>-->
+    <script src="../assets/js/forbiddenAdmin.js"></script>
 
     <link rel="stylesheet" href="../assets/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -122,15 +122,23 @@
             height: auto;
             transition: opacity 0.3s ease; /* Smooth transition for hover effect */
         }
+        /* Logo image */
+        .sidebar .logo img.expand {
+            width: 0px; /* Adjust logo size */
+        }
 
         /* Image when expanded */
         .sidebar:hover .logo img.expand {
             opacity: 1; /* Show full logo on hover */
             width: 120px;
         }
+        .sidebar:hover .collapsed {
+            opacity: 0; /* Show full logo on hover */
+        }
+
 
         /* Image when collapsed */
-        .sidebar .logo img.collapsed {
+        .sidebar .logo img.expand {
             opacity: 0; /* Hide the expanded logo when collapsed */
         }
 
@@ -307,14 +315,18 @@
 <body>
 
     <aside class="sidebar">
-        <div class="logo">
-            <img src="../assets/img/logo4.png" alt="Logo" class="expand"> <!-- Image when expanded -->
-            <img src="image2.png" alt="Logo" class="collapsed"> <!-- Image when collapsed -->
-        </div>
+        <a href="/dashboard/list-product.html">
+            <div class="logo">
+                <img src="../assets/img/logo4.png" alt="Logo" class="expand"> <!-- Image when expanded -->
+                <img src="../assets/img/smallLogo.png"  alt="Logo" class="collapsed"> <!-- Image when collapsed -->
+            </div>
+        </a>
         <nav>
             <ul>
-                <li><a href="list-product.html"><i class="fas fa-box"></i><span style="margin-left: 10px;">Products</span></a></li>
-                <li><a href="list-orders.html"><i class="fas fa-shopping-cart"></i><span style="margin-left: 10px;">Orders</span></a></li>
+                <li><a href="/dashboard/list-customer.html"><i class="fas fa-address-book"></i><span style="margin-left: 10px;">Customers</span></a></li>
+                <li><a href="/dashboard/list-product.html"><i class="fas fa-box"></i><span style="margin-left: 10px;">Products</span></a></li>
+                <li><a href="/dashboard/list-orders.html"><i class="fas fa-shopping-cart"></i><span style="margin-left: 10px;">Orders</span></a></li>
+                    <li><a onclick="localStorage.removeItem('adminToken');location.href = '/web/index.html'"><i class="fas fa-power-off"></i><span style="margin-left: 10px;">Logout</span></a></li>
             </ul>
         </nav>
     </aside>

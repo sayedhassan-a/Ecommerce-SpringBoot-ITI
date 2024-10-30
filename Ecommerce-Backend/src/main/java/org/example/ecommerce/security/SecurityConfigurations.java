@@ -97,6 +97,7 @@ public class SecurityConfigurations {
 
                         //Customer
                                 .requestMatchers("/customers/profile/**").hasAuthority(Role.ROLE_USER.name())
+                                .requestMatchers("/customers/update-password").hasAuthority(Role.ROLE_USER.name())
                                 .requestMatchers("/customers/checkEmail").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/customers/register").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/customers/check-info").permitAll()

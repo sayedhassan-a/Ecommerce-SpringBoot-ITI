@@ -7,7 +7,7 @@ services:
       - ecommerce-emara
     build: ./Ecommerce-Backend
     env_file:
-      - ./Ecommerce-Backend/.env
+      - .env
     ports:
       - "9002:9002"
   #Client

@@ -125,7 +125,7 @@
         <script>
             var token = localStorage.getItem("token");
             function createOrder() {
-                fetch('https://improved-ghastly-midge.ngrok-free.app/customers/check-info', {
+                fetch('http://localhost:9002/customers/check-info', {
                     method: 'GET',
                     headers: {
                         Authorization: "Bearer " + token,
@@ -149,7 +149,7 @@
                                 paymentMethod: paymentMethod
                             };
 
-                            fetch('https://improved-ghastly-midge.ngrok-free.app/api/v1/orders', {
+                            fetch('http://localhost:9002/api/v1/orders', {
                                 method: 'POST',
                                 headers: {
                                     Authorization: "Bearer " + token,

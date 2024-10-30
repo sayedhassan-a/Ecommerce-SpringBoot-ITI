@@ -7422,6 +7422,9 @@ position: relative;
 .footer-cta {
 border-bottom: 1px solid #373636;
 }
+.footer-area{
+  padding-bottom: 0;
+}
 .single-cta i {
 color: #ff5e14;
 font-size: 30px;

@@ -341,7 +341,7 @@
 
       const data = await response.json();
       populateTable(data.content);
-      populatePagination(data.pageable.pageNumber + 1, data.totalPages);
+      populatePagination(data.page.number + 1, data.page.totalPages);
     } catch (error) {
       console.error('Error loading orders:', error);
     }

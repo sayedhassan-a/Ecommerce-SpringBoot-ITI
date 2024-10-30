@@ -65,10 +65,11 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                .authorizeHttpRequests(authorizeHttpRequests ->
+                        authorizeHttpRequests
 
                         //Login
-                                .requestMatchers("/admins/**").hasAuthority(Role.ROLE_ADMIN.name())
+                                .requestMatchers("/admins/**").permitAll()
 
                         //Auth
                                 .requestMatchers(HttpMethod.POST,
@@ -173,7 +174,6 @@ public class SecurityConfigurations {
                         .failureUrl("/web/auth/login.html?error=true")
                 )
                 .build();
-
     }
 
     @Bean

@@ -94,10 +94,6 @@ public class AdminController {
 
     // this part is for managing products
 
-
-
-
-
     @PostMapping("/products")
     public ResponseEntity<Product> addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {
         Product savedProduct = productService.addProduct(productWithSpecsDTO);
@@ -136,6 +132,19 @@ public class AdminController {
         );
         return updatedProduct;
     }
+
+
+
+    @GetMapping("products/search")
+    public Page<ProductResponseDTO> searchProducts(
+            @RequestParam("keyword") String keyword,
+            @RequestParam(value = "page", defaultValue = "0" , required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10",  required = false) int size) {
+
+        return productService.searchProducts(keyword, page, size);
+    }
+
+
 
      /* @PostMapping("/products")
     public Result addProduct(@RequestBody ProductWithSpecsDTO productWithSpecsDTO) {

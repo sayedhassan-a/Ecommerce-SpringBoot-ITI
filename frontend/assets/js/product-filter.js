@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 renderProducts(data.content);
-                createPagination(data.totalPages, data.pageable.pageNumber);
+                createPagination(data.page.totalPages, data.page.number);
             })
             .catch(error => console.error('Error fetching products:', error));
     }
@@ -157,7 +157,7 @@ function fetchFilteredProducts(subId, filters) {
     fetch(`http://localhost:9002/api/products/subcategory/${subId}/filter?${queryParams}`)
         .then(response => response.json())
         .then(data => {renderProducts(data.content);
-            createPagination(data.totalPages,data.pageable.pageNumber);
+            createPagination(data.page.totalPages,data.page.number);
         })
         .catch(error => console.error('Error fetching filtered products:', error));
 }
@@ -215,7 +215,7 @@ function fetchFilteredProducts(subId, filters) {
         fetch(`http://localhost:9002/api/products/subcategory/${subId}/search?${queryParams}`)
             .then(response => response.json())
             .then(data => {renderProducts(data.content);
-                createPagination(data.totalPages,data.pageable.pageNumber);
+                createPagination(data.page.totalPages,data.page.number);
             })
             .catch(error => console.error('Error fetching products:', error));
         resetFilters();

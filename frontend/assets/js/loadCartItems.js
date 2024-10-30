@@ -153,6 +153,7 @@ function updateQuantity(itemId, quantity) {
 
 
     var inputField = $('#sst-' + itemId);
+    var oldQuantity = parseInt(inputField.val());
     var currentQuantity = parseInt(inputField.val());
     console.log(currentQuantity);
 
@@ -169,8 +170,14 @@ function updateQuantity(itemId, quantity) {
                    url: `http://localhost:9002/api/products/${item.product.id}/stock`, // Servlet URL/
                    type: 'GET',
                    success: function(response) {
-                       if(response.quantity < currentQuantity){
+                       if(response.quantity < oldQuantity){
                            //$('#err-' + itemId).text("quantity out of stock!");
+                           $('#price-' + itemId).text((Number.parseFloat(response.price)/100).toFixed(2) + ' EGP');
+                           $('#total-' + itemId).text((Number.parseFloat(
+                               response.quantity * response.price)/100).toFixed(2) + ' EGP');
+                           // Update the input field with the new quantity
+                           inputField.val(response.quantity);
+                           calculateTotalPrice();
                            showStockError();
                        }
                        else{
@@ -214,8 +221,11 @@ function updateQuantity(itemId, quantity) {
                        $('#total-' + itemId).text((Number.parseFloat(
                            response.quantity * response.product.price)/100).toFixed(2) + ' EGP');
                        // Update the input field with the new quantity
-                       inputField.val(currentQuantity);
+                       inputField.val(response.quantity);
                        calculateTotalPrice();
+                       if(response.quantity < currentQuantity){
+                           showStockError();
+                       }
                        //$('#err-' + itemId).text("");
 
                    },

@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="../assets/js/loadHeader.js"></script>
   <script src="../assets/js/loading.js"></script>
+  <link rel="stylesheet" href="../assets/css/popUp.css">
+  <script src="../assets/js/popUp.js"></script>
   <style>
     /* Modern styling for filters and orders list */
     body {
@@ -294,7 +296,7 @@
 
     // Display errors if any
     if (errors.length > 0) {
-      alert(errors.join("\n")); // Show error messages
+      showNotification(errors.join("\n")); // Show error messages
 
     }
 

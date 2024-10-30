@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="../../assets/css/style.css">
     <script src="../../assets/js/loadHeader.js"></script>
     <script src="../../assets/js/loading.js"></script>
+    <link rel="stylesheet" href="../../assets/css/popUp.css">
+    <script src="../../assets/js/popUp.js"></script>
 </head>
 
 <body>
@@ -178,7 +180,7 @@
                 } else {
                     mailIsAvailable = false;
                     document.getElementById("emailError").innerText = "This email already exists";
-                    alert("This email already exists");
+                    showNotification("This email already exists");
                 }
             })
             .catch(error => console.error('Error checking email availability:', error));
@@ -196,7 +198,7 @@
             const firstErrorMessage = errors[firstErrorKey];
             document.getElementById("generalError").innerText = firstErrorMessage;
         } else {
-            alert("An unknown error occurred. Please try again.");
+            showNotification("An unknown error occurred. Please try again.");
         }
     }
 </script>

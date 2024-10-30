@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/all.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/popUp.css">
+    <link rel="stylesheet" href="../assets/css/popUp.css">
+    <script src="../assets/js/popUp.js"></script>
     <style>
         /* Loader container styles */
         .loader-container {
@@ -402,7 +405,7 @@
                 .then(response => response.json())
                 .then(data => {
                     hideLoader();
-                    alert("Product added successfully!");
+                    showNotification("Product added successfully!");
                 })
                 .catch(error => {
                     console.error("Error adding product:", error);

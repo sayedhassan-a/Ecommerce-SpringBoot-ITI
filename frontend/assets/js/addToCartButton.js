@@ -1,3 +1,4 @@
+import { showNotification, displayNotification } from './popUp.js';
 
 function handleAddItem(num, id, redirect){
     var quantity;
@@ -55,7 +56,7 @@ function handleAddItem(num, id, redirect){
                            item.product.name = response.name;
                            item.product.image = response.image;
                            localStorage.setItem("cart", JSON.stringify(cartItems));
-                           alert("Item added to cart");
+                           showNotification("Item added to cart");
                            if(!redirect)location.href = location.origin + "/web/cart.html";
                        }
                    },
@@ -80,7 +81,7 @@ function handleAddItem(num, id, redirect){
                        'ngrok-skip-browser-warning':'abc'
                    },
                    success: function(response) {
-                       alert("Item added to cart");
+                       showNotification("Item added to cart");
                        if(!redirect)location.href = location.origin + "/web/cart.html";
                    },
                    error: function() {

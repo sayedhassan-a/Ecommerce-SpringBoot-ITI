@@ -1,3 +1,5 @@
+import {showNotification} from "./popUp";
+
 function loadCartItems() {
     var token = localStorage.getItem("token");
     if(token == null){
@@ -198,7 +200,7 @@ function updateQuantity(itemId, quantity) {
                        }
                    },
                    error: function() {
-                       alert("Error updating quantity!");
+                       showNotification("Error updating quantity!");
                    }
                });
 
@@ -272,7 +274,7 @@ function removeItem(itemId, action) {
                        location.reload(true);
                    },
                    error: function() {
-                       alert("Error removing item!");
+                       showNotification("Error removing item!");
                    }
                });
     }
@@ -297,7 +299,7 @@ function calculateTotalPrice() {
     document.getElementById('total-price').innerText = totalPrice.toFixed(2)+" EGP";
 }
 function goToLogin(){
-    alert("You need to login");
+    showNotification("You need to login");
 }
     // Call the loadCartItems function on page load
     document.addEventListener('DOMContentLoaded', loadCartItems);

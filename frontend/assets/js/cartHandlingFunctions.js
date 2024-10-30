@@ -1,3 +1,5 @@
+import {showNotification} from "./popUp";
+
 function addToCart(itemId, buyQuantity, action) {
                                                 // Make the asynchronous request to the server
                                                 $.ajax({
@@ -22,7 +24,7 @@ function addToCart(itemId, buyQuantity, action) {
                                                             window.location.href = window.location.origin + "/ecommerce/web/auth/login.jsp"
                                                         }
                                                         else{
-                                                            alert("Error adding item!");
+                                                            showNotification("Error adding item!");
                                                         }
 
                                                     },

@@ -268,32 +268,29 @@ public class ProductService {
     }
 
     // latest products
-   public List<ProductResponseDTO> getLatestProducts() {
+   public List<SimpleProductDTO> getLatestProducts() {
        List<Product> latestProducts = productRepository.findTop10ByOrderByCreatedAtDesc();
        return latestProducts.stream()
-               .map(product -> productMapper.toProductResponseDTO(
-                       product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)))
+               .map(simpleProductMapper::toDTO)
                .collect(Collectors.toList());
    }
 
 
     // fetching products on sale
-    public Page<ProductResponseDTO> getProductsOnSale(int page, int size) {
+    public Page<SimpleProductDTO> getProductsOnSale(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> saleProducts = productRepository.findProductsOnSale(pageable);
 
-        return saleProducts.map(product -> productMapper.toProductResponseDTO(
-                product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)));
+        return saleProducts.map(simpleProductMapper::toDTO);
     }
 
 
     // fetching products on flash sale
-    public Page<ProductResponseDTO> getFlashSaleProducts(int page, int size) {
+    public Page<SimpleProductDTO> getFlashSaleProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> flashSaleProducts = productRepository.findFlashSaleProducts(pageable);
 
-        return flashSaleProducts.map(product -> productMapper.toProductResponseDTO(
-                product, productSpecsRepository.findById(product.getSpecsId()).orElse(null)));
+        return flashSaleProducts.map(simpleProductMapper::toDTO);
     }
 
 

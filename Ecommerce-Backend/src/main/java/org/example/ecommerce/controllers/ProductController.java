@@ -146,24 +146,24 @@ public class ProductController {
 
 
     @GetMapping("/latest")
-    public ResponseEntity<List<ProductResponseDTO>> getLatestProducts() {
-        List<ProductResponseDTO> latestProducts = productService.getLatestProducts();
+    public ResponseEntity<List<SimpleProductDTO>> getLatestProducts() {
+        List<SimpleProductDTO> latestProducts = productService.getLatestProducts();
         return ResponseEntity.ok(latestProducts);
     }
     @GetMapping("/onsale")
-    public ResponseEntity<Page<ProductResponseDTO>> getProductsOnSale(
+    public ResponseEntity<Page<SimpleProductDTO>> getProductsOnSale(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponseDTO> products = productService.getProductsOnSale(page, size);
+        Page<SimpleProductDTO> products = productService.getProductsOnSale(page, size);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping("/flash-sale")
-    public ResponseEntity<Page<ProductResponseDTO>> getFlashSaleProducts(
+    public ResponseEntity<Page<SimpleProductDTO>> getFlashSaleProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<ProductResponseDTO> products = productService.getFlashSaleProducts(page,size);
+        Page<SimpleProductDTO> products = productService.getFlashSaleProducts(page,size);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

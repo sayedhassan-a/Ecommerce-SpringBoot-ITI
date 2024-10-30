@@ -114,6 +114,7 @@ function handleAddItem(num, id, redirect){
                        'ngrok-skip-browser-warning':'abc'
                    },
                    success: function(response) {
+                       console.log("heeeere" ,response);
                        showNotification("Item added to cart");
                        if(!redirect)location.href = location.origin + "/web/cart.html";
                    },

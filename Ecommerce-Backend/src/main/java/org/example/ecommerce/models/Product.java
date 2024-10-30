@@ -20,7 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

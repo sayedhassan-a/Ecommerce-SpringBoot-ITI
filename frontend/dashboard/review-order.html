@@ -94,9 +94,158 @@
             font-weight: bold;
         }
     </style>
+    <style>
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 80px; /* Collapsed width */
+            height: 100vh;
+            background-color: #1c1c2e; /* Dark background for sidebar */
+            color: #f4f4f4; /* Light text color */
+            position: fixed;
+            transition: width 0.3s ease; /* Smooth transition for expanding */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            overflow: hidden; /* Hide overflow for smooth expand effect */
+            z-index: 1000; /* Ensures sidebar is above content */
+        }
+
+        .sidebar:hover {
+            width: 250px; /* Expanded width */
+        }
+
+
+
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            background-color: #28293d;
+            font-weight: bold;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Logo image */
+        .sidebar .logo img {
+            width: 40px; /* Adjust logo size */
+            height: auto;
+            transition: opacity 0.3s ease; /* Smooth transition for hover effect */
+        }
+        /* Logo image */
+        .sidebar .logo img.expand {
+            width: 0px; /* Adjust logo size */
+        }
+
+        /* Image when expanded */
+        .sidebar:hover .logo img.expand {
+            opacity: 1; /* Show full logo on hover */
+            width: 120px;
+        }
+        .sidebar:hover .collapsed {
+            opacity: 0; /* Show full logo on hover */
+        }
+
+
+        /* Image when collapsed */
+        .sidebar .logo img.expand {
+            opacity: 0; /* Hide the expanded logo when collapsed */
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            position: relative;
+        }
+
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            color: #f4f4f4; /* Light text color */
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #3a3b5a; /* Darker background on hover */
+            cursor: pointer;
+        }
+
+        .sidebar nav ul li a i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar nav ul li a span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover nav ul li a span {
+            opacity: 1;
+        }
+
+        .sidebar nav ul li a:hover i {
+            transform: scale(1.1);
+            color: #f1c40f; /* Example hover color */
+        }
+
+
+        .sidebar:hover ~ .main-content {
+            margin-left: 250px; /* Adjust for expanded sidebar */
+            width: calc(100% - 250px); /* Adjust width for expanded sidebar */
+        }
+
+
+
+
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: static; /* Change position for smaller screens */
+                width: 100%; /* Full width for sidebar */
+                height: auto; /* Auto height for sidebar */
+            }
+
+            .main-content {
+                margin-left: 0; /* Reset margin for small screens */
+                width: 100%; /* Full width for main content */
+            }
+
+            .section_gap {
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="header_area sticky-header" id="admin-header"></header>
+<!-- Start Header Area -->
+<aside class="sidebar">
+    <a href="/dashboard/list-product.html">
+        <div class="logo">
+            <img src="../assets/img/logo4.png" alt="Logo" class="expand"> <!-- Image when expanded -->
+            <img src="../assets/img/smallLogo.png"  alt="Logo" class="collapsed"> <!-- Image when collapsed -->
+        </div>
+    </a>
+    <nav>
+        <ul>
+            <li><a href="/dashboard/list-customer.html"><i class="fas fa-address-book"></i><span style="margin-left: 10px;">Customers</span></a></li>
+            <li><a href="/dashboard/list-product.html"><i class="fas fa-box"></i><span style="margin-left: 10px;">Products</span></a></li>
+            <li><a href="/dashboard/list-orders.html"><i class="fas fa-shopping-cart"></i><span style="margin-left: 10px;">Orders</span></a></li>
+            <li><a onclick="localStorage.removeItem('adminToken');location.href = '/web/index.html'"><i class="fas fa-power-off"></i><span style="margin-left: 10px;">Logout</span></a></li>
+        </ul>
+    </nav>
+</aside>
 
 <section class="banner-area organic-breadcrumb">
     <div class="container">
@@ -108,7 +257,7 @@
     </div>
 </section>
 
-<section class="order-container">
+<section class="main-content order-container">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
@@ -155,7 +304,7 @@
         // Replace 'orderId' with the actual order ID you want to fetch
         var token = localStorage.getItem("adminToken");
         // Fetch the order data from the endpoint
-        fetch(`http://localhost:9002/api/v1/orders/admin/${orderId}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
+        fetch(`http://localhost:9002/api/v1/orders/admin/${orderId}`,{headers:{Authorization:`Bearer ${token}`,'ngrok-skip-browser-warning':'abc'}})
             .then(response => response.json())
             .then(data => {
                 const order = data.order;

@@ -1,4 +1,4 @@
-export function showNotification(message) {
+ function showNotification(message) {
     // Save the message in sessionStorage
     sessionStorage.setItem('notificationMessage', message);
 
@@ -6,7 +6,7 @@ export function showNotification(message) {
     displayNotification(message);
 }
 
-export function displayNotification(message) {
+function displayNotification(message) {
     // Check if the banner already exists, if not, create one
     let banner = document.querySelector('.notification-banner');
     if (!banner) {

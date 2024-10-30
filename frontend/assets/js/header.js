@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const shopDropdownContainer = document.getElementById("shopDropdownContainer");
 
     // Fetch categories and build dropdown dynamically
-    fetch("https://improved-ghastly-midge.ngrok-free.app/api/categories",{headers:{'ngrok-skip-browser-warning':'abc'}})
+    fetch("http://localhost:9002/api/categories",{headers:{'ngrok-skip-browser-warning':'abc'}})
         .then(response => response.json())
         .then(categories => {
             // Initialize dropdown structure

@@ -151,7 +151,7 @@
 
         if (productId) {
             // Fetch product data
-            const productResponse = await fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`,{headers:{'ngrok-skip-browser-warning':'abc'}});
+            const productResponse = await fetch(`http://localhost:9002/admins/products/${productId}`,{headers:{'ngrok-skip-browser-warning':'abc'}});
             const productData = await productResponse.json();
             populateProductForm(productData);
 
@@ -159,7 +159,7 @@
             window.subCategoryId = productData.subCategoryId;
             window.productId = productData.id;
             window.SpecID = productData.productSpecs.id;
-            const specsResponse = await fetch(`https://improved-ghastly-midge.ngrok-free.app/api/subcategories/${subCategoryId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}});
+            const specsResponse = await fetch(`http://localhost:9002/api/subcategories/${subCategoryId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}});
             const specsData = await specsResponse.json();
             createDynamicSpecFields(specsData.subCategorySpecification.specs, productData.productSpecs);
         }
@@ -247,7 +247,7 @@
             productSpecs: productSpecsDTO
         };
 
-         fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`, {
+         fetch(`http://localhost:9002/admins/products/${productId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

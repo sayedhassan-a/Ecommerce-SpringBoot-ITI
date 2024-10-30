@@ -33,7 +33,7 @@ function loadCartItems() {
         calculateTotalPrice();
     }
     else{
-        fetch('https://improved-ghastly-midge.ngrok-free.app/api/v1/carts',{
+        fetch('http://localhost:9002/api/v1/carts',{
             method:"GET",
             headers:{
                 Authorization: "Bearer "+token,
@@ -168,7 +168,7 @@ function updateQuantity(itemId, quantity) {
         cartItems = JSON.parse(cartItems);
         const item = cartItems.find(item => item.product.id === itemId);
         $.ajax({
-                   url: `https://improved-ghastly-midge.ngrok-free.app/api/products/${item.product.id}/stock`, // Servlet URL/
+                   url: `http://localhost:9002/api/products/${item.product.id}/stock`, // Servlet URL/
                    type: 'GET',
                     headers:{'ngrok-skip-browser-warning':'abc'},
                    success: function(response) {
@@ -206,7 +206,7 @@ function updateQuantity(itemId, quantity) {
     else {
         // Make the asynchronous request to the server
         $.ajax({
-                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts`, // Servlet URL
+                   url: `http://localhost:9002/api/v1/carts`, // Servlet URL
                    type: 'POST',
                    data: JSON.stringify({
                            productId: itemId,
@@ -257,7 +257,7 @@ function removeItem(itemId, action) {
     else {
         // Make the asynchronous request to the server
         $.ajax({
-                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts`, // Servlet URL
+                   url: `http://localhost:9002/api/v1/carts`, // Servlet URL
                    type: 'POST',
                    data: JSON.stringify({
                        productId: itemId,

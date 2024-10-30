@@ -33,7 +33,7 @@ function displayShop() {
                                 <span class="dropdown-item dropdown-toggle">${category.name}</span>
                                 <div class="dropdown-menu">
                                     ${category.subCategories.map(subCat => `
-                                        <a class="dropdown-item" href="category.html?sub=${subCat.id}">${subCat.name}</a>
+                                        <a class="dropdown-item" href="/web/category.html?sub=${subCat.id}">${subCat.name}</a>
                                     `).join('')}
                                 </div>
                             </div>

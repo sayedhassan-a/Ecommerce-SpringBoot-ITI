@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem('selectedFilters', JSON.stringify(filters));
 
         // Redirect to the target URL without adding parameters in the URL
-        window.location.href = 'category.html';
+        window.location.href = '/web/category.html';
     }
 
     // On page load, check if there are saved filters and apply them

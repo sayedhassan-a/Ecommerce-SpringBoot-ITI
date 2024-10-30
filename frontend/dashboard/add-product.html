@@ -208,7 +208,7 @@
             async function sendForm() {
                 const productDto = {
                     name: document.getElementById("name").value,
-                    price: parseFloat(document.getElementById("price").value),
+                    price: parseFloat(document.getElementById("price").value) * 100,
                     description: document.getElementById("description").value,
                     stock: parseInt(document.getElementById("stock").value),
                     images: imageUrls, // Primary image if needed

@@ -151,7 +151,11 @@
 
         if (productId) {
             // Fetch product data
-            const productResponse = await fetch(`http://localhost:9002/admins/products/${productId}`,{headers:{'ngrok-skip-browser-warning':'abc'}});
+            var token = localStorage.getItem("adminToken");
+            const productResponse = await fetch(`http://localhost:9002/admins/products/${productId}`,{
+                headers:{
+                    Authorization:`Bearer ${token}`,
+                    'ngrok-skip-browser-warning':'abc'}});
             const productData = await productResponse.json();
             populateProductForm(productData);
 
@@ -159,7 +163,7 @@
             window.subCategoryId = productData.subCategoryId;
             window.productId = productData.id;
             window.SpecID = productData.productSpecs.id;
-            const specsResponse = await fetch(`http://localhost:9002/api/subcategories/${subCategoryId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}});
+            const specsResponse = await fetch(`http://localhost:9002/api/subcategories/${subCategoryId}/specifications`,{headers:{Authorization:`Bearer ${token}`,'ngrok-skip-browser-warning':'abc'}});
             const specsData = await specsResponse.json();
             createDynamicSpecFields(specsData.subCategorySpecification.specs, productData.productSpecs);
         }
@@ -246,10 +250,11 @@
             subCategoryId: window.subCategoryId,
             productSpecs: productSpecsDTO
         };
-
+        var token = localStorage.getItem("adminToken");
          fetch(`http://localhost:9002/admins/products/${productId}`, {
             method: "PUT",
             headers: {
+                Authorization:`Bearer ${token}`,
                 "Content-Type": "application/json",
                 'ngrok-skip-browser-warning':'abc'
             },

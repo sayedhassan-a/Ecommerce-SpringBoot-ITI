@@ -113,7 +113,7 @@
 
         /* Main Content Area */
         .main-content {
-            margin-left: 80px; /* Initial space for collapsed sidebar */
+            margin-left: 100px; /* Initial space for collapsed sidebar */
             padding: 2rem;
             transition: margin-left 0.3s ease, width 0.3s ease;
             width: calc(100% - 80px); /* Width accounting for collapsed sidebar */
@@ -129,7 +129,6 @@
 
         /* Section Gap */
         .section_gap {
-            margin: 20px 0;
             padding: 20px;
             border-radius: 8px;
             background: #2a2a3a; /* Dark background for section gaps */
@@ -222,10 +221,12 @@
 
 <body>
 <aside class="sidebar">
-    <div class="logo">
-        <img src="../assets/img/logo4.png" alt="Logo" class="expand"> <!-- Image when expanded -->
-        <img src="image2.png" alt="Logo" class="collapsed"> <!-- Image when collapsed -->
-    </div>
+    <a href="/dashboard/list-product.html">
+        <div class="logo">
+            <img src="../assets/img/logo4.png" alt="Logo" class="expand"> <!-- Image when expanded -->
+            <img src="image2.png" alt="Logo" class="collapsed"> <!-- Image when collapsed -->
+        </div>
+    </a>
     <nav>
         <ul>
             <li><a href="/dashboard/list-customer.html"><i class="fas fa-address-book"></i><span style="margin-left: 10px;">Customers</span></a></li>
@@ -235,7 +236,7 @@
     </nav>
 </aside>
 
-<section class="container section_gap">
+<section class="main-content container section_gap">
     <br>
     <br>
     <h3>Customer List</h3>

@@ -169,12 +169,14 @@
         // Get customer ID from URL
         const customerId = getQueryParameter('id');
         console.log("Customer ID:", customerId);
+        var token = localStorage.getItem("adminToken");
         if (customerId) {
             // Fetch customer details using AJAX or Fetch API
             $.ajax({
                 url: `http://localhost:9002/customers/${customerId}`, // Adjust the endpoint as necessary
                 type: "GET",
                 headers:{
+                    Authorization:`Bearer ${token}`,
                     'ngrok-skip-browser-warning':'abc'
                 },
                 success: function(customer) {

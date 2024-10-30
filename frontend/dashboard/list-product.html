@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
 
-    <script src="../assets/js/forbiddenAdmin.js"></script>
+    <!--<script src="../assets/js/forbiddenAdmin.js"></script>-->
 
     <link rel="stylesheet" href="../assets/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -14,6 +14,73 @@
     <link rel="stylesheet" href="../assets/css/custom.css">
     <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
     <style>
+
+
+
+
+        /* Container styling */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #f5f5f5;
+        }
+
+        /* Search input field styling */
+        .search-container input[type="text"] {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            border-radius: 50px 0 0 50px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Placeholder text color */
+        .search-container input::placeholder {
+            color: #888;
+        }
+
+        /* Search button styling */
+        .search-container button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 50px 50px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Icon color */
+        .search-container button i {
+            color: white;
+        }
+
+        /* Hover effect for the button */
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+
+
+        .product-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
         body {
             display: flex;
             margin: 0;
@@ -265,6 +332,17 @@
                 <button class="btn btn-success" onclick="window.location.href='add-product.html'">Add Product</button>
             </span>
 
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search products..." />
+                <button onclick="updateKeyword(); searchProducts();">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+            <div id="resultsContainer"></div>
+
+
             <!-- Product Grid -->
             <div class="grid" id="productGrid">
                 <!-- Product cards will be inserted here dynamically -->
@@ -287,7 +365,9 @@
 
     <script>
         let currentPage = 0;
-        const pageSize = 10;
+        const pageSize = 12;
+        var flag =false ;
+        var keyword="";
 
         var token = localStorage.getItem("adminToken")
         // Confirm delete action
@@ -299,7 +379,7 @@
         }
         // Function to delete the product
         function deleteProduct(productId) {
-            fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`, {
+            fetch(`http://localhost:9002/admins/products/${productId}`, {
                 method: 'DELETE',
                 headers:{
                     Authorization: `Bearer ${token}`,
@@ -315,7 +395,8 @@
             });
         }
         function fetchProducts(page, size) {
-            const url = `https://improved-ghastly-midge.ngrok-free.app/admins/products?page=${page}&size=${size}`;
+            flag=false;
+            const url = `http://localhost:9002/admins/products?page=${page}&size=${size}`;
             fetch(url, {
                 method: 'GET',
                 headers:{
@@ -336,16 +417,22 @@
         function renderProducts(products) {
             const productGrid = document.getElementById('productGrid');
             productGrid.innerHTML = ''; // Clear previous products
+
+            if (products.length === 0) {
+                productGrid.innerHTML = "<p>No products found.</p>";
+                return;
+            }
+
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.className = 'card';
                 productCard.innerHTML = `
-                        <h5>${product.name}</h5>
-                        <p>Price: ${parseFloat(product.price)/100} EGP</p>
-                        <p class="truncate-by-height">${product.description}</p>
-                        <button class="btn btn-danger" onclick="confirmDelete('${product.id}')">Delete</button>
-                        <button class="btn btn-primary" onclick="window.location.href='update-product.html?productId=${product.id}'">Update</button>
-                    `;
+            <h5>${product.name}</h5>
+            <p>Price: ${parseFloat(product.price) / 100} EGP</p>
+            <p class="truncate-by-height">${product.description}</p>
+            <button class="btn btn-danger" onclick="confirmDelete('${product.id}')">Delete</button>
+            <button class="btn btn-primary" onclick="window.location.href='update-product.html?productId=${product.id}'">Update</button>
+        `;
                 productGrid.appendChild(productCard);
             });
         }
@@ -448,14 +535,40 @@
         // Load Page Function
         function loadPage(pageNumber) {
             currentPage = pageNumber;
-            fetchProducts(pageNumber,pageSize);
+            if(!flag)fetchProducts(pageNumber,pageSize);
+            else  searchProducts(pageNumber, pageSize);
+
         }
         document.addEventListener('DOMContentLoaded', function () {
             fetchProducts(currentPage, pageSize); // Initial fetch for products
 
         });
 
+
+        function searchProducts(page=0, size=12) {
+            flag=true;
+
+            fetch(`http://localhost:9002/admins/products/search?keyword=${encodeURIComponent(keyword)}&page=${page}&size=${size}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderProducts(data.content);
+                    createPagination(data.page.totalPages, data.page.number);
+                })
+                .catch(error => console.error("Error fetching search results:", error));
+        }
+
+        function updateKeyword(){
+            keyword = document.getElementById('searchInput').value;
+        }
+
     </script>
+
+
 </body>
 
 

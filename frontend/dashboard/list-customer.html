@@ -57,7 +57,7 @@
 
         if (token) {
             $.ajax({
-                url: `https://improved-ghastly-midge.ngrok-free.app/customers?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+                url: `http://localhost:9002/customers?pageNumber=${pageNumber}&pageSize=${pageSize}`,
                 type: "GET",
                 headers: {
                     "Authorization": "Bearer " + token,

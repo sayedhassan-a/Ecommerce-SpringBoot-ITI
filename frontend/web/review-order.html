@@ -155,7 +155,7 @@
         // Replace 'orderId' with the actual order ID you want to fetch
         var token = localStorage.getItem("token");
         // Fetch the order data from the endpoint
-        fetch(`https://improved-ghastly-midge.ngrok-free.app/api/v1/orders/customer/${orderId}`,{
+        fetch(`http://localhost:9002/api/v1/orders/customer/${orderId}`,{
             method:"GET",
             headers:{
                 Authorization: "Bearer "+token,

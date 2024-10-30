@@ -1,8 +1,5 @@
 package org.example.ecommerce.controllers;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.example.ecommerce.dtos.AddressDto;
@@ -13,22 +10,14 @@ import org.example.ecommerce.mappers.AddressMapper;
 import org.example.ecommerce.models.Address;
 import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.models.NewPassword;
-import org.example.ecommerce.models.PasswordChangeRequest;
 import org.example.ecommerce.services.AuthService;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
 import org.example.ecommerce.system.StatusCode;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

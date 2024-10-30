@@ -172,7 +172,11 @@ public class CustomerController {
     public Result checkInfo() {
         String email = authService.extractEmail();
 
-        customerService.isCustomerInfoComplete(email);
+        List<String> validationErrors = customerService.isCustomerInfoComplete(email);
+
+        if (!validationErrors.isEmpty()) {
+            return new Result(false, StatusCode.INVALID_ARGUMENT, "Customer information is incomplete", validationErrors);
+        }
 
         return new Result(true, StatusCode.SUCCESS, "Customer information is complete", null);
     }

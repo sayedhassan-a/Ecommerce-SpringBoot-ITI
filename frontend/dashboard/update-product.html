@@ -168,7 +168,7 @@
     // Populate form with existing product details
     function populateProductForm(data) {
         document.getElementById("productName").value = data.name;
-        document.getElementById("productPrice").value = data.price;
+        document.getElementById("productPrice").value = parseFloat(data.price)/100;
         document.getElementById("productDescription").value = data.description;
         document.getElementById("productStock").value = data.stock;
         document.getElementById("salePercentage").value = data.salePercentage;
@@ -238,7 +238,7 @@
         const jsonPayload = {
             id: window.productId,
             name: formData.get("name"),
-            price: formData.get("price"),
+            price: parseInt(formData.get("price"))*100,
             description: formData.get("description"),
             stock: formData.get("stock"),
             salePercentage: formData.get("salePercentage"),

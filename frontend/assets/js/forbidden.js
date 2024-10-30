@@ -38,6 +38,6 @@ function checkAuth() {
             });
     }
     else{
-        location.href = "/web/index.html";
+        location.href = "/web/auth/login.html";
     }
 }

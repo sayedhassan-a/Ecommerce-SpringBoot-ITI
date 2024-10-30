@@ -49,6 +49,7 @@ public class PaymentService {
     }
 
     public String generateLink(PaymentDTO paymentDTO){
+        System.out.println("PaymentService.generateLink");
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", PAYMENT_SECRET_KEY);
         headers.set("Content-Type", "application/json");
@@ -69,7 +70,7 @@ public class PaymentService {
 
         JsonObject response = JsonParser.parseString(responseEntity.getBody()).getAsJsonObject();
         String clientSecret = response.get("client_secret").getAsString();
-
+        System.out.println("secret: " + clientSecret);
         return PAYMENT_CHECKOUT_URL
                 + "?" + "publicKey=" + PAYMENT_PUBLIC_KEY
                 + "&" + "clientSecret=" + clientSecret;
@@ -78,6 +79,7 @@ public class PaymentService {
 
     @Transactional
     public void handleTransactionStatus(TransactionDTO transactionDTO){
+        System.out.println("PaymentService.handleTransactionStatus");
         Long orderId =
                 transactionDTO.getObj().getPayment_key_claims().getExtra().getOrder_id();
 
@@ -90,6 +92,7 @@ public class PaymentService {
 
     @Transactional
     public void saveToken(TokenDTO tokenDTO){
+        System.out.println("PaymentService.saveToken");
         CreditCard creditCard = new CreditCard();
         creditCard.setToken(tokenDTO.getObj().getToken());
         creditCard.setMaskedPan(tokenDTO.getObj().getMaskedPan());

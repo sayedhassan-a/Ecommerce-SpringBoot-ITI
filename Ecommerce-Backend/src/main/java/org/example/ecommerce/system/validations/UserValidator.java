@@ -31,6 +31,9 @@ public class UserValidator {
 
     public List<String> vaildateCheckout(Customer customer) {
         List<String> errors = new ArrayList<>();
+
+
+
         errors.addAll(validateAddress(customer.getAddress()));
 
         if(customer.getFirstName() == null || customer.getFirstName().trim().isEmpty()) {
@@ -57,6 +60,11 @@ public class UserValidator {
 
     private List<String> validateAddress(Address address) {
         List<String> errors = new ArrayList<>();
+        if(address == null) {
+            errors.add("Address cannot be empty.");
+            return errors;
+        }
+
         if(address.getAddressOne() == null || address.getAddressOne().trim().isEmpty()) {
             errors.add("Address line 1 cannot be empty.");
         }

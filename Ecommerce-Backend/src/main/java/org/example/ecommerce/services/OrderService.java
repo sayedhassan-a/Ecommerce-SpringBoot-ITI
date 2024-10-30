@@ -135,7 +135,8 @@ public class OrderService {
     @Transactional
     public Optional<OrderResponseDTO> initOrder(OrderRequestDTO orderRequestDTO) {
 
-
+        System.out.println("inside initOrder " + SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal());
 
         //Retrieve current customer
         Customer customer =
@@ -181,8 +182,13 @@ public class OrderService {
                                 * orderItem.getQuantity())
                 .reduce(Integer::sum)
                 .orElse(0));
+
+        System.out.println("final order before save: " + order);
+
         Order saved = orderRepository.save(order);
         OrderResponseDTO orderResponseDTO = orderMapper.toDTO(saved);
+
+        System.out.println("final order after save: " + saved);
 
         //Emptying Cart
         cartItemService.emptyCart(customer.getId());
@@ -193,6 +199,8 @@ public class OrderService {
             String paymentLink = paymentService.generateLink(paymentDTO);
             orderResponseDTO.setPaymentLink(paymentLink);
         }
+
+        System.out.println("final orderResponseDTO: " + orderResponseDTO);
 
         return Optional.ofNullable(orderResponseDTO);
     }

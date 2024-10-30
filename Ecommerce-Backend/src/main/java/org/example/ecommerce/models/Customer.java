@@ -29,7 +29,6 @@ public class Customer extends User{
 
     private String phone;
 
-//    @NotNull
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 

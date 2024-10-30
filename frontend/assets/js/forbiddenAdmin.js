@@ -24,7 +24,7 @@ function checkAdminAuth() {
             })
             .then(data=>{
                 console.log(data)
-                if (data.data != "ROLE_USER") {
+                    if (data.data == "ROLE_ADMIN") {
 
                 }
                 else {

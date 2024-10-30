@@ -293,7 +293,7 @@
                 <th>Date</th>
                 <th>Total Amount (EGP)</th>
                 <th>Payment Method</th>
-                <th>Action</th>
+                <th>State</th>
               </tr>
             </thead>
             <tbody id="ordersTableBody">
@@ -334,7 +334,9 @@
 
       const response = await fetch(url, {
         method: "GET",
-        headers:{"ngrok-skip-browser-warning":"abc"}
+        headers:{
+          Authorization:`Bearer ${token}`,
+          "ngrok-skip-browser-warning":"abc"}
       });
 
       if (!response.ok) throw new Error('Network response was not ok');
@@ -364,7 +366,7 @@
 
   // Function to dynamically populate the table with orders
   function populateTable(orders) {
-    const tableBody = document.getElementById('productTableBody');
+    const tableBody = document.getElementById('ordersTableBody');
     tableBody.innerHTML = ''; // Clear the table first
 
     orders.forEach(order => {
@@ -372,10 +374,10 @@
       row.innerHTML = `
         <td>${order.id}</td>
         <td>${order.customerId}</td>
-        <td>${order.paymentMethod}</td>
-        <td>${order.totalPrice} EGP</td>
         <td>${new Date(order.date).toLocaleDateString()}</td>
-        <td>${order.status}</td>
+        <td>${order.totalPrice} EGP</td>
+        <td>${order.paymentMethod}</td>
+        <td>${order.state}</td>
         <td>
           <button class="btn btn-primary" onclick="viewOrder(${order.id})">View</button>
         </td>
@@ -386,7 +388,7 @@
 
   // Function to handle viewing a specific order (redirect)
   function viewOrder(orderId) {
-    window.location.href = `/dashboard/view-order.html?orderId=${orderId}`;
+    window.location.href = `/dashboard/review-order.html?orderId=${orderId}`;
   }
 
   // Populate pagination

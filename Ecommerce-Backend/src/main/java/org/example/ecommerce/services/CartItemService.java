@@ -48,7 +48,7 @@ public class CartItemService {
         }
 
         if(product.getStock() < quantity) {
-            throw new BadRequestException("Available quantity is not enough");
+            quantity = product.getStock();
         }
 
         CartKey cartKey = new CartKey(customer, product);

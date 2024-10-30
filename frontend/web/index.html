@@ -159,7 +159,7 @@
                                     <div class="carousel-item active">
                                         <div class="row justify-content-center align-items-center" style="height: 100%;">
                                             <div class="col-sm-12 text-center">
-                                                <h1 class="banner_taital">Get Start <br>Your favorite shopping</h1>
+                                                <h1 class="banner_taital">Discover the best deals <br>Start shopping now</h1>
                                                 <div class="buynow_bt"><a href="#" class="buy-now-btn">Buy Now</a></div>
                                             </div>
                                         </div>
@@ -308,7 +308,7 @@
       <i class="fas fa-chevron-left slider-icon prev-icon" onclick="slide('latest-products-slider', 'prev')"></i>
       <i class="fas fa-chevron-right slider-icon next-icon" onclick="slide('latest-products-slider', 'next')"></i>
     </div>
-  
+
     <div class="product-section on-sale">
       <h2>On Sale</h2>
       <div class="product-slider" id="on-sale-slider">
@@ -317,7 +317,7 @@
       <i class="fas fa-chevron-left slider-icon prev-icon" onclick="slide('on-sale-slider', 'prev')"></i>
       <i class="fas fa-chevron-right slider-icon next-icon" onclick="slide('on-sale-slider', 'next')"></i>
     </div>
-  
+
     <div class="product-section flash-sale">
       <h2>Flash Sale</h2>
       <div class="product-slider" id="flash-sale-slider">
@@ -326,7 +326,7 @@
       <i class="fas fa-chevron-left slider-icon prev-icon" onclick="slide('flash-sale-slider', 'prev')"></i>
       <i class="fas fa-chevron-right slider-icon next-icon" onclick="slide('flash-sale-slider', 'next')"></i>
     </div>
-  
+
   
     <section class="brand-area section_gap">
       <div class="container">
@@ -398,7 +398,7 @@
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/loadHeader.js"></script>
     <script src="../assets/js/loading.js"></script>
-    
+
     <script>
       async function fetchAndDisplayProducts(url, containerId) {
     try {
@@ -406,7 +406,7 @@
         const data = await response.json();
         const products = data.content || data; // Adjusts for "content" key if present
         const container = document.getElementById(containerId);
-        
+
         products.forEach(product => {
             // Check if product.image is null, and if so, use the first image in productImages
             const imageUrl = product.image || (product.productImages && product.productImages.length > 0 ? product.productImages[0].url : "");

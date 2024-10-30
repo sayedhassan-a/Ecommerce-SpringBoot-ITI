@@ -116,6 +116,7 @@ public class CustomerService implements UserDetailsService {
         // Validate the new password
         List<String> validationErrors = userValidator.validateChangePassword(newPassword);
         if (!validationErrors.isEmpty()) {
+            System.out.println("Errors: " + validationErrors.get(0));
             throw new ValidationException(validationErrors);
         }
 

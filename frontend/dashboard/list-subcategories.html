@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel="stylesheet" href="../assets/css/popUp.css">
+    <script src="../assets/js/popUp.js"></script>
     <style>
         body {
             display: flex;
@@ -193,7 +195,7 @@
                     })
                     .catch(error => {
                         console.error('Error fetching categories:', error);
-                        alert('An error occurred while fetching categories.');
+                        showNotification('An error occurred while fetching categories.');
                     });
             }
 
@@ -221,7 +223,7 @@
                     })
                     .catch(error => {
                         console.error('Error fetching subcategories:', error);
-                        alert('An error occurred while fetching subcategories.');
+                        showNotification('An error occurred while fetching subcategories.');
                     });
             }
 

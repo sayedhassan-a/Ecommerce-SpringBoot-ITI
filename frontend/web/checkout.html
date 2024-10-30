@@ -30,6 +30,8 @@
         <link rel="stylesheet" href="../assets/css/bootstrap.css">
         <link rel="stylesheet" href="../assets/css/main.css">
         <link rel="stylesheet" href="../assets/css/style.css" />
+        <link rel="stylesheet" href="../assets/css/popUp.css">
+        <script src="../assets/js/popUp.js"></script>
         <style>
             .payment-options {
                 display: flex;
@@ -139,7 +141,7 @@
 
                         console.log(data.code)
                         if (data.code != 200) {
-                            alert('Complete All info');
+                            showNotification('Complete All info');
 
                             location.href = 'profile.html';
                         } else {

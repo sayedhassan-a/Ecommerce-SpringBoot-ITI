@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../assets/css/all.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/popUp.css">
+    <script src="../assets/js/popUp.js"></script>
     <style>
         /* Basic page and container styling */
         body {
@@ -413,10 +415,10 @@
             body: JSON.stringify(jsonPayload)
         }).then(response => {
             if (response.ok) {
-                alert("Product updated successfully!");
+                showNotification("Product updated successfully!");
                 window.location.href = "list-product.html";
             } else {
-                alert("Failed to update product.");
+                showNotification("Failed to update product.");
             }
         });
     }

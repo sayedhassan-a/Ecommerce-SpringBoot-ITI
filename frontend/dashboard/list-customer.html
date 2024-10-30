@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/all.css">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/popUp.css">
+    <script src="../assets/js/popUp.js"></script>
+
     <style>
         body {
             display: flex;
@@ -339,14 +342,14 @@
                     },
                     error: function(xhr) {
                         if (xhr.status === 401) {
-                            alert("Your session has expired. Please log in again.");
+                            showNotification("Your session has expired. Please log in again.");
                             window.location.href = '/web/auth/login.html';
                         }
                         console.error("Failed to fetch customer data", xhr);
                     }
                 });
             } else {
-                alert("No token found. Please log in.");
+                showNotification("No token found. Please log in.");
                 window.location.href = '/web/auth/login.html';
             }
         }

@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
     <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/css/popUp.css">
+    <script src="../assets/js/popUp.js"></script>
     <style>
 
 
@@ -399,10 +401,10 @@
                 }
             }).then(response => {
                 if (response.ok) {
-                    alert('Product deleted successfully');
+                    showNotification('Product deleted successfully');
                     fetchProducts(currentPage, pageSize); // Refresh product list
                 } else {
-                    alert('Failed to delete the product');
+                    showNotification('Failed to delete the product');
                 }
             });
         }
@@ -422,7 +424,7 @@
                 })
                 .catch(error => {
                     console.error('Error fetching products:', error);
-                    alert('An error occurred while fetching products.');
+                    showNotification('An error occurred while fetching products.');
                 });
         }
 

@@ -156,7 +156,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 <script src="../assets/js/gmaps.min.js"></script>
 <script src="../assets/js/main.js"></script>
-<script src="../assets/js/loadAdminHeader.js"></script>
+
 
 <script>
     $(document).ready(function() {
@@ -172,8 +172,11 @@
         if (customerId) {
             // Fetch customer details using AJAX or Fetch API
             $.ajax({
-                url: `http://localhost:9002/customers/${customerId}`, // Adjust the endpoint as necessary
+                url: `https://improved-ghastly-midge.ngrok-free.app/customers/${customerId}`, // Adjust the endpoint as necessary
                 type: "GET",
+                headers:{
+                    'ngrok-skip-browser-warning':'abc'
+                },
                 success: function(customer) {
                     console.log("Customer details:", customer);
                     customer = customer.data;

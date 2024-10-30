@@ -91,7 +91,7 @@
 					<div class="col-md-12 form-group">
 						<div id="g_id_onload"
 							 data-client_id="516688200027-a5ouf65hcr858rf3lse81mg6q4lffg0h.apps.googleusercontent.com"
-							 data-login_uri="http://localhost:9002/oauth2/authorization/google"
+							 data-login_uri="https://improved-ghastly-midge.ngrok-free.app/oauth2/authorization/google"
 							 data-auto_prompt="false">
 						</div>
 						<div class="g_id_signin"
@@ -122,13 +122,17 @@
 		console.log('3 form submitted');
 
 		$.ajax({
-			url: 'http://localhost:9002/login',
+				url: 'https://improved-ghastly-midge.ngrok-free.app/login',
 			type: 'POST',
+			headers:{
+				'ngrok-skip-browser-warning':'abc'
+			},
 			contentType: 'application/json',
 			data: JSON.stringify({
 				email: $('#email').val(),
 				password: $('#password').val(),
-			}),
+			})
+				   ,
 			success: function(response, status, xhr) {
 				// Capture the token from the response headers or body
 				const token = response.data.token;  // Adjust key as per your setup, e.g., 'Authorization'

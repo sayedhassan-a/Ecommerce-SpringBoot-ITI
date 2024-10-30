@@ -157,6 +157,7 @@ $(document).ready(function(){
                 $.ajax({
                     url: 'booking.php', // form action url
                     type: 'POST', // form submit method get/post
+                    headers:{'ngrok-skip-browser-warning':'abc'},
                     dataType: 'html', // request type html/json/xml
                     data: form.serialize(), // serialize form data
                     beforeSend: function() {

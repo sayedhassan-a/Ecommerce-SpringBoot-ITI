@@ -315,9 +315,10 @@
 
     // Function to fetch credit cards
     function fetchCreditCards() {
-      fetch("http://localhost:9002/api/v1/credit-card", {
+      fetch("https://improved-ghastly-midge.ngrok-free.app/api/v1/credit-card", {
         headers: {
-          "Authorization": "Bearer " + token
+          "Authorization": "Bearer " + token,
+          'ngrok-skip-browser-warning':'abc'
         }
       }).then(response => {
         if (response.ok) return response.json();
@@ -348,10 +349,11 @@
 
     // Function to delete a credit card
     function deleteCreditCard(cardId) {
-      fetch(`http://localhost:9002/api/v1/credit-card/${cardId}`, {
+      fetch(`https://improved-ghastly-midge.ngrok-free.app/api/v1/credit-card/${cardId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": "Bearer " + token
+          "Authorization": "Bearer " + token,
+          'ngrok-skip-browser-warning':'abc'
         }
       }).then(response => {
         if (response.ok) {
@@ -371,10 +373,11 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:9002/customers/profile",
+        url: "https://improved-ghastly-midge.ngrok-free.app/customers/profile",
         type: "GET",
         headers: {
-          "Authorization": "Bearer " + token
+          "Authorization": "Bearer " + token,
+          'ngrok-skip-browser-warning':'abc'
         },
         success: function(data) {
           console.log(data);
@@ -551,11 +554,12 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:9002/customers/profile",
+        url: "https://improved-ghastly-midge.ngrok-free.app/customers/profile",
         type: "PUT",
         headers: {
           "Authorization": "Bearer " + token,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'ngrok-skip-browser-warning':'abc'
         },
         data: JSON.stringify(data),
         success: function(response) {
@@ -583,11 +587,13 @@
     const newPassword = $('#password').val();
 
     $.ajax({
-      url: "http://localhost:9002/customers/update-password",
+      url: "https://improved-ghastly-midge.ngrok-free.app/customers/update-password",
       type: "PUT",
       contentType: "application/json",
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem('token')
+        "Authorization": "Bearer " + localStorage.getItem('token'),
+        'ngrok-skip-browser-warning':'abc'
+
       },
       data: JSON.stringify({ newPassword: newPassword }),
       success: function (response) {

@@ -155,7 +155,7 @@
         // Replace 'orderId' with the actual order ID you want to fetch
         var token = localStorage.getItem("adminToken");
         // Fetch the order data from the endpoint
-        fetch(`http://localhost:9002/api/v1/orders/admin/${orderId}`)
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/api/v1/orders/admin/${orderId}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
             .then(response => response.json())
             .then(data => {
                 const order = data.order;
@@ -188,7 +188,5 @@
 
     })
 </script>
-<script src="../assets/js/loadAdminHeader.js"></script>
-<script src="../assets/js/loadingAdminHeaderContent.js"></script>
 </body>
 </html>

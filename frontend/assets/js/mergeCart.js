@@ -12,12 +12,13 @@ function mergeCart(){
             };
         })
         $.ajax({
-                   url: `http://localhost:9002/api/v1/carts`, // Servlet URL
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts`, // Servlet URL
                    type: 'PUT',
                    data: JSON.stringify(cart),
                    headers: {
                        Authorization: "Bearer "+token,
-                       'Content-Type': "application/json"
+                       'Content-Type': "application/json",
+                       'ngrok-skip-browser-warning':'abc'
                    },
                    success: function(response) {
                    },

@@ -174,8 +174,8 @@
             fetchCategories(); // Initial fetch for categories
 
             function fetchCategories() {
-                const url = 'http://localhost:9002/api/categories';
-                fetch(url)
+                const url = 'https://improved-ghastly-midge.ngrok-free.app/api/categories';
+                fetch(url,{headers:{'ngrok-skip-browser-warning':'abc'}})
                     .then(response => response.json())
                     .then(data => {
                         renderCategories(data); // Pass the full category data

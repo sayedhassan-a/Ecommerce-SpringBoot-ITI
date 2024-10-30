@@ -299,10 +299,11 @@
         }
         // Function to delete the product
         function deleteProduct(productId) {
-            fetch(`http://localhost:9002/admins/products/${productId}`, {
+            fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`, {
                 method: 'DELETE',
                 headers:{
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'ngrok-skip-browser-warning':'abc'
                 }
             }).then(response => {
                 if (response.ok) {
@@ -314,11 +315,12 @@
             });
         }
         function fetchProducts(page, size) {
-            const url = `http://localhost:9002/admins/products?page=${page}&size=${size}`;
+            const url = `https://improved-ghastly-midge.ngrok-free.app/admins/products?page=${page}&size=${size}`;
             fetch(url, {
                 method: 'GET',
                 headers:{
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'ngrok-skip-browser-warning':'abc'
                 }})
                 .then(response => response.json())
                 .then(data => {

@@ -12,10 +12,11 @@ function checkAuth() {
     if (token) {
         console.log("Validating user token...");
 
-        fetch(`http://localhost:9002/login/validate-token`, {
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/login/validate-token`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'ngrok-skip-browser-warning':'abc'
             }
         })
             .then(response => {

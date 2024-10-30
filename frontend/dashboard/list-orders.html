@@ -310,7 +310,6 @@
 <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
 <script src="../assets/js/vendor/bootstrap.min.js"></script>
 <script src="../assets/js/main.js"></script>
-<script src="../assets/js/loadAdminHeader.js"></script>
 
 <script>
   var token = localStorage.getItem("adminToken");
@@ -318,7 +317,7 @@
   // Function to fetch orders from the API and populate the table
   async function loadOrders(page = 0, size = 10, filters = {}) {
     try {
-      let url = `http://localhost:9002/api/v1/orders/admin?page=${page}&size=${size}`;
+      let url = `https://improved-ghastly-midge.ngrok-free.app/api/v1/orders/admin?page=${page}&size=${size}`;
 
       // Append filter parameters if provided
       if (filters.startDate) url += `&startDate=${filters.startDate}T00:00`;
@@ -335,6 +334,7 @@
 
       const response = await fetch(url, {
         method: "GET",
+        headers:{"ngrok-skip-browser-warning":"abc"}
       });
 
       if (!response.ok) throw new Error('Network response was not ok');
@@ -404,9 +404,6 @@
 
   // Initial load
   document.addEventListener('DOMContentLoaded', () => loadOrders());
-  document.getElementById('resetButton').addEventListener('click', function() {
-    document.getElementById('filterForm').reset();
-  });
 </script>
 </body>
 </html>

@@ -151,7 +151,7 @@
 
         if (productId) {
             // Fetch product data
-            const productResponse = await fetch(`http://localhost:9002/admins/products/${productId}`);
+            const productResponse = await fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`,{headers:{'ngrok-skip-browser-warning':'abc'}});
             const productData = await productResponse.json();
             populateProductForm(productData);
 
@@ -159,7 +159,7 @@
             window.subCategoryId = productData.subCategoryId;
             window.productId = productData.id;
             window.SpecID = productData.productSpecs.id;
-            const specsResponse = await fetch(`http://localhost:9002/api/subcategories/${subCategoryId}/specifications`);
+            const specsResponse = await fetch(`https://improved-ghastly-midge.ngrok-free.app/api/subcategories/${subCategoryId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}});
             const specsData = await specsResponse.json();
             createDynamicSpecFields(specsData.subCategorySpecification.specs, productData.productSpecs);
         }
@@ -247,10 +247,11 @@
             productSpecs: productSpecsDTO
         };
 
-         fetch(`http://localhost:9002/admins/products/${productId}`, {
+         fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning':'abc'
             },
             body: JSON.stringify(jsonPayload)
         }).then(response => {
@@ -267,6 +268,5 @@
 <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
 <script src="../assets/js/vendor/bootstrap.min.js"></script>
 <script src="../assets/js/main.js"></script>
-<script src="../assets/js/loadAdminHeader.js"></script>
 </body>
 </html>

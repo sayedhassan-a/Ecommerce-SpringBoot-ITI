@@ -12,10 +12,11 @@ function checkAdminAuth() {
     if (token) {
         console.log("Validating user token...");
 
-        fetch(`http://localhost:9002/login/validate-token`, {
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/login/validate-token`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'ngrok-skip-browser-warning':'abc'
             }
         })
             .then(response => {
@@ -28,13 +29,13 @@ function checkAdminAuth() {
                 }
                 else {
                     localStorage.removeItem("adminToken");
-                    location.href = "/dashboard/auth/login.html";
+                    location.href = "/web/auth/login.html";
                 }
             })
             .catch(error => {
                 console.error('Error during token validation:', error);
                 localStorage.removeItem("adminToken");
-                location.href = "/dashboard/auth/login.html";
+                location.href = "/web/auth/login.html";
             });
     }
     else{

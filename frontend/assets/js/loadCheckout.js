@@ -1,11 +1,12 @@
 function loadCheckout(){
     var token = localStorage.getItem("token");
 // Fetch cart items from API
-    fetch('http://localhost:9002/api/v1/carts', {
+    fetch('https://improved-ghastly-midge.ngrok-free.app/api/v1/carts', {
         method: "GET",
         headers: {
             Authorization: "Bearer " + token,
-            'Content-Type': "application/json"
+            'Content-Type': "application/json",
+            'ngrok-skip-browser-warning':'abc'
         }
     })
         .then(response => {

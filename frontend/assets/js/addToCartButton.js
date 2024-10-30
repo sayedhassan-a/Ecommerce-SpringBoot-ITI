@@ -41,8 +41,9 @@ function handleAddItem(num, id, redirect){
             currentQuantity = quantity   + item.quantity;
         }
         $.ajax({
-                   url: `http://localhost:9002/api/products/${itemId}/stock`, // Servlet URL/
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/products/${itemId}/stock`, // Servlet URL/
                    type: 'GET',
+                    headers:{'ngrok-skip-browser-warning':'abc'},
                    success: function(response) {
                        if(response.quantity < currentQuantity){
                            //$('#err-' + itemId).text("quantity out of stock!");
@@ -67,7 +68,7 @@ function handleAddItem(num, id, redirect){
     else {
         // Make the asynchronous request to the server
         $.ajax({
-                   url: `http://localhost:9002/api/v1/carts/add`, // Servlet URL
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts/add`, // Servlet URL
                    type: 'POST',
                    data: JSON.stringify({
                                             productId: itemId,
@@ -75,7 +76,8 @@ function handleAddItem(num, id, redirect){
                                         }),
                    headers: {
                        Authorization: "Bearer "+token,
-                       'Content-Type': "application/json"
+                       'Content-Type': "application/json",
+                       'ngrok-skip-browser-warning':'abc'
                    },
                    success: function(response) {
                        alert("Item added to cart");

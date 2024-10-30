@@ -163,7 +163,7 @@
 		const id = params.get('id');
 
 		// Fetch product details using the product ID
-		$.getJSON("http://localhost:9002/api/products" + "/" + id, populate);
+		$.getJSON("https://improved-ghastly-midge.ngrok-free.app/api/products" + "/" + id, populate);
 
 
 		function populate(data, status, xhr) {

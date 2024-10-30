@@ -2,7 +2,7 @@ function addToCart(itemId, buyQuantity, action) {
                                                 // Make the asynchronous request to the server
                                                 $.ajax({
                                                     url: 'addCartItem', // Servlet URL
-                                                    type: 'POST',
+                                                    type: 'POST', headers:{'ngrok-skip-browser-warning':'abc'},
                                                     data: {
                                                         id: itemId,
                                                         quantity: buyQuantity

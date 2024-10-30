@@ -143,7 +143,7 @@
         }
 
         // Check email availability
-        fetch(`http://localhost:9002/customers/checkEmail?email=${email}`)
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/customers/checkEmail?email=${email}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
             .then(response => response.text())
             .then(responseText => {
                 if (responseText === "true") {
@@ -159,10 +159,11 @@
                         terms: document.getElementById("terms").checked
                     };
 
-                    fetch('http://localhost:9002/customers/register', {
+                    fetch('https://improved-ghastly-midge.ngrok-free.app/customers/register', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'ngrok-skip-browser-warning':'abc'
                         },
                         body: JSON.stringify(data)
                     })

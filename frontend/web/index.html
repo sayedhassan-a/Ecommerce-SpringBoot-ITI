@@ -380,7 +380,7 @@
     <script>
       async function fetchAndDisplayProducts(url, containerId) {
     try {
-        const response = await fetch(url);
+        const response = await fetch(url,{headers:{'ngrok-skip-browser-warning':'abc'}});
         const data = await response.json();
         const products = data.content || data; // Adjusts for "content" key if present
         const container = document.getElementById(containerId);
@@ -411,9 +411,9 @@
 }
 
 // Fetch products on load
-fetchAndDisplayProducts("http://localhost:9002/api/products/latest", "latest-products-slider");
-fetchAndDisplayProducts("http://localhost:9002/api/products/onsale", "on-sale-slider");
-fetchAndDisplayProducts("http://localhost:9002/api/products/flash-sale", "flash-sale-slider");
+fetchAndDisplayProducts("https://improved-ghastly-midge.ngrok-free.app/api/products/latest", "latest-products-slider");
+fetchAndDisplayProducts("https://improved-ghastly-midge.ngrok-free.app/api/products/onsale", "on-sale-slider");
+fetchAndDisplayProducts("https://improved-ghastly-midge.ngrok-free.app/api/products/flash-sale", "flash-sale-slider");
 
 // Slider navigation
 function slide(containerId, direction) {

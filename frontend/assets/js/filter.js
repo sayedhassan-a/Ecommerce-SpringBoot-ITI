@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const filterContainer = document.querySelector('.sidebar-filter .common-filter');
 
     if (subId) {
-        fetch(`http://localhost:9002/api/subcategories/${subId}/specifications`)
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/api/subcategories/${subId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}})
             .then(response => {
                 if (!response.ok) throw new Error('Failed to fetch specifications');
                 return response.json();

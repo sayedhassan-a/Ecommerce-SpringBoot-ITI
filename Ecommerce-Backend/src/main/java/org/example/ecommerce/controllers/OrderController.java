@@ -78,7 +78,7 @@ public class OrderController {
                         (String) ((Jwt) SecurityContextHolder.getContext()
                                 .getAuthentication().getPrincipal()).getClaims().get(
                                 "sub"));
-        map.put("customerId",customer.getId());
+        map.put("customerId",customer.getId()); 
         return ResponseEntity.ok(orderService.findAllBySpecs(page, size, map));
 
     }

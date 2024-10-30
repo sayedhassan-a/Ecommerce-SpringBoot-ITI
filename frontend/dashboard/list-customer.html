@@ -21,6 +21,16 @@
     <br>
     <h3>Customer List</h3>
 
+    <!-- Search Form -->
+    <form id="searchForm">
+        <div class="form-group">
+            <input type="text" id="searchEmail" class="form-control" placeholder="Search by Email">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <br>
+
     <!-- Customer Table -->
     <table class="table table-striped">
         <thead>
@@ -55,56 +65,74 @@
         const pageNumber = 0; // Replace with the current page number
         const pageSize = 10; // Number of customers per page
 
-        if (token) {
-            $.ajax({
-                url: `http://localhost:9002/customers?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-                type: "GET",
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    'ngrok-skip-browser-warning':'abc'
-                },
-                success: function(response) { // Change this line to accept the full response
-                    const customers = response.data.customers; // Access the customers from the response
-                    const currentPage = response.data.currentPage; // Access the current page
-                    const totalPages = response.data.totalPages; // Access total pages
-                    const totalItems = response.data.totalItems; // Access total items
+        function fetchCustomers(email = '') {
+            if (token) {
+                $.ajax({
+                    url: `http://localhost:9002/customers/search?email=${email}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+                    type: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        'ngrok-skip-browser-warning':'abc'
+                    },
+                    success: function(response) {
+                        const customers = response.content; // Access the customers from the response
+                        const currentPage = response.number; // Access the current page
+                        const totalPages = response.totalPages; // Access total pages
+                        const totalItems = response.totalElements; // Access total items
 
-                    // Populate the customer table
-                    $('#customerTableBody').empty();
-                    // Inside the success function for your AJAX call in list-customer.html
-                    customers.forEach(customer => {
-                        $('#customerTableBody').append(
-                            `<tr>
-            <td>${customer.Id}</td>
-            <td>${customer.firstName}</td>
-            <td>${customer.lastName}</td>
-            <td>${customer.email}</td>
-            <td>${customer.phone}</td>
-            <td>
-                <button class="btn btn-success" onclick="window.location.href='review-customer.html?id=${customer.Id}'">View</button>
-            </td>
-        </tr>`
-                        );
-                    });
+                        // Populate the customer table
+                        $('#customerTableBody').empty();
+                        customers.forEach(customer => {
+                            console.log(customer.Id);
+                            $('#customerTableBody').append(
+                                `<tr>
+                                    <td>${customer.id}</td>
+                                    <td>${customer.firstName}</td>
+                                    <td>${customer.lastName}</td>
+                                    <td>${customer.email}</td>
+                                    <td>${customer.phone}</td>
+                                    <td>
+                                        <button class="btn btn-success" onclick="window.location.href='review-customer.html?id=${customer.Id}'">View</button>
+                                    </td>
+                                </tr>`
+                            );
+                        });
 
-
-                    // Update pagination display
-                    $('#paginationInfo').text(`Page ${currentPage + 1} of ${totalPages}`);
-                },
-                error: function(xhr) {
-                    if (xhr.status === 401) {
-                        alert("Your session has expired. Please log in again.");
-                        window.location.href = '/web/auth/login.html';
+                        // Update pagination display
+                        $('#pagination').empty();
+                        for (let i = 0; i < totalPages; i++) {
+                            $('#pagination').append(
+                                `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                                    <a class="page-link" href="#" onclick="fetchCustomers('${email}', ${i})">${i + 1}</a>
+                                </li>`
+                            );
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            alert("Your session has expired. Please log in again.");
+                            window.location.href = '/web/auth/login.html';
+                        }
+                        console.error("Failed to fetch customer data", xhr);
                     }
-                    console.error("Failed to fetch customer data", xhr);
-                }
-            });
-        } else {
-            alert("No token found. Please log in.");
-            window.location.href = '/web/auth/login.html';
+                });
+            } else {
+                alert("No token found. Please log in.");
+                window.location.href = '/web/auth/login.html';
+            }
         }
-    });
 
+        // Initial fetch
+        fetchCustomers();
+
+        // Handle search form submission
+        $('#searchForm').submit(function(event) {
+            event.preventDefault();
+            const email = $('#searchEmail').val();
+            const name = $('#searchName').val();
+            fetchCustomers(email, name);
+        });
+    });
 </script>
 
 </body>

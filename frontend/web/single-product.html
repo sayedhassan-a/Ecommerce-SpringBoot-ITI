@@ -31,6 +31,7 @@
 	<link rel="stylesheet" href="../assets/css/style.css" />
 	<link rel="stylesheet" href="../assets/css/header.css"/>
 	<link rel="stylesheet" href="../assets/css/popUp.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<script src="../assets/js/popUp.js"></script>
 	<style>
 		.popup {
@@ -164,8 +165,19 @@
 		const params = new URLSearchParams(url.search);
 		const id = params.get('id');
 
-		// Fetch product details using the product ID
-		$.getJSON("http://localhost:9002/api/products" + "/" + id, populate);
+		// Fetch product details using the product ID with a custom header
+		$.ajax({
+				   url: `http://localhost:9002/api/products/${id}`,
+				   method: "GET",
+				   headers: {
+					   'ngrok-skip-browser-warning':'abc'
+				   },
+				   dataType: "json",
+				   success: populate,
+				   error: function(xhr, status, error) {
+					   console.error("Failed to fetch product details:", error);
+				   }
+			   });
 
 
 		function populate(data, status, xhr) {

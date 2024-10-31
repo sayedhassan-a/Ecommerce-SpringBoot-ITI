@@ -7,12 +7,11 @@ function loadingHeaderContent(){
     else{
         document.getElementById("login").innerHTML = '<a class="nav-link" onclick="invalidateToken()">Logout</a>\n';
         document.getElementById("profileSection").innerHTML = `
-                        <br>
                         <li class="nav-item">
-                            <button class="search">
-                                <a href="/web/profile.html" class="cart"><span class="lnr fa-regular fa-user" style="color: white" id="search"></span></a>
-                            </button>
-                        </li>`
+                            <a href="/web/profile.html" style="font-size: 20px;color: white" class="cart-icon fas fa-user-alt" aria-label="Cart">
+                            </a>
+                        </li>
+                        `
     }
 }
 

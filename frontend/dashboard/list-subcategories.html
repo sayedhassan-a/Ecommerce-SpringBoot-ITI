@@ -187,7 +187,7 @@
             fetchSubcategories(); // Initial fetch for subcategories
 
             function fetchCategories() {
-                const url = 'http://localhost:9002/api/categories';
+                const url = 'https://improved-ghastly-midge.ngrok-free.app/api/categories';
                 fetch(url,{headers:{'ngrok-skip-browser-warning':'abc'}})
                     .then(response => response.json())
                     .then(data => {
@@ -215,7 +215,7 @@
             }
 
             function fetchSubcategories() {
-                const url = 'http://localhost:9002/api/subcategories';
+                const url = 'https://improved-ghastly-midge.ngrok-free.app/api/subcategories';
                 fetch(url,{headers:{'ngrok-skip-browser-warning':'abc'}})
                     .then(response => response.json())
                     .then(data => {

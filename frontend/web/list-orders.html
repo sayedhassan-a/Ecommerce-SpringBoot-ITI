@@ -239,7 +239,7 @@
   async function loadOrders(page = 0, size = 10, filters = {}) {
     try {
       // Build the URL with query parameters for filters
-      let url = `http://localhost:9002/api/v1/orders/customer?page=${page}&size=${size}`;
+      let url = `https://improved-ghastly-midge.ngrok-free.app/api/v1/orders/customer?page=${page}&size=${size}`;
 
       // Append filter parameters if provided
       if (filters.startDate) url += `&startDate=${filters.startDate}T00:00`;

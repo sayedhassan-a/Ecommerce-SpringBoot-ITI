@@ -12,7 +12,7 @@ function mergeCart(){
             };
         })
         $.ajax({
-                   url: `http://localhost:9002/api/v1/carts`, // Servlet URL
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts`, // Servlet URL
                    type: 'PUT',
                    data: JSON.stringify(cart),
                    headers: {

@@ -562,7 +562,7 @@
         function searchProducts(page=0, size=12) {
             flag=true;
 
-            fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/search?keyword=${encodeURIComponent(keyword)}&page=${page}&size=${size}`)
+            fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/search?keyword=${encodeURIComponent(keyword)}&page=${page}&size=${size}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);

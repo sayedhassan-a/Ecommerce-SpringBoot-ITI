@@ -77,8 +77,8 @@
 						</div>
 						<div class="col-md-12 form-group">
 							<div class="creat_account">
-								<input type="checkbox" id="rememberMe" name="rememberMe">
-								<label for="rememberMe">Keep me logged in</label>
+								<input type="checkbox" id="rememberMe" name="rememberMe" disabled hidden="hidden">
+								<label for="rememberMe" hidden="hidden">Keep me logged in</label>
 							</div>
 						</div>
 						<div id="loginError" class="text-danger" style="display: none;"></div>
@@ -88,7 +88,7 @@
 					</form>
 					<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-					<div class="col-md-12 form-group">
+					<div class="col-md-12 form-group" hidden="hidden">
 						<div id="g_id_onload"
 							 data-client_id="516688200027-a5ouf65hcr858rf3lse81mg6q4lffg0h.apps.googleusercontent.com"
 							 data-login_uri="https://improved-ghastly-midge.ngrok-free.app/oauth2/authorization/google"

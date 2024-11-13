@@ -207,6 +207,10 @@ function updateQuantity(itemId, quantity) {
                    type: 'GET',
                     headers:{'ngrok-skip-browser-warning':'abc'},
                    success: function(response) {
+                       if(response.quantity == 0){
+                           removeItem(itemId, currentQuantity);
+                           return ;
+                       }
                        if(response.quantity < oldQuantity){
                            //$('#err-' + itemId).text("quantity out of stock!");
                            $('#price-' + itemId).text((Number.parseFloat(response.price)/100).toFixed(2) + ' EGP');
@@ -255,6 +259,10 @@ function updateQuantity(itemId, quantity) {
                    success: function(response) {
 
                        // Update the total price on success
+                       if(response.quantity == 0){
+                           removeItem(itemId, currentQuantity);
+                           return ;
+                       }
                        $('#price-' + itemId).text((Number.parseFloat(response.product.price)/100).toFixed(2) + ' EGP');
                        $('#total-' + itemId).text((Number.parseFloat(
                            response.quantity * response.product.price)/100).toFixed(2) + ' EGP');

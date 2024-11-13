@@ -306,7 +306,7 @@
         if (productId) {
             // Fetch product data
             var token = localStorage.getItem("adminToken");
-            const productResponse = await fetch(`http://localhost:9002/admins/products/${productId}`,{
+            const productResponse = await fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`,{
                 headers:{
                     Authorization:`Bearer ${token}`,
                     'ngrok-skip-browser-warning':'abc'}});
@@ -317,7 +317,7 @@
             window.subCategoryId = productData.subCategoryId;
             window.productId = productData.id;
             window.SpecID = productData.productSpecs.id;
-            const specsResponse = await fetch(`http://localhost:9002/api/subcategories/${subCategoryId}/specifications`,{headers:{Authorization:`Bearer ${token}`,'ngrok-skip-browser-warning':'abc'}});
+            const specsResponse = await fetch(`https://improved-ghastly-midge.ngrok-free.app/api/subcategories/${subCategoryId}/specifications`,{headers:{Authorization:`Bearer ${token}`,'ngrok-skip-browser-warning':'abc'}});
             const specsData = await specsResponse.json();
             createDynamicSpecFields(specsData.subCategorySpecification.specs, productData.productSpecs);
         }
@@ -405,7 +405,7 @@
             productSpecs: productSpecsDTO
         };
         var token = localStorage.getItem("adminToken");
-         fetch(`http://localhost:9002/admins/products/${productId}`, {
+         fetch(`https://improved-ghastly-midge.ngrok-free.app/admins/products/${productId}`, {
             method: "PUT",
             headers: {
                 Authorization:`Bearer ${token}`,

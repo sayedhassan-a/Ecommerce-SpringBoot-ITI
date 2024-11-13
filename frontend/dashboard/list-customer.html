@@ -227,6 +227,58 @@
                 padding: 10px;
             }
         }
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: transparent;
+            border: solid white 1px;
+            color: white;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .arrow:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+        .pagination-link {
+            cursor: pointer;
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #e0e0e0; /* Light gray text for pagination links */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination-link.active {
+            background-color: #007bff; /* Blue background for active page */
+            color: white;
+            border: 1px solid #007bff;
+        }
+
+        .pagination-link:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            color: white; /* White text on hover */
+        }
     </style>
 </head>
 
@@ -251,7 +303,7 @@
 <section class="main-content container section_gap">
     <br>
     <br>
-    <h3>Customer List</h3>
+    <h3 style="color: white">Customer List</h3>
 
     <!-- Search Form -->
     <form id="searchForm">
@@ -281,11 +333,8 @@
     </table>
 
     <!-- Pagination -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination" id="pagination">
-            <!-- Pagination will be populated here if needed -->
-        </ul>
-    </nav>
+    <div class="pagination-container" id="pagination">
+    </div>
 </section>
 
 <script src="../assets/js/vendor/jquery-2.2.4.min.js"></script>
@@ -294,13 +343,14 @@
 <script>
     $(document).ready(function() {
         const token = localStorage.getItem('adminToken');
-        const pageNumber = 0; // Replace with the current page number
-        const pageSize = 10; // Number of customers per page
+        var pageNumber = 0; // Replace with the current page number
+        const pageSize = 7; // Number of customers per page
+        var currentEmail = '';
 
         function fetchCustomers(email = '') {
             if (token) {
                 $.ajax({
-                    url: `http://localhost:9002/customers/search?email=${email}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+                    url: `https://improved-ghastly-midge.ngrok-free.app/customers/search?email=${email}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
                     type: "GET",
                     headers: {
                         "Authorization": "Bearer " + token,
@@ -308,9 +358,6 @@
                     },
                     success: function(response) {
                         const customers = response.content; // Access the customers from the response
-                        const currentPage = response.number; // Access the current page
-                        const totalPages = response.totalPages; // Access total pages
-                        const totalItems = response.totalElements; // Access total items
 
                         // Populate the customer table
                         $('#customerTableBody').empty();
@@ -329,16 +376,10 @@
                                 </tr>`
                             );
                         });
+                        createPagination(response.page.totalPages, response.page.number);
 
                         // Update pagination display
-                        $('#pagination').empty();
-                        for (let i = 0; i < totalPages; i++) {
-                            $('#pagination').append(
-                                `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                                    <a class="page-link" href="#" onclick="fetchCustomers('${email}', ${i})">${i + 1}</a>
-                                </li>`
-                            );
-                        }
+
                     },
                     error: function(xhr) {
                         if (xhr.status === 401) {
@@ -354,6 +395,104 @@
             }
         }
 
+        function createPagination(totalPages, currentPage) {
+            const container = document.getElementById('pagination');
+            container.innerHTML = '';  // Clear previous pagination
+
+            const paginationNumbers = document.createElement('span');
+            paginationNumbers.classList.add('pagination-numbers');
+            container.appendChild(paginationNumbers);
+
+            const delta = 0; // Pages to show around the current page
+
+            // Left Arrow
+            const createLeftButton = () => {
+                const leftArrow = document.createElement('a');
+                leftArrow.classList.add('arrow', 'prev-arrow');
+                leftArrow.innerHTML = '<i class="fa fa-long-arrow-left" aria-hidden="true"></i>';
+                leftArrow.style.pointerEvents = currentPage === 0 ? 'none' : 'auto';
+
+                leftArrow.onclick = function() {
+                    if (currentPage > 0) {
+                        loadPage(currentPage - 1);
+                    }
+                };
+                container.insertBefore(leftArrow, paginationNumbers);
+            };
+
+            // Right Arrow
+            const createRightButton = () => {
+                const rightArrow = document.createElement('a');
+                rightArrow.classList.add('arrow', 'next-arrow');
+                rightArrow.innerHTML = '<i class="fa fa-long-arrow-right" aria-hidden="true"></i>';
+                rightArrow.style.pointerEvents = currentPage === totalPages - 1 ? 'none' : 'auto';
+
+                rightArrow.onclick = function() {
+                    if (currentPage < totalPages - 1) {
+                        loadPage(currentPage + 1);
+                    }
+                };
+                container.appendChild(rightArrow);
+            };
+
+            // Individual Page Buttons
+            const createPageButton = (pageNum) => {
+                const pageButton = document.createElement('a');
+                pageButton.classList.add('pagination-link');
+                pageButton.innerText = pageNum;
+                if (pageNum === currentPage + 1 ) {
+                    pageButton.classList.add('active');  // Highlight current page
+                }
+                else{
+                    pageButton.onclick = function() {
+                        loadPage(pageNum - 1);
+                    };
+                }
+
+                paginationNumbers.appendChild(pageButton);
+            };
+
+            createLeftButton();
+
+            // First page
+            createPageButton(1);
+
+
+            // Dots if currentPage is not close to the beginning
+            if (currentPage - delta > 1) {
+                const dots = document.createElement('a');
+                dots.classList.add('pagination-link');
+                dots.innerText = '...';
+                paginationNumbers.appendChild(dots);
+            }
+
+            // Pages around currentPage
+            for (let i = Math.max(2, currentPage + 1 - delta); i <= Math.min(totalPages - 1 , currentPage + 1 + delta); i++) {
+                createPageButton(i);
+            }
+
+            // Dots if currentPage is not close to the end
+            if (currentPage + 1 + delta < totalPages - 1) {
+                const dots = document.createElement('a');
+                dots.classList.add('pagination-link');
+                dots.innerText = '...';
+                paginationNumbers.appendChild(dots);
+            }
+
+            // Last page
+            if(totalPages>1)createPageButton(totalPages);
+
+
+            createRightButton();
+        }
+
+        // Load Page Function
+        function loadPage(newPage) {
+            pageNumber = newPage;
+            fetchCustomers(currentEmail);
+
+        }
+
         // Initial fetch
         fetchCustomers();
 
@@ -361,8 +500,9 @@
         $('#searchForm').submit(function(event) {
             event.preventDefault();
             const email = $('#searchEmail').val();
-            const name = $('#searchName').val();
-            fetchCustomers(email, name);
+            currentEmail = email;
+            pageNumber = 0;
+            fetchCustomers(email);
         });
     });
 </script>

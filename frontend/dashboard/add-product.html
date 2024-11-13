@@ -241,7 +241,7 @@
                 <input type="file" class="form-control" id="images" name="images" accept="image/*" multiple required>
             </div>
 
-            <button type="button" class="btn btn-primary" id="submitForm">Add Product</button>
+            <button type="submit" class="btn btn-primary" id="submitForm">Add Product</button>
         </form>
 
         <!-- Loader -->
@@ -274,7 +274,7 @@
             }
     
             // Fetch and populate subcategories
-            fetch("http://localhost:9002/api/subcategories",{headers:{'ngrok-skip-browser-warning':'abc'}})
+            fetch("https://improved-ghastly-midge.ngrok-free.app/api/subcategories",{headers:{'ngrok-skip-browser-warning':'abc'}})
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(subcategory => {
@@ -289,7 +289,7 @@
             subcategorySelect.addEventListener("change", () => {
                 const subId = subcategorySelect.value;
                 showLoader();
-                fetch(`http://localhost:9002/api/subcategories/${subId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}})
+                fetch(`https://improved-ghastly-midge.ngrok-free.app/api/subcategories/${subId}/specifications`,{headers:{'ngrok-skip-browser-warning':'abc'}})
                     .then(response => response.json())
                     .then(data => {
                         hideLoader();
@@ -333,12 +333,8 @@
             const addProductForm = document.getElementById('addProductForm');
             let imageUrls = [];
     
-            document.getElementById('submitForm').addEventListener('click', async function (event) {
+            document.getElementById('addProductForm').addEventListener('submit', async function (event) {
                 event.preventDefault();
-    
-                if (!validateForm()) {
-                    return;
-                }
     
                 showLoader();
                 const additionalImageFiles = imageFiles.files;
@@ -354,7 +350,7 @@
                 }
     
                 await Promise.all(uploadPromises);
-                sendForm();
+                await sendForm();
             });
     
             // Function to validate the form before submission
@@ -394,7 +390,7 @@
                     productSpecsDTO
                 };
     
-                fetch("http://localhost:9002/api/products", {
+                fetch("https://improved-ghastly-midge.ngrok-free.app/api/products", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -406,6 +402,7 @@
                 .then(data => {
                     hideLoader();
                     showNotification("Product added successfully!");
+                    location.href = "/dashboard/list-product.html"
                 })
                 .catch(error => {
                     console.error("Error adding product:", error);

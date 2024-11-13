@@ -68,7 +68,7 @@ function loadCartItems() {
         calculateTotalPrice();
     }
     else{
-        fetch('http://localhost:9002/api/v1/carts',{
+        fetch('https://improved-ghastly-midge.ngrok-free.app/api/v1/carts',{
             method:"GET",
             headers:{
                 Authorization: "Bearer "+token,
@@ -203,10 +203,14 @@ function updateQuantity(itemId, quantity) {
         cartItems = JSON.parse(cartItems);
         const item = cartItems.find(item => item.product.id === itemId);
         $.ajax({
-                   url: `http://localhost:9002/api/products/${item.product.id}/stock`, // Servlet URL/
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/products/${item.product.id}/stock`, // Servlet URL/
                    type: 'GET',
                     headers:{'ngrok-skip-browser-warning':'abc'},
                    success: function(response) {
+                       if(response.quantity == 0){
+                           removeItem(itemId, currentQuantity);
+                           return ;
+                       }
                        if(response.quantity < oldQuantity){
                            //$('#err-' + itemId).text("quantity out of stock!");
                            $('#price-' + itemId).text((Number.parseFloat(response.price)/100).toFixed(2) + ' EGP');
@@ -241,7 +245,7 @@ function updateQuantity(itemId, quantity) {
     else {
         // Make the asynchronous request to the server
         $.ajax({
-                   url: `http://localhost:9002/api/v1/carts`, // Servlet URL
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts`, // Servlet URL
                    type: 'POST',
                    data: JSON.stringify({
                            productId: itemId,
@@ -255,6 +259,10 @@ function updateQuantity(itemId, quantity) {
                    success: function(response) {
 
                        // Update the total price on success
+                       if(response.quantity == 0){
+                           removeItem(itemId, currentQuantity);
+                           return ;
+                       }
                        $('#price-' + itemId).text((Number.parseFloat(response.product.price)/100).toFixed(2) + ' EGP');
                        $('#total-' + itemId).text((Number.parseFloat(
                            response.quantity * response.product.price)/100).toFixed(2) + ' EGP');
@@ -292,7 +300,7 @@ function removeItem(itemId, action) {
     else {
         // Make the asynchronous request to the server
         $.ajax({
-                   url: `http://localhost:9002/api/v1/carts`, // Servlet URL
+                   url: `https://improved-ghastly-midge.ngrok-free.app/api/v1/carts`, // Servlet URL
                    type: 'POST',
                    data: JSON.stringify({
                        productId: itemId,

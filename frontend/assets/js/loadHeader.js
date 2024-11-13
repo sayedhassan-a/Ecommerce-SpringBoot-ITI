@@ -17,7 +17,7 @@ function loadHeader() {
 function displayShop() {
     const shopDropdownContainer = document.getElementById("shopDropdownContainer");
 
-    fetch("http://localhost:9002/api/categories",{headers:{'ngrok-skip-browser-warning':'abc'}})
+    fetch("https://improved-ghastly-midge.ngrok-free.app/api/categories",{headers:{'ngrok-skip-browser-warning':'abc'}})
     .then(response => response.json())
     .then(categories => {
         // Build the dropdown menu dynamically

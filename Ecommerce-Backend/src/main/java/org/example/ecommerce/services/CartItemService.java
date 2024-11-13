@@ -139,8 +139,10 @@ public class CartItemService {
                 ((Jwt)SecurityContextHolder.getContext()
                         .getAuthentication().getPrincipal()).getClaims();
         String email = (String) claims.get("sub");
-
-        return cartItemRepository.findByCustomerEmail(email).stream().map((cartItem) -> {
+        List<CartItem> cartItems =
+                cartItemRepository.findByCustomerEmail(email);
+        cartItems.stream().filter((item)->item.getProduct().getStock()==0).forEach(cartItemRepository::delete);
+        return cartItems.stream().filter((item)->item.getProduct().getStock()>0).map((cartItem) -> {
             CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
             cartItemResponseDTO.setQuantity(cartItem.getQuantity());
             cartItemResponseDTO.setProduct(productCartMapper.toDTO(cartItem.getProduct()));

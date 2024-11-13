@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fetch specifications based on subcategory
     function fetchSpecifications(subId) {
-        fetch(`http://localhost:9002/api/subcategories/${subId}/specifications`,{
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/api/subcategories/${subId}/specifications`,{
             headers:{'ngrok-skip-browser-warning':'abc'}
         })
             .then(response => response.json())
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fetch products by subcategory
     function fetchProducts(subId) {
         const queryParams = new URLSearchParams({ page: currentPage, size: currentSize }).toString();
-        fetch(`http://localhost:9002/api/products/subcategory/${subId}?${queryParams}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/api/products/subcategory/${subId}?${queryParams}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
             .then(response => response.json())
             .then(data => {
                 renderProducts(data.content);
@@ -156,7 +156,7 @@ function applyFilters() {
 function fetchFilteredProducts(subId, filters) {
     const filterParams = encodeURIComponent(JSON.stringify(filters));
     const queryParams = `filters=${filterParams}&page=${currentPage}&size=${currentSize}`;
-    fetch(`http://localhost:9002/api/products/subcategory/${subId}/filter?${queryParams}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
+    fetch(`https://improved-ghastly-midge.ngrok-free.app/api/products/subcategory/${subId}/filter?${queryParams}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
         .then(response => response.json())
         .then(data => {renderProducts(data.content);
             createPagination(data.page.totalPages,data.page.number);
@@ -214,7 +214,7 @@ function fetchFilteredProducts(subId, filters) {
         if(searchValue == null)searchValue="";
         searchInput.value=searchValue;
         const queryParams = new URLSearchParams({ page: currentPage, size: currentSize, name: searchValue }).toString();
-        fetch(`http://localhost:9002/api/products/subcategory/${subId}/search?${queryParams}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
+        fetch(`https://improved-ghastly-midge.ngrok-free.app/api/products/subcategory/${subId}/search?${queryParams}`,{headers:{'ngrok-skip-browser-warning':'abc'}})
             .then(response => response.json())
             .then(data => {renderProducts(data.content);
                 createPagination(data.page.totalPages,data.page.number);

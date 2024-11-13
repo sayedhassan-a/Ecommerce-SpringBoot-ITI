@@ -319,7 +319,7 @@
 
     // Function to fetch credit cards
     function fetchCreditCards() {
-      fetch("http://localhost:9002/api/v1/credit-card", {
+      fetch("https://improved-ghastly-midge.ngrok-free.app/api/v1/credit-card", {
         headers: {
           "Authorization": "Bearer " + token,
           'ngrok-skip-browser-warning':'abc'
@@ -353,7 +353,7 @@
 
     // Function to delete a credit card
     function deleteCreditCard(cardId) {
-      fetch(`http://localhost:9002/api/v1/credit-card/${cardId}`, {
+      fetch(`https://improved-ghastly-midge.ngrok-free.app/api/v1/credit-card/${cardId}`, {
         method: "DELETE",
         headers: {
           "Authorization": "Bearer " + token,
@@ -377,7 +377,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:9002/customers/profile",
+        url: "https://improved-ghastly-midge.ngrok-free.app/customers/profile",
         type: "GET",
         headers: {
           "Authorization": "Bearer " + token,
@@ -558,7 +558,7 @@
     const token = localStorage.getItem('token');
     if (token) {
       $.ajax({
-        url: "http://localhost:9002/customers/profile",
+        url: "https://improved-ghastly-midge.ngrok-free.app/customers/profile",
         type: "PUT",
         headers: {
           "Authorization": "Bearer " + token,
@@ -591,7 +591,7 @@
     const newPassword = $('#password').val();
 
     $.ajax({
-      url: "http://localhost:9002/customers/update-password",
+      url: "https://improved-ghastly-midge.ngrok-free.app/customers/update-password",
       type: "PUT",
       contentType: "application/json",
       headers: {

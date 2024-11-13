@@ -106,7 +106,10 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long productId) {
-        productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId)).setDeleted(true);
+        Product product =
+                productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+        product.setDeleted(true);
+        product.setStock(0);
 
     }
 
@@ -245,7 +248,6 @@ public class ProductService {
         SubCategory subCategory = subCategoryRepository.findBy(productRequestDTO.getSubCategoryId());
         product.setSubCategory(subCategory);
         product.setSalePercentage(productRequestDTO.getSalePercentage());
-        product.setImage(productRequestDTO.getImage()); // Set main image if present
 
         Product updatedProduct = productRepository.save(product);
 

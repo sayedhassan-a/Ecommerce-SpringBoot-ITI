@@ -10,6 +10,7 @@ import org.example.ecommerce.mappers.AddressMapper;
 import org.example.ecommerce.models.Address;
 import org.example.ecommerce.models.Customer;
 import org.example.ecommerce.models.NewPassword;
+import org.example.ecommerce.services.AdminService;
 import org.example.ecommerce.services.AuthService;
 import org.example.ecommerce.services.CustomerService;
 import org.example.ecommerce.system.Result;
@@ -35,6 +36,7 @@ public class CustomerController {
     private final CustomerToCustomerDtoConverter customerToCustomerDtoConverter;
     private final AuthService authService;
     private final AddressMapper addressMapper;
+    private final AdminService adminService;
 
 
     // Create a new customer
@@ -70,7 +72,15 @@ public class CustomerController {
 
     @GetMapping("/checkEmail")
     public ResponseEntity<String> checkEmail(@RequestParam String email) {
-        boolean exists = customerService.existsByEmail(email);
+        boolean exists = false;
+        try{
+            adminService.findByEmail(email);
+            exists = true;
+        }
+        catch (Exception e){
+           exists = false;
+        }
+        exists |= customerService.existsByEmail(email);
         return ResponseEntity.ok(Boolean.toString(!exists)); // Return "true" if email is available, "false" if not
     }
 
